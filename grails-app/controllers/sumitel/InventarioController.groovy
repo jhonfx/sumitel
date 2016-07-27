@@ -41,6 +41,8 @@ class InventarioController {
 
     def saveArticle() {
 
+      
+      log.debug("guardando los datos.........]")
       def datos = params
       def formatCostoSub = params.costoSub.replace(',', '')
       def formatCostoPublico = params.costoPublico.replace(',', '')
