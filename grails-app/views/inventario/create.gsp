@@ -14,7 +14,23 @@
                 var withformat = format("#,##0.####", costo);
                 console.log(withformat)
                 $('#costoSub').val(withformat)
-            })
+            });
+
+            $('#costoPublico').change( function() {
+                var costo =  $('#costoPublico').val();
+                console.log(costo);
+                var withformat = format("#,##0.####", costo);
+                console.log(withformat)
+                $('#costoPublico').val(withformat)
+            });
+
+            $('#costoUnitario').change( function() {
+                var costo =  $('#costoUnitario').val();
+                console.log(costo);
+                var withformat = format("#,##0.####", costo);
+                console.log(withformat)
+                $('#costoUnitario').val(withformat)
+            });
             
         })
     </script>

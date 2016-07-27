@@ -2,10 +2,19 @@ import sumitel.Menu
 import sumitel.Usuario
 import sumitel.Articulo
 import sumitel.Inventario
+import sumitel.Proveedor
 
 class BootStrap {
 
     def init = { servletContext ->
+
+      Proveedor prov = new Proveedor()
+      prov.nombreProveedor = 'TELCEL'
+      prov.estatus = 1
+      prov.usuarioCreacion = 'admin'
+      prov.fechaCreacion = new Date()
+      prov.save()
+
 
       def menuList = ['Compras', 'Clientes', 'Usuarios', 'Almacen', 'Inventario', 'Orden Compra', 'Notas Devolucion']
       menuList.each { obj -> 

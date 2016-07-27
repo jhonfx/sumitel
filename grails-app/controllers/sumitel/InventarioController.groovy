@@ -42,24 +42,34 @@ class InventarioController {
     def saveArticle() {
 
       def datos = params
+      def formatCostoSub = params.costoSub.replace(',', '')
+      def formatCostoPublico = params.costoPublico.replace(',', '')
+      def formatCostoUnitario = params.costoUnitario.replace(',', '')
 
       Inventario inv = new Inventario()
-      inv.articulo = params.articulo
-      inv.precioSub = 100
-      inv.precioPublico = 100
-      inv.precioUnitario = 100
+      inv.articulo = params.articulo.toUpperCase()
+      inv.precioSub = Double.parseDouble(formatCostoSub)
+      inv.precioPublico = Double.parseDouble(formatCostoPublico)
+      inv.precioUnitario = Double.parseDouble(formatCostoUnitario)
       inv.totalArticulos = 0
-      inv.costoSub = 100
-      inv.costoPublico = 100
-      inv.costoUnitario = 100
+      inv.costoSub = Double.parseDouble(formatCostoSub)
+      inv.costoPublico = Double.parseDouble(formatCostoPublico)
+      inv.costoUnitario = Double.parseDouble(formatCostoUnitario)
       inv.usuarioCreacion = 'admin'
       inv.fechaCreacion = new Date()
       inv.save()
 
       log.debug("Se guardo el articulo con id[" + inv.id + "]")
 
-      redirect(action: 'index')
+      redirect(controller: 'inventario', action: 'listarArticulos')
     }
 
+    def infoProducto = {
+
+      def producto = Inventario.findAllById(params.id)
+      log.debug(producto)
+      render producto as JSON
+
+    }
 
 }

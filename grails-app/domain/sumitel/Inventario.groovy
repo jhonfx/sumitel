@@ -1,6 +1,6 @@
 package sumitel
 
-class Inventario {
+class Inventario implements Serializable {
 
     String articulo
     Double precioSub
