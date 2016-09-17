@@ -31,6 +31,7 @@
               id: id,
               ajax: 'true'
           }, function(response) {
+              console.log(response)
               $('#producto').val(response.articulo)
               $('#costosub').val(response.costosub)
               $('#costoPublico').val(response.costoPublico)
@@ -158,23 +159,9 @@
                 data: {'tuplas': JSON.stringify(toTable)},
                 type:"POST",
                 success:function (callback) {
-                    
-                    
-                    if (callback.success) {
-                        console.log("todo ok")
-                        console.log(callback)
-                    }
-                    else {
-                        console.log("no funciona")
-                    }
-                    // $(callback.text).dialog({
-                    //     resizable:false,
-                    //     modal:true,
-                    //     hide:"none",
-                    //     buttons:{
-                    //         "Ok":okFunction
-                    //     }
-                    // });
+                  console.log(callback)
+                   var href = "${createLink(controller: 'almacen', action: 'listaAlmacen')}"
+                   location.href = href;
                 },
                 error:function (json) {
                     console.log("pos hubo un error" + json)

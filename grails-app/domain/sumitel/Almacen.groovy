@@ -2,28 +2,28 @@ package sumitel
 
 class Almacen implements Serializable {
 
-    String fechaCompra
-    int numeroFactura
+    Date fechaCompra
+    Long numeroFactura
     int idProveedor
+    String proveedor
     int idArticuloInventario
-    String imei
-    String sim
-    double costosub
+    String articulo
+    String imeiSim
+    double costoSub
     double precioPublico
     double costoUnitario
     String almacen
     String remision
-    String fechaEntrega
+    Date fechaEntrega
     String sub
-    Date   fechaCreacion
+    Date   fechaCreacion 
     String usuarioCreacion
     Date   fechaModificacion
     String usuarioModificacion
 
     static constraints = {
       numeroFactura maxSize: 10, nullable: false
-      imei maxSize: 15, nullable: true
-      sim maxSize: 20, nullable: true
+      imeiSim maxSize: 20, nullable: true
       fechaModificacion nullable: true
       usuarioModificacion nullable: true
     }

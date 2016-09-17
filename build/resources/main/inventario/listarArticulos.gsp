@@ -5,6 +5,16 @@
     <asset:stylesheet src="application.css"/>
     <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Inventario')}" />
 
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
+
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
+
     <title>LISTAR ARTCULOS</title>
     <script type="text/javascript">
       $(document).ready( function() {
@@ -33,10 +43,12 @@
                     return $.grep(this.tuplas, function(tupla) {
                         return (!filter.articulo || tupla.articulo.indexOf(filter.articulo) > -1)
                         && (!filter.totalArticulos || tupla.totalArticulos == filter.totalArticulos)
-                        && (!filter.precioSub || tupla.precioSub == filter.precioSub)
-                        && (!filter.costoSub || tupla.costoSub == filter.costoSub)
-                        && (!filter.fechaCreacion.from || new Date(tupla.fechaCreacion) >= filter.fechaCreacion.from) 
-                        && (!filter.fechaCreacion.to || new Date(tupla.fechaCreacion) <= filter.fechaCreacion.to)
+                        && (!filter.precioPublico || tupla.precioPublico == filter.precioPublico)
+                        && (!filter.precioUnitario || tupla.precioUnitario == filter.precioUnitario)
+                        && (!filter.costoPublico || tupla.costoPublico == filter.costoPublico)
+                        && (!filter.costoUnitario || tupla.costoUnitario == filter.costoUnitario)
+                        // && (!filter.fechaCreacion.from || new Date(tupla.fechaCreacion) >= filter.fechaCreacion.from) 
+                        // && (!filter.fechaCreacion.to || new Date(tupla.fechaCreacion) <= filter.fechaCreacion.to)
                     });
                 },
 
@@ -120,16 +132,19 @@ jsGrid.fields.date = DateField;
                 controller: db,
          
                 fields: [
-                    { name: "articulo", type: "text", width: 110,  editing: false},
-                    { name: "precioSub", type: "number", width: 30,  editing: false},
-                    { name: "precioPublico", type: "number", width: 30,  editing: false},
-                    { name: "precioUnitario", type: "number", width: 30,  editing: false},
-                    { name: "totalArticulos", type: "number", width: 30,  editing: false},
-                    { name: "costoSub", type: "number", width: 30,  editing: false},
-                    { name: "costoPublico", type: "number", width: 30,  editing: false},
-                    { name: "costoUnitario", type: "number", width: 30,  editing: false},
-                    { name: "usuarioCreacion", type: "text", width: 50,  editing: false},
-                    { name: "fechaCreacion", type: "date", width: 50,  editing: false},
+                    { name: "articulo", filtering: true, title:'Producto', type: "text", width: 110,  editing: false},
+                    // { name: "precioSub", type: "number", width: 30,  editing: false},
+                    { name: "precioPublico", filtering: true, title:'Precio Publico', type: "number", width: 30,  editing: false},
+                    { name: "precioUnitario", filtering: false,title: 'Precio Unitario', type: "number", width: 30,  editing: false},
+                    { name: "totalArticulos", filtering: true, title: 'Total', type: "number", width: 30,  editing: false},
+                    // { name: "costoSub", type: "number", width: 30,  editing: false},
+                    { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "number", width: 30,  editing: false},
+                    { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "number", width: 30,  editing: false, itemTemplate: function(value) {
+                        return value.toFixed(2) + "$"; 
+                      }
+                    },
+                    // { name: "usuarioCreacion", type: "text", width: 50,  editing: false},
+                    // { name: "fechaCreacion", type: "date", width: 50,  editing: false},
                     { type: "control", editButton: false}
                 ]
 
@@ -159,6 +174,16 @@ jsGrid.fields.date = DateField;
     </div>
   </div>
 </div>
-  
+<script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.core.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-indicator.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-strategies.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.sort-strategies.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.field.js')}"></script>
 
-  
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.text.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.number.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.select.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.checkbox.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.control.js')}"></script>
+</body>
+</html>

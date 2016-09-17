@@ -17,6 +17,20 @@
 
 
     <title>CARGA DE ARTICULOS</title>
+
+    <style type="text/css">
+      
+      .header {
+         
+         top: 0 !important;
+         width: 100% !important;
+         height: 60px !important;   /* Height of the footer */
+         background: #e8ebec !important;
+         float: right;
+      }
+
+    </style>
+
     <script type="text/javascript">
       $(document).ready( function() {
 
@@ -41,6 +55,21 @@
           });
         });
 
+        var serie = $('#codigos').val();
+        
+        $('#imei').on('keypress', function(e, a){
+          var selected = $('input:radio[name=inlineRadioOptions]:checked').val();
+          var serie = $('#imei').val()
+
+          if (serie.length == selected) {
+            $('#aplicar').click();
+            $('#imei').val('');
+          }
+
+         console.log(selected)
+        //$('#aplicar').click();
+          
+        })
 
         console.log("cargando");
         var toTable = [];
@@ -176,17 +205,20 @@
 </head>
 <body>
 <div class="container"> 
-  <div class="col-md-12">
+  <div class="row">
+    <div class="header">header</div>
+  </div>
+  
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>
     </div>
     <div class="row">
       <form id="formulario">
-        <div class="form-group">
+        <div class="form-group col-sm-4">
           <label>FACTURA</label>
-          <input type="text" class="form-control col-md-6" id="factura" name="fact">
+          <input type="text" class="form-control" id="factura" name="fact">
         </div>
-        <div class="form-group">
+        <div class="form-group col-sm-4">
           <label>Producto</label>
           <g:select name="inventarioId" class="form-control col-md-4" id="inventarioId"
             from="${Inventario.findAll()}"
@@ -198,24 +230,40 @@
             <input type="hidden" name="costoUnitario" id="costoUnitario">
             <input type="hidden" name="totalArticulos" id="totalArticulos">
         </div>
-        <div class="form-group">
+        <div class="form-group col-sm-4">
           <label>Proveedor</label>
-          <g:select name="proveedorId" class="form-control col-md-4"
+          <g:select name="proveedorId" class="form-control"
             from="${Proveedor.findAll()}"
             optionKey="id" optionValue="nombreProveedor"
             noSelection="${['':'Seleccione...']}"/>
         </div>
-        <div class="form-group">
-          <label>IMEI / SERIE</label>
-          <textarea type="textarea" class="form-control" id="codigos" name="code"></textarea>
+        <div class="form-group col-sm-4">
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="15"> EQUIPO
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="13"> CHIP
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="12"> TARJETA
+          </label>
         </div>
-        <div class="form-group">
+
+        <div class="form-group col-sm-8">
+          <label>IMEI / SERIE</label>
+          <input type="text" class="form-control" id="imei" name="code"></input>
+        </div>
+        <div class="form-group col-sm-12">
           <button type="button" id="aplicar" class="btn">AGREGAR</button>
           <button type="button" id="limpiar" class="btn">BORRAR</button>
         </div>
       </form>
     </div>
-    <div class="row" id="jsgrid_table">
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <div id="jsgrid_table">
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-8"></div>
@@ -224,7 +272,7 @@
         <button type="button" id="save_data" class="btn pull-right">GENERAR ORDEN</button>
       </div>
     </div>
-  </div>
+  
 </div>
   
 

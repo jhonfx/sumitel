@@ -5,9 +5,10 @@
 // You're free to add application-wide JavaScript to this file, but it's generally better
 // to create separate JavaScript files as needed.
 //
-//= require jquery-2.2.0.min
-//= require bootstrap
+//= require_jquery-1.8.3
+//= require_bootstrap
 //= require_tree .
+//= sumitel_utils
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
