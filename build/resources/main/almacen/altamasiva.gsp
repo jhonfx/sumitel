@@ -2,7 +2,6 @@
 <%@ page import="sumitel.Proveedor" %>
 <%@ page import="sumitel.Inventario" %>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
 <head>
     <meta name="layout" content="main" />
     <asset:stylesheet src="application.css"/>
@@ -22,9 +21,28 @@
 
         var responseInvData;
 
+
+        function validateNumber(event) {
+            var key = window.event ? event.keyCode : event.which;
+            if (event.keyCode === 8 || event.keyCode === 46) {
+                return true;
+            } else if ( key < 48 || key > 57 ) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+
+        $('#factura').keypress(validateNumber);
+        $('#imei_cel').keypress(validateNumber);
+        $('#codigos').keypress(validateNumber);
+
+
         $('#inventarioId').on('change', function(e) {
           console.log("lo cambie")
           var id = $(this).find('option:selected').val();
+          var tipoProd = 0;
           console.log(id)
 
           $.getJSON('${createLink(controller:"inventario", action:"infoProducto")}', {
@@ -37,7 +55,30 @@
               $('#costoPublico').val(response.costoPublico)
               $('#costoUnitario').val(response.costoUnitario)
               $('#totalArticulos').val(response.totalArticulos)
+              $('#idProducto').val(id)
               responseInvData = response[0];
+              tipoProd = parseInt(responseInvData.tipoArticulo)
+              console.log(tipoProd)
+              if (tipoProd === 1 ) {
+                $('#imei_cel').removeAttr('disabled');
+              } else {
+                $('#imei_cel').attr('disabled', 'disabled');
+              }
+
+          });
+        });
+
+        $('#test').on('click', function() {
+          $.ajax({
+            url: "${createLink(controller: 'almacen', action: 'mandameaOtraWEb')}",
+            type: "GET",
+            success: function(callback) {
+              console.log("xsp");
+            },
+            error: function(json) {
+              console.log(json);
+            },
+            dataType: "json"
           });
         });
 
@@ -53,22 +94,29 @@
           var format = JSON.parse(data);  //data parse
 
           var newobject = format.code.split(/\s+/);  //array of serie/IMEI
+          var newobject2 = !format.imei_cel ? [] : format.imei_cel.split(/\s+/);  //array of serie/IMEI
           console.log(newobject);
+          console.log(newobject2);
           console.log(responseInvData.articulo)
           if (newobject == [""] || newobject == null || newobject.length == 0 || newobject == "") {
             console.log("esta vacio")
           } else {
-            _.each(newobject, function(obj) {
-              toTable.push({
-                'series': obj,
-                'factura': format.fact,
-                'articulo':  responseInvData.articulo,
-                'precioUnitario':  responseInvData.precioUnitario,
-                'precioPublico': responseInvData.precioPublico,
-                'precioSub': responseInvData.precioSub,
-                'totalArticulos': responseInvData.totalArticulos
-              });
-            });
+                _.each(newobject, function(obj) {
+                  
+                  toTable.push({
+                    'series': obj,
+                    'imeiCel': !newobject2[0] ? 0 : newobject2[0],
+                    'factura': format.fact,
+                    'articulo':  responseInvData.articulo,
+                    'precioUnitario':  responseInvData.precioUnitario,
+                    'precioPublico': responseInvData.precioPublico,
+                    'precioSub': responseInvData.precioSub,
+                    'totalArticulos': responseInvData.totalArticulos,
+                    'idProducto': responseInvData.id,
+                    'cant': 1
+                  });
+                });
+
 
             $('#codigos').val('');
             console.log(toTable);
@@ -107,7 +155,7 @@
               /* generate data table */
               $("#jsgrid_table").jsGrid({
                 width: "100%",
-                height: "400px",
+                height: "600px",
 
                 confirmDeleting: true,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
@@ -125,10 +173,11 @@
                 controller: db,
          
                 fields: [
-                    { name: "factura", type: "text", width: 50, filtering: false, editing: false},
-                    { name: "series", type: "text", width: 50, editing: false},
-                    { name: "articulo", type: "text", width: 150, editing: false},
-                    { name:  "precioUnitario", type: 'text', width: 30, filtering: false, editing: false},
+                    { name: "factura", title: "Factura", type: "text", width: 50, filtering: false, editing: false},
+                    { name: "series", title: "SIM/SERIE", type: "text", width: 50, editing: false},
+                    { name: "imeiCel", title: "IMEI", type: "text", width: 50, editing: false},
+                    { name: "articulo", title: "Producto", type: "text", width: 150, editing: false},
+                    { name:  "precioUnitario", title: "Precio", type: 'text', width: 40, filtering: false, editing: false},
                     { type: "control", editButton: false, filtering: false}
                 ]
 
@@ -147,7 +196,7 @@
           // $('#table_here').html(template({toTable}));
         });
 
-
+        
 
         $('#save_data').click( function(e) {
           console.log(toTable);
@@ -160,17 +209,16 @@
                 type:"POST",
                 success:function (callback) {
                   console.log(callback)
-                   var href = "${createLink(controller: 'almacen', action: 'listaAlmacen')}"
+                   var href = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
                    location.href = href;
                 },
-                error:function (json) {
-                    console.log("pos hubo un error" + json)
+                error:function (error) {
+                  console.log(error)
                 },
                 dataType:"json"
             });
         })
       });
-      
 
     </script>
 </head>
@@ -184,7 +232,7 @@
       <form id="formulario">
         <div class="form-group">
           <label>FACTURA</label>
-          <input type="text" class="form-control col-md-6" id="factura" name="fact">
+          <input type="text" class="form-control col-md-6" id="factura" name="fact" required>
         </div>
         <div class="form-group">
           <label>Producto</label>
@@ -197,6 +245,7 @@
             <input type="hidden" name="costoPublico" id="costoPublico">
             <input type="hidden" name="costoUnitario" id="costoUnitario">
             <input type="hidden" name="totalArticulos" id="totalArticulos">
+            <input type="hidden" name="idProducto" id="idProducto">
         </div>
         <div class="form-group">
           <label>Proveedor</label>
@@ -206,8 +255,16 @@
             noSelection="${['':'Seleccione...']}"/>
         </div>
         <div class="form-group">
-          <label>IMEI / SERIE</label>
+          <label>SERIE</label>
           <textarea type="textarea" class="form-control" id="codigos" name="code"></textarea>
+        </div>
+        <div class="form-group">
+          <label>IMEI</label>
+          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel" maxlength="16"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Telefono</label>
+          <input type="text" disabled class="form-control" id="tel_cel" name="tel_cel"></textarea>
         </div>
         <div class="form-group">
           <button type="button" id="aplicar" class="btn">AGREGAR</button>
@@ -215,7 +272,10 @@
         </div>
       </form>
     </div>
-    <div class="row" id="jsgrid_table">
+    <div class="row">
+    <div class="col-sm-12">
+      <div id="jsgrid_table"></div>
+    </div>
     </div>
     <div class="row">
       <div class="col-md-8"></div>

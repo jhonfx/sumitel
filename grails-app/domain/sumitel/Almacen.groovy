@@ -9,8 +9,11 @@ class Almacen implements Serializable {
     int idArticuloInventario
     String articulo
     String imeiSim
+    String imeiCel
+    String numeroCel = "00000"
     double costoSub
     double precioPublico
+    double precioUnitario
     double costoUnitario
     String almacen
     String remision

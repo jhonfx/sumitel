@@ -67,6 +67,13 @@
               <input type="text" class="form-control text-right" id="costoUnitario" name="costoUnitario" value="0.00">
             </div>
           </div>
+          <div class="form-group">
+            <label for="tipoArticulo" class="col-sm-2 control-label">Tipo articulo</label>
+            <div class="col-sm-3">
+              <g:radio name="tipo" value="1"/>Equipo
+              <g:radio name="tipo" value="2"/>Chip/Tarjeta Amigo
+            </div>
+          </div>
 
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-7">

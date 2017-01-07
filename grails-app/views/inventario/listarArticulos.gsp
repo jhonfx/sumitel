@@ -9,13 +9,14 @@
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
 
-    <title>LISTAR ARTCULOS</title>
+    <title>INVENTARIO</title>
     <script type="text/javascript">
       $(document).ready( function() {
         console.log("inciando");
@@ -59,54 +60,82 @@
             }());
 
             var DateField = function(config) {
-    jsGrid.Field.call(this, config);
-};
+                jsGrid.Field.call(this, config);
+            };
 
-var DateField = function(config) {
-    jsGrid.Field.call(this, config);
-};
+            var DateField = function(config) {
+                jsGrid.Field.call(this, config);
+            };
 
-DateField.prototype = new jsGrid.Field({
-    sorter: function(date1, date2) {
-        return new Date(date1) - new Date(date2);
-    },    
-    
-    itemTemplate: function(value) {
-        return new Date(value).toDateString();
-    },
-    
-    filterTemplate: function() {
-        var now = new Date();
-        this._fromPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() - 1) });
-        this._toPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() + 1) });
-        return $("<div>").append(this._fromPicker).append(this._toPicker);
-    },
-    
-    insertTemplate: function(value) {
-        return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
-    },
-    
-    editTemplate: function(value) {
-        return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
-    },
-    
-    insertValue: function() {
-        return this._insertPicker.datepicker("getDate").toISOString();
-    },
-    
-    editValue: function() {
-        return this._editPicker.datepicker("getDate").toISOString();
-    },
-    
-    filterValue: function() {
-        return {
-            from: this._fromPicker.datepicker("getDate"),
-            to: this._toPicker.datepicker("getDate")
-        };
-    }
-});
+            DateField.prototype = new jsGrid.Field({
+                sorter: function(date1, date2) {
+                    return new Date(date1) - new Date(date2);
+                },    
+                
+                itemTemplate: function(value) {
+                    return new Date(value).toDateString();
+                },
+                
+                filterTemplate: function() {
+                    var now = new Date();
+                    this._fromPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() - 1) });
+                    this._toPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() + 1) });
+                    return $("<div>").append(this._fromPicker).append(this._toPicker);
+                },
+                
+                insertTemplate: function(value) {
+                    return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
+                },
+                
+                editTemplate: function(value) {
+                    return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+                },
+                
+                insertValue: function() {
+                    return this._insertPicker.datepicker("getDate").toISOString();
+                },
+                
+                editValue: function() {
+                    return this._editPicker.datepicker("getDate").toISOString();
+                },
+                
+                filterValue: function() {
+                    return {
+                        from: this._fromPicker.datepicker("getDate"),
+                        to: this._toPicker.datepicker("getDate")
+                    };
+                }
+            });
 
-jsGrid.fields.date = DateField;
+            jsGrid.fields.date = DateField;
+
+
+            function MoneyField(config) {
+                jsGrid.NumberField.call(this, config);
+            }
+
+            MoneyField.prototype = new jsGrid.NumberField({
+
+                itemTemplate: function(value) {
+                  var string = numeral(value).format('$0,0');
+                    return string;
+                },
+
+                filterValue: function() {
+                    return parseFloat(this.filterControl.val() || 0);
+                },
+
+                insertValue: function() {
+                    return parseFloat(this.insertControl.val() || 0);
+                },
+
+                editValue: function() {
+                    return parseFloat(this.editControl.val() || 0);
+                }
+
+            });
+
+            jsGrid.fields.money = MoneyField;
 
 
             $( function() {
@@ -134,18 +163,15 @@ jsGrid.fields.date = DateField;
                 fields: [
                     { name: "articulo", filtering: true, title:'Producto', type: "text", width: 110,  editing: false},
                     // { name: "precioSub", type: "number", width: 30,  editing: false},
-                    { name: "precioPublico", filtering: true, title:'Precio Publico', type: "number", width: 30,  editing: false},
-                    { name: "precioUnitario", filtering: false,title: 'Precio Unitario', type: "number", width: 30,  editing: false},
+                    { name: "precioPublico", filtering: true, title:'Precio Publico', type: "money", width: 30,  editing: false },
+                    { name: "precioUnitario", filtering: false,title: 'Precio Unitario', type: "money", width: 30,  editing: false},
                     { name: "totalArticulos", filtering: true, title: 'Total', type: "number", width: 30,  editing: false},
                     // { name: "costoSub", type: "number", width: 30,  editing: false},
-                    { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "number", width: 30,  editing: false},
-                    { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "number", width: 30,  editing: false, itemTemplate: function(value) {
-                        return value.toFixed(2) + "$"; 
-                      }
-                    },
+                    { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "money", width: 30,  editing: false},
+                    { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
                     // { name: "usuarioCreacion", type: "text", width: 50,  editing: false},
                     // { name: "fechaCreacion", type: "date", width: 50,  editing: false},
-                    { type: "control", editButton: false}
+                    
                 ]
 
                 
@@ -162,7 +188,6 @@ jsGrid.fields.date = DateField;
 
       });
     </script>
-    
 </head>
 <body>
 <div class="container"> 
@@ -170,7 +195,10 @@ jsGrid.fields.date = DateField;
     <div class="row">
       <h1>LISTAR ARTICULOS</h1>
     </div>
-    <div class="row" id="datos_list">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datos_list"></div>
+        </div>
     </div>
   </div>
 </div>

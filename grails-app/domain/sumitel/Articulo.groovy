@@ -1,6 +1,6 @@
 package sumitel
 
-class Articulo {
+class Articulo implements Serializable{
 
     String articulo
     Double precioSub

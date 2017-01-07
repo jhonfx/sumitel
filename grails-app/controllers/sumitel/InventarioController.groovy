@@ -13,7 +13,7 @@ class InventarioController {
     def obtenerListaArticulos = {
 
       StringBuilder sql = new StringBuilder()
-      sql.append("Select inv from Inventario inv");
+      sql.append("Select inv from Inventario inv order by inv.id DESC");
       def resultSQL = Inventario.executeQuery(sql.toString())
       log.debug(resultSQL.toString())
 
@@ -42,7 +42,7 @@ class InventarioController {
     def saveArticle() {
 
       
-      log.debug("guardando los datos.........]")
+      log.debug("guardando los datos de nuevo articulo.........]" + params)
       def datos = params
       def formatCostoSub = params.costoSub.replace(',', '')
       def formatCostoPublico = params.costoPublico.replace(',', '')
@@ -54,6 +54,8 @@ class InventarioController {
       inv.precioPublico = Double.parseDouble(formatCostoPublico)
       inv.precioUnitario = Double.parseDouble(formatCostoUnitario)
       inv.totalArticulos = 0
+      inv.tipoArticulo = datos.tipo
+      inv.activo = 1
       inv.costoSub = Double.parseDouble(formatCostoSub)
       inv.costoPublico = Double.parseDouble(formatCostoPublico)
       inv.costoUnitario = Double.parseDouble(formatCostoUnitario)

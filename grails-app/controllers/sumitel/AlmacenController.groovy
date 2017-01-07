@@ -1,10 +1,6 @@
 package sumitel
 
 import grails.converters.JSON
-import sumitel.Proveedor
-import sumitel.Inventario
-import sumitel.Almacen
-
 
 class AlmacenController {
     
@@ -15,6 +11,12 @@ class AlmacenController {
     def altamasiva() { }
 
     def altaporpistola() { }
+
+    def mandameaOtraWEb() {
+      log.debug("vamonos a la gsp ver articulos")
+      redirect(controller: 'inventario', action: 'listarArticulos')
+    }
+
 
     def listaInventario () {
       def inventario = Inventario.findAll()
@@ -27,30 +29,56 @@ class AlmacenController {
 
     }
 
+    def checkFactura = {
+        
+    }
+
     def saveData = {
 
         log.debug("ya debuggea???")
         log.debug(params);
 
         def tuplas_articulos = JSON.parse(params.tuplas)
-        log.debug "Total de tuplas a guardar" + tuplas_articulos.size()
+        log.debug "Total de tuplas a guardar: " + tuplas_articulos.size()
         def totalArticulo = tuplas_articulos.size();
+        def idProd = tuplas_articulos.idProducto
+        log.debug(idProd)
+        def cant = tuplas_articulos.cant
 
-        //{"factura":"333341","precioUnitario":50,"precioPublico":150,"totalArticulos":16,"series":"091213487643878","articulo":"AMIGO CHIP  NANO LTE  SANTI","precioSub":115}
 
+        def searchFact = Almacen.findByNumeroFactura(params.factura);
+        log.debug("factura----->" + searchFact);
+        log.debug("buscando factura");
         try {
+            if (searchFact) {
+                 log.debug("factura ya existe");
+                 def jsonResult = [error: 303]
+                 render jsonResult as JSON
+                 return
+            }    
+        } catch(Exception exec) {
+            log.debug(exec)
+        }
+         
+        //{"factura":"333341","precioUnitario":50,"precioPublico":150,"totalArticulos":16,"series":"091213487643878","articulo":"AMIGO CHIP  NANO LTE  SANTI","precioSub":115}
+        def count = 0;
+        try {
+
           tuplas_articulos.each{tupla->
-            log.debug(tupla)
+            
             Almacen obj = new Almacen()
             obj.fechaCompra = new Date()
             obj.numeroFactura = Long.parseLong(tupla.factura)
             obj.idProveedor = 1
             obj.proveedor = 'TELCEL'
-            obj.idArticuloInventario = 1
+            obj.idArticuloInventario = tupla.idProducto
             obj.articulo = tupla.articulo
             obj.imeiSim = tupla.series
-            obj.costosub = tupla.precioSub * totalArticulo
+            obj.imeiCel = tupla.imeiCel
+            obj.numeroCel = tupla.numeroCel
+            obj.costoSub = tupla.precioSub * totalArticulo
             obj.precioPublico = tupla.precioPublico
+            obj.precioUnitario = tupla.precioUnitario
             obj.costoUnitario = tupla.precioUnitario * totalArticulo
             obj.almacen = 'OF'
             obj.remision = '0'
@@ -62,19 +90,25 @@ class AlmacenController {
           
           }
 
-          def productoInventario = Inventario.get(1)
-          def sumArticulos = productoInventario.getTotalArticulos() + totalArticulo
-          def newCostoSub = productoInventario.getPrecioSub() * totalArticulo
-          def newCostoUnitario = productoInventario.getPrecioUnitario() * totalArticulo
-          def newCostoPublico = productoInventario.getPrecioPublico() * totalArticulo
+          idProd.eachWithIndex{id, index->
+            log.debug("id: "+ id)
 
-          productoInventario.setTotalArticulos(sumArticulos)
-          productoInventario.setUsuarioModificacion('admin2')
-          productoInventario.setfechaModificacion(new Date())
-          productoInventario.setCostoSub(newCostoSub)
-          productoInventario.setCostoUnitario(newCostoUnitario)
-          productoInventario.setCostoPublico(newCostoPublico)
-          productoInventario.save(flush: true)
+            def productoInventario = Inventario.get(id)
+            def sumArticulos = productoInventario.getTotalArticulos() + 1
+            def newCostoSub = productoInventario.getPrecioSub() * sumArticulos
+            def newCostoUnitario = productoInventario.getPrecioUnitario() * sumArticulos
+            def newCostoPublico = productoInventario.getPrecioPublico() * sumArticulos
+            
+
+            productoInventario.setTotalArticulos(sumArticulos)
+            productoInventario.setUsuarioModificacion('admin2')
+            productoInventario.setFechaModificacion(new Date())
+            productoInventario.setCostoSub(newCostoSub)
+            productoInventario.setCostoUnitario(newCostoUnitario)
+            productoInventario.setCostoPublico(newCostoPublico)
+            productoInventario.save(flush: true)
+
+          }
 
 
 
@@ -82,15 +116,9 @@ class AlmacenController {
         catch(Exception e) {
           log.debug(e)
         }
-        
 
-        //render params as JSON
-        log.debug("vamonos a la gsp ver articulos")
-        //redirect(controller: 'almacen', action: 'listaAlmacen')
         def jsonResult = [success: true]
-        render jsonResult as JSON
-        
-        
+        render(jsonResult as JSON)
     }
 
     def obtenerAlmacen = {

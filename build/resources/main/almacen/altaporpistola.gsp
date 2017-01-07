@@ -51,6 +51,7 @@
               $('#costoPublico').val(response.costoPublico)
               $('#costoUnitario').val(response.costoUnitario)
               $('#totalArticulos').val(response.totalArticulos)
+              $('#idProducto').val(id)
               responseInvData = response[0];
           });
         });
@@ -95,7 +96,8 @@
                 'precioUnitario':  responseInvData.precioUnitario,
                 'precioPublico': responseInvData.precioPublico,
                 'precioSub': responseInvData.precioSub,
-                'totalArticulos': responseInvData.totalArticulos
+                'totalArticulos': responseInvData.totalArticulos,
+                'idProducto': responseInvData.id
               });
             });
 
@@ -205,9 +207,9 @@
 </head>
 <body>
 <div class="container"> 
-  <div class="row">
+  <!---div class="row">
     <div class="header">header</div>
-  </div>
+  </div--->
   
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>
@@ -229,6 +231,7 @@
             <input type="hidden" name="costoPublico" id="costoPublico">
             <input type="hidden" name="costoUnitario" id="costoUnitario">
             <input type="hidden" name="totalArticulos" id="totalArticulos">
+            <input type="hidden" name="idProducto" id="idProducto">
         </div>
         <div class="form-group col-sm-4">
           <label>Proveedor</label>

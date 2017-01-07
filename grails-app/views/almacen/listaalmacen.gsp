@@ -79,9 +79,9 @@
             $('#spin').hide()
 
             $('#button_tupla').on('click', function(e, target) {
-              console.log("dando click")
+              // console.log("dando click")
               var id = target.val();
-              console.log(id);
+              // console.log(id);
             })
             var tuplas = json.rows
 
@@ -89,7 +89,7 @@
               return  tupla.imeiSim == '8952020516197792158'
             });
 
-            console.log(tuplasFilter);
+            // console.log(tuplasFilter);
             
             
             /*Start data for table*/
@@ -108,7 +108,7 @@
 
                 loadData: function(filter) {
                     return $.grep(this.tuplas, function(tupla) {
-                      console.log(tupla)
+                      // console.log(tupla)
                         return (!filter.numeroFactura || tupla.numeroFactura === filter.numeroFactura)
                         && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1);
                     });
@@ -120,23 +120,23 @@
               db.tuplas = result;
             }());
 
-    var MyDateField = function(config) {
-        jsGrid.Field.call(this, config);
-    };
+            var MyDateField = function(config) {
+                jsGrid.Field.call(this, config);
+            };
 
-    MyDateField.prototype = new jsGrid.Field({
-        sorter: function(date1, date2) {
-            return new Date(date1) - new Date(date2);
-        },
- 
-        itemTemplate: function(value) {
-          console.log("format date")
-          console.log(value)
-            return new Date(value).toLocaleDateString();
-        }
-    });
- 
-    jsGrid.fields.myDateField = MyDateField;
+            MyDateField.prototype = new jsGrid.Field({
+                sorter: function(date1, date2) {
+                    return new Date(date1) - new Date(date2);
+                },
+         
+                itemTemplate: function(value) {
+                  // console.log("format date")
+                  // console.log(value)
+                    return new Date(value).toLocaleDateString();
+                }
+            });
+         
+            jsGrid.fields.myDateField = MyDateField;
 
               /* generate data table */
               $("#datos_list").jsGrid({
@@ -227,9 +227,9 @@
 </head>
 <body>
 <div class="container"> 
-  <div class="row">
+  <!-- <div class="row">
     <div class="header">SUMITEL S.A DE C.V</div>
-  </div>
+  </div> -->
   <div class="col-sm-6 col-md-7">
     <div class="row">
       <h1>LISTA ALMACEN</h1>
@@ -239,11 +239,8 @@
     </div>
     <div class="row">
       <div class="modal" id="contenedor">
-      
-    </div>
-    </div>
-    
-
+      </div>
+    </div> 
   </div>
 </div>
   

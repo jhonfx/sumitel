@@ -2,7 +2,6 @@
 <%@ page import="sumitel.Proveedor" %>
 <%@ page import="sumitel.Inventario" %>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
 <head>
     <meta name="layout" content="main" />
     <asset:stylesheet src="application.css"/>
@@ -39,6 +38,7 @@
         $('#inventarioId').on('change', function(e) {
           console.log("lo cambie")
           var id = $(this).find('option:selected').val();
+          var tipoProd = 0;
           console.log(id)
 
           $.getJSON('${createLink(controller:"inventario", action:"infoProducto")}', {
@@ -51,17 +51,56 @@
               $('#costoPublico').val(response.costoPublico)
               $('#costoUnitario').val(response.costoUnitario)
               $('#totalArticulos').val(response.totalArticulos)
+              $('#idProducto').val(id)
               responseInvData = response[0];
+              tipoProd = parseInt(responseInvData.tipoArticulo)
+              console.log(tipoProd)
+              if (tipoProd === 1 ) {
+                $('#imei_cel').removeAttr('disabled');
+                $('#imei_cel').attr('required');
+                $('input:radio[name=inlineRadioOptions]').removeAttr('checked');
+              } else {
+                $('#imei_cel').attr('disabled', 'disabled');
+                $('#imei_cel').val('');
+                $('#imei_cel').removeAttr('required');
+                $('input:radio[name=inlineRadioOptions]').removeAttr('checked');
+              }
+
           });
         });
 
         var serie = $('#codigos').val();
+
         
+        var ss = 0;
+        $('input:radio[name=inlineRadioOptions]').on('change', function() {
+          ss = $('input:radio[name=inlineRadioOptions]:checked').val();
+          console.log(ss);
+        });
+        
+        $('#imei').on('focus', function() {
+          if (ss == 0) {
+            swal({
+              title: "Error",
+              type: "error",
+              text: "Debe seleccionar el tipo de producto",
+              allowEscapeKey: true,
+              imageSize: "20x20"
+            });
+            return;
+          }
+        });
+        
+        //Funcion para agregar automaticamente
         $('#imei').on('keypress', function(e, a){
           var selected = $('input:radio[name=inlineRadioOptions]:checked').val();
-          var serie = $('#imei').val()
 
-          if (serie.length == selected) {
+          var serie = $('#imei').val()
+          
+          if (serie.length == 13) {
+            console.log("aqui");
+            $('#imei_cel').focus();
+          } else if (serie.length == selected) {
             $('#aplicar').click();
             $('#imei').val('');
           }
@@ -69,7 +108,20 @@
          console.log(selected)
         //$('#aplicar').click();
           
+        });
+        //termina funcion
+        $('#imei_cel').on('keypress', function(e, a){
+          var imei_cel = $('#imei_cel').val();
+
+          if(imei_cel.length == 15) {
+              console.log(imei_cel.length);
+              $('#aplicar').click();
+              $('#imei').focus();
+              $('#imei').val('');
+              $('#imei_cel').val('');
+            }
         })
+
 
         console.log("cargando");
         var toTable = [];
@@ -82,6 +134,7 @@
           var format = JSON.parse(data);  //data parse
 
           var newobject = format.code.split(/\s+/);  //array of serie/IMEI
+          var newobject2 = !format.imei_cel ? [] : format.imei_cel.split(/\s+/);  //array of serie/IMEI
           console.log(newobject);
           console.log(responseInvData.articulo)
           if (newobject == [""] || newobject == null || newobject.length == 0 || newobject == "") {
@@ -90,12 +143,15 @@
             _.each(newobject, function(obj) {
               toTable.push({
                 'series': obj,
+                'imeiCel': !newobject2[0] ? 0 : newobject2[0],
+                'numeroCel': '0000000',
                 'factura': format.fact,
                 'articulo':  responseInvData.articulo,
                 'precioUnitario':  responseInvData.precioUnitario,
                 'precioPublico': responseInvData.precioPublico,
                 'precioSub': responseInvData.precioSub,
-                'totalArticulos': responseInvData.totalArticulos
+                'totalArticulos': responseInvData.totalArticulos,
+                'idProducto': responseInvData.id
               });
             });
 
@@ -136,7 +192,7 @@
               /* generate data table */
               $("#jsgrid_table").jsGrid({
                 width: "100%",
-                height: "400px",
+                height: "600px",
 
                 confirmDeleting: true,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
@@ -154,10 +210,10 @@
                 controller: db,
          
                 fields: [
-                    { name: "factura", type: "text", width: 50, filtering: false, editing: false},
-                    { name: "series", type: "text", width: 50, editing: false},
-                    { name: "articulo", type: "text", width: 150, editing: false},
-                    { name:  "precioUnitario", type: 'text', width: 30, filtering: false, editing: false},
+                    { name: "factura", title: "Factura", type: "text", width: 50, filtering: false, editing: false},
+                    { name: "series", title: "SIM/SERIE", type: "text", width: 50, editing: false},
+                    { name: "imeiCel", title: "IMEI", type: "text", width: 50, editing: false},
+                    { name:  "precioUnitario", title: "Precio", type: 'text', width: 30, filtering: false, editing: false},
                     { type: "control", editButton: false, filtering: false}
                 ]
 
@@ -170,10 +226,8 @@
 
         $('#limpiar').click( function(e) {
           console.log("limpiando");
+          $("#jsgrid_table").jsGrid("destroy");
           toTable = [];
-          $('#table_here').html("");
-          // $("#jsgrid_table").jsGrid("refresh");
-          // $('#table_here').html(template({toTable}));
         });
 
 
@@ -182,6 +236,49 @@
           console.log(toTable);
           var testjson = JSON.stringify({series: toTable})
           console.log(testjson);
+          e.preventDefault();
+
+          if($('#factura').val() === "") {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Agregue un numero de factura",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#factura').attr('required', 'required');
+            return;
+          } else if ($('#inventarioId').val() === "" || $('#inventarioId').val() === 0) {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Debe seleccionar un producto",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#inventarioId').attr('required', 'required');
+              return;
+          } else if ($('#proveedorId').val() === "" || $('#proveedorId').val() === 0) {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Debe seleccionar un proveedor",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#proveedorId').attr('required', 'required');
+              return;
+          } else if (toTable.length === 0) {
+            swal({
+                title: "Error",
+                type: "error",
+                text: "Debe agregar productos a la factura",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+            console.log("table vacia");
+            return;
+          }
 
           $.ajax({
                 url:"${createLink(controller:'almacen', action:'saveData')}",
@@ -205,9 +302,9 @@
 </head>
 <body>
 <div class="container"> 
-  <div class="row">
+  <!---div class="row">
     <div class="header">header</div>
-  </div>
+  </div--->
   
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>
@@ -229,6 +326,7 @@
             <input type="hidden" name="costoPublico" id="costoPublico">
             <input type="hidden" name="costoUnitario" id="costoUnitario">
             <input type="hidden" name="totalArticulos" id="totalArticulos">
+            <input type="hidden" name="idProducto" id="idProducto">
         </div>
         <div class="form-group col-sm-4">
           <label>Proveedor</label>
@@ -239,25 +337,32 @@
         </div>
         <div class="form-group col-sm-4">
           <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="15"> EQUIPO
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="13"> EQUIPO
           </label>
           <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="13"> CHIP
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="19"> CHIP
           </label>
           <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="12"> TARJETA
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="19"> TARJETA
           </label>
         </div>
 
         <div class="form-group col-sm-8">
-          <label>IMEI / SERIE</label>
+          <label>SIM / SERIE</label>
           <input type="text" class="form-control" id="imei" name="code"></input>
         </div>
-        <div class="form-group col-sm-12">
-          <button type="button" id="aplicar" class="btn">AGREGAR</button>
-          <button type="button" id="limpiar" class="btn">BORRAR</button>
+
+        <div class="form-group col-sm-4">
+          &nbsp;
         </div>
-      </form>
+        <div class="form-group col-sm-8">
+          <label>IMEI</label>
+          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel" maxlength="15"></input>
+        </div>
+        <div class="form-group col-sm-12">
+          <button type="button" id="aplicar" class="btn btn-xs blue">AGREGAR</button>&nbsp;&nbsp;&nbsp;
+          <button type="button" id="limpiar" class="btn btn-xs red">BORRAR</button>
+        </div>
     </div>
     <div class="row">
       <div class="col-sm-12 col-md-12">
@@ -268,11 +373,10 @@
     <div class="row">
       <div class="col-md-8"></div>
       <div class="col-md-4">
-        ${name}
-        <button type="button" id="save_data" class="btn pull-right">GENERAR ORDEN</button>
+        <button type="button" id="save_data" class="btn btn-sm green pull-right">GENERAR ORDEN</button>
       </div>
     </div>
-  
+    </form>
 </div>
   
 

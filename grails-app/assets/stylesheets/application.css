@@ -14,4 +14,6 @@
 *= require push_nav
 *= require ring
 *= require_self
+*= require style
+*= require printer
 */

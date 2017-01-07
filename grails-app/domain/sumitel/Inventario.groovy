@@ -10,6 +10,7 @@ class Inventario implements Serializable {
     Double costoSub
     Double costoUnitario
     Double costoPublico
+    String tipoArticulo
 
     boolean activo
     String usuarioCreacion

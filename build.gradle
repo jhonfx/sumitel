@@ -10,12 +10,14 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
         classpath "org.grails.plugins:hibernate4:5.0.6"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.10.1"
     }
 }
 
 version "0.1"
 group "sumitel"
 
+apply plugin:"maven-publish"
 apply plugin:"eclipse"
 apply plugin:"idea"
 apply plugin:"war"
@@ -30,6 +32,7 @@ ext {
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }
 
@@ -61,6 +64,7 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     runtime "mysql:mysql-connector-java:5.1.29"
+    compile "com.bertramlabs.plugins:asset-pipeline-core:2.10.1"
 }
 
 task wrapper(type: Wrapper) {

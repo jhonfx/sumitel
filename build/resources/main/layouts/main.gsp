@@ -16,6 +16,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
         <g:layoutTitle default="Grails"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-ui.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui.css')}"/>
     
@@ -23,12 +24,11 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
 
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'format_number.js')}"></script>
-
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sidebar.js')}"></script>
-
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'push_nav.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
-
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sumitel_utils.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment.js')}"></script>
     <script>
       function openNav() {
           document.getElementById("mySidenav").style.width = "250px";
@@ -51,8 +51,10 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
       <a href="${createLink(controller: 'almacen', action: 'listaAlmacen')}">Almacen</a>
       <a href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
+      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
       <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Alta masiva</a>
       <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Alta dispositivo</a>
+      <a href="${createLink(controller: 'ordenCompra', action: 'buscarfact')}">Orden de Compra</a>
     </div>
 
     <div id="main">
@@ -76,9 +78,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.select.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.checkbox.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.control.js')}"></script>
-
-    <asset:javascript src="application.js"/>
-     
+ 
     <!-- <div class="footer">SUMITEL S.A de C.V</div> -->
 </body>
 </html>
