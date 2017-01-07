@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TEST PRINTER</title>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'angularPrint.css')}"/>
+</head>
+<body>
+<button class="printer">Printer 2</button>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+          <g:img dir="img" file="sumitel.jpeg" class="img-responsive sumitel" />
+        </div>
+        <div class="col-sm-6 title">
+          <p class="text_header">CONSTRUCTORA, COMERCIALIZADORA Y ADMINISTRADORA LOGISTICA</p>
+        </div>
+        <div class="col-sm-3">
+          <g:img dir="img" file="telcel.png" class="img-responsive telcel"/>
+        </div>
+      
+        <div class="col-sm-12">
+          <p>GRUPO SUMITEL S.A DE C.V 23 SEPTIEMBRE 514 COL.MORELOS CP 50120 TOLUCA, MÉX, RFCGSA070416-415 TEL(01722) 277 85 49 E-mail: sumittelcel@</p>
+        </div>
+      
+        <div class="col-sm-9" ng-controller="datCtrl">
+          <div class="panel panel-default">
+            <div class="panel-heading" >Toluca, Méx a: {{ today | date : "fullDate" }} </div>
+            <div class="panel-body">
+              Cliente: ${params.name}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <label style="float: right;">ORDEN DE COMPRA</label>
+          <p class="numFact">${params.oc}</p>
+        </div>
+    
+        <div class="col-sm-12" id="tableContainer">
+
+          
+        </div>
+    
+
+    
+        
+        <div class="col-sm-12">
+          <div class="text-uppercase panel panel-default">
+            <div class="panel-body">
+              debe(mos) y pagaré(mos) a la orden de grupo sumitel asociados, s.a. de c.v. en esta plaza la cantidad de $158,000 (ciento cincuenta y ochomil) cantidad que ampara las mercancias expresadas en esta orden de compra recibidas a mi (nuestra) entera satisfacción de no pagarse el día de su vencimiento, causará un interes moratorio a razón (x %) mensual de su valor total, este pagaré se rige por la ley general de titulos y operaciones de crédito, la firma puesta en cualquier lugar de este documento implica su aceptación.
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 firma">
+          <div class="col-sm-7"></div>
+          <div class="col-sm-5">
+            <br /><br /><br />
+            <span class="line">____________________________________________________________</span>
+            <p class="text-uppercase textFirma">firma de conformidad</p>
+          </div>
+        </div>
+        <div class="col-sm-12 text-uppercase opciones">
+          <div class="col-sm-3 panel panel-default">
+            <div class="panel-body ajustPanel">
+              <span>dirección</span>
+            </div>
+          </div>
+          <div class="col-sm-3 panel panel-default">
+            <div class="panel-body ajustPanel">
+              <span>almacén</span>
+            </div>
+          </div>
+          <div class="col-sm-3 panel panel-default">
+            <div class="panel-body ajustPanel">
+              <span>contabilidad</span>
+            </div>
+          </div>
+          <div class="col-sm-3 panel panel-default">
+            <div class="panel-body ajustPanel">
+              <span>recibio</span>
+            </div>
+          </div>
+        </div>
+      
+    
+    </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript">
+    $('.printer').on('click', function() {
+      window.print();
+    });
+  </script>
+  <script type="text/javascript">
+  	(document).ready( function() {
+  		var createTable = '<table>' +
+  			'<tbody>' +
+  				'<tr>' +
+  					'<td>hola</td>'+
+					'</tr>' +
+				'</tbody>' +
+				'</table>';
+			$('#tableContainer').html(createTable);
+
+
+  	})
+  </script>
+</html>

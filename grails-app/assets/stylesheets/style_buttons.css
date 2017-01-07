@@ -1,0 +1,86 @@
+.btn{
+    border: none;
+    border-radius: 0;
+    color: #fff;
+    text-transform: uppercase;
+    position: relative;
+}
+.btn:hover{
+    color: #fff;
+}
+.btn:before,
+.btn:after{
+    content: "";
+    position: absolute;
+    transition: all 0.25s ease 0s;
+}
+.btn.btn-lg:before,
+.btn.btn-lg:after{
+    width: 24px;
+    height: 24px;
+}
+.btn.btn-sm:before,
+.btn.btn-sm:after{
+    width: 18px;
+    height: 18px;
+}
+.btn.btn-xs:before,
+.btn.btn-xs:after{
+    width: 14px;
+    height: 14px;
+}
+.btn:before{
+    top: -5px;
+    right: -5px;
+}
+.btn:after{
+    bottom: -5px;
+    left: -5px;
+}
+.btn:hover:before,
+.btn:hover:after{
+    width: 100%;
+    height: 100%;
+}
+.btn.red{
+    background: #ff6e6e;
+}
+.btn.red:before{
+    border-top: 2px solid #ff6e6e;
+    border-right: 2px solid #ff6e6e;
+}
+.btn.red:after{
+    border-bottom: 2px solid #ff6e6e;
+    border-left: 2px solid #ff6e6e;
+}
+.btn.blue{
+    background: #5cbcf6;
+}
+.btn.blue:before{
+    border-top: 2px solid #5cbcf6;
+    border-right: 2px solid #5cbcf6;
+}
+.btn.blue:after{
+    border-bottom: 2px solid #5cbcf6;
+    border-left: 2px solid #5cbcf6;
+}
+.btn.orange{
+    background: #ef965c;
+}
+.btn.orange:before{
+    border-top: 2px solid #ef965c;
+    border-right: 2px solid #ef965c;
+}
+.btn.orange:after{
+    border-bottom: 2px solid #ef965c;
+}
+.btn.green{
+    background: #91ca87;
+}
+.btn.green:before{
+    border-top: 2px solid #91ca87;
+    border-right: 2px solid #91ca87;
+}
+.btn.green:after{
+    border-bottom: 2px solid #91ca87;
+}
