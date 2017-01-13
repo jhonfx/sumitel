@@ -22,13 +22,19 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'stylesheets', file: 'style_buttons.css')}"/>
 
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'format_number.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sidebar.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'push_nav.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'sweetalert.css')}"/>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sumitel_utils.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'validate.js')}"></script>
+    
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sweetalert.min.js')}"></script>
+
     <script>
       function openNav() {
           document.getElementById("mySidenav").style.width = "250px";
@@ -51,10 +57,11 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
       <a href="${createLink(controller: 'almacen', action: 'listaAlmacen')}">Almacen</a>
       <a href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
-      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
       <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Alta masiva</a>
       <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Alta dispositivo</a>
       <a href="${createLink(controller: 'ordenCompra', action: 'buscarfact')}">Orden de Compra</a>
+      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
+      <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
     </div>
 
     <div id="main">

@@ -34,10 +34,26 @@
             
         })
     </script>
+    <style type="text/css">
+      .header {
+         top: 0 !important;
+         width: 100% !important;
+         height: 60px !important;   /* Height of the footer */
+         background: #9dc1e0 !important;
+         float: right;
+         font-size: 30px;
+         color: white;
+         text-align: center;
+         padding: 15px;
+      }
+    </style>
 </head>
 <body>
 <div class="container"> 
   <div class="col-md-12">
+    <div class="row">
+      <div class="header col-sm-12" >SUMITEL S.A DE C.V</div>
+    </div>
     <div class="row">
       <h1>Nuevo articulo</h1>
     </div>
@@ -69,7 +85,7 @@
           </div>
           <div class="form-group">
             <label for="tipoArticulo" class="col-sm-2 control-label">Tipo articulo</label>
-            <div class="col-sm-3">
+            <div class="col-sm-8">
               <g:radio name="tipo" value="1"/>Equipo
               <g:radio name="tipo" value="2"/>Chip/Tarjeta Amigo
             </div>

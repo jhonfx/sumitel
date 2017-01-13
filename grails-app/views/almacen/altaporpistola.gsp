@@ -20,13 +20,27 @@
     <style type="text/css">
       
       .header {
-         
          top: 0 !important;
          width: 100% !important;
          height: 60px !important;   /* Height of the footer */
-         background: #e8ebec !important;
+         background: #9dc1e0 !important;
          float: right;
+         font-size: 40px;
+         font-weight: 400;
+         color: white;
+         text-align: center;
+         padding: 15px;
+         font-family: 'Raleway',sans-serif;
       }
+
+       h1 { color: black; font-family: 'Raleway',sans-serif; font-size: 35px; font-weight: 800; line-height: 55px; margin: 0 0 4px; text-align: center; text-transform: uppercase; 
+       }
+
+       hr {
+          height: 10px;
+          border: 0;
+          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
 
     </style>
 
@@ -302,12 +316,13 @@
 </head>
 <body>
 <div class="container"> 
-  <!---div class="row">
-    <div class="header">header</div>
-  </div--->
+  <div class="row">
+    <div class="header">SUMITEL S.A DE C.V</div>
+  </div>
   
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>
+      <hr>
     </div>
     <div class="row">
       <form id="formulario">

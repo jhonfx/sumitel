@@ -46,7 +46,6 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
           document.getElementById("main").style.marginLeft= "0";
       }
     </script>
-
     <asset:stylesheet src="application.css"/>
     <g:layoutHead/>
 </head>
@@ -57,10 +56,11 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
       <a href="${createLink(controller: 'almacen', action: 'listaAlmacen')}">Almacen</a>
       <a href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
-      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
       <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Alta masiva</a>
       <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Alta dispositivo</a>
       <a href="${createLink(controller: 'ordenCompra', action: 'buscarfact')}">Orden de Compra</a>
+      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
+      <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
     </div>
 
     <div id="main">

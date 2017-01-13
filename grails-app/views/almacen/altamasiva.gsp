@@ -17,6 +17,20 @@
 
 
     <title>CARGA DE ARTICULOS</title>
+    <style>
+      .header {
+         
+         top: 0 !important;
+         width: 100% !important;
+         height: 60px !important;   /* Height of the footer */
+         background: #9dc1e0 !important;
+         float: right;
+         font-size: 30px;
+         color: white;
+         text-align: center;
+         padding: 15px;
+      }
+    </style>
     <script type="text/javascript">
       $(document).ready( function() {
 
@@ -285,6 +299,10 @@
 </head>
 <body>
 <div class="container"> 
+  <div class="row">
+    <div class="header">SUMITEL S.A DE C.V</div>
+  </div>
+  
   <div class="col-md-12">
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>

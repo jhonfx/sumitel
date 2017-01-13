@@ -4,22 +4,22 @@ class BootStrap {
 
     def init = { servletContext ->
 
-      /*Proveedor prov = new Proveedor()
+      Proveedor prov = new Proveedor()
       prov.nombreProveedor = 'TELCEL'
       prov.estatus = 1
       prov.usuarioCreacion = 'admin'
       prov.fechaCreacion = new Date()
-      prov.save()*/
+      prov.save()
 
 
-      def menuList = ['Compras', 'Clientes', 'Usuarios', 'Almacen', 'Inventario', 'Orden Compra', 'Notas Devolucion']
+      /*def menuList = ['Compras', 'Clientes', 'Usuarios', 'Almacen', 'Inventario', 'Orden Compra', 'Notas Devolucion']
       menuList.each { obj -> 
         Menu menu = new Menu()
         menu.descripcionMenu = obj
         menu.save() 
-      }
+      }*/
 
-      /*Usuario u = new Usuario()
+      Usuario u = new Usuario()
       u.nombre = 'Juan'
       u.apellido = 'Purata'
       u.login = 'admin'
@@ -28,7 +28,7 @@ class BootStrap {
       u.fechaCreacion = new Date()
       u.save()
 
-      OrdenCompra oc = new OrdenCompra()
+      /*OrdenCompra oc = new OrdenCompra()
       oc.id = 900
       oc.numeroOrden = 23460
       oc.numeroFactura = 00000000

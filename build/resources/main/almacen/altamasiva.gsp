@@ -13,9 +13,24 @@
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'validate.js')}"></script>
 
 
     <title>CARGA DE ARTICULOS</title>
+    <style>
+      .header {
+         
+         top: 0 !important;
+         width: 100% !important;
+         height: 60px !important;   /* Height of the footer */
+         background: #9dc1e0 !important;
+         float: right;
+         font-size: 30px;
+         color: white;
+         text-align: center;
+         padding: 15px;
+      }
+    </style>
     <script type="text/javascript">
       $(document).ready( function() {
 
@@ -24,7 +39,7 @@
 
         function validateNumber(event) {
             var key = window.event ? event.keyCode : event.which;
-            if (event.keyCode === 8 || event.keyCode === 46) {
+            if (event.keyCode === 8 || event.keyCode === 46 || event.keyCode == 32) {
                 return true;
             } else if ( key < 48 || key > 57 ) {
                 return false;
@@ -61,28 +76,17 @@
               console.log(tipoProd)
               if (tipoProd === 1 ) {
                 $('#imei_cel').removeAttr('disabled');
+                $('#imei_cel').attr('required');
               } else {
                 $('#imei_cel').attr('disabled', 'disabled');
+                $('#imei_cel').val('');
+                $('#imei_cel').removeAttr('required');
               }
 
           });
         });
 
-        $('#test').on('click', function() {
-          $.ajax({
-            url: "${createLink(controller: 'almacen', action: 'mandameaOtraWEb')}",
-            type: "GET",
-            success: function(callback) {
-              console.log("xsp");
-            },
-            error: function(json) {
-              console.log(json);
-            },
-            dataType: "json"
-          });
-        });
-
-
+        
         console.log("cargando");
         var toTable = [];
         
@@ -106,6 +110,7 @@
                   toTable.push({
                     'series': obj,
                     'imeiCel': !newobject2[0] ? 0 : newobject2[0],
+                    'numeroCel': '0000000',
                     'factura': format.fact,
                     'articulo':  responseInvData.articulo,
                     'precioUnitario':  responseInvData.precioUnitario,
@@ -119,6 +124,7 @@
 
 
             $('#codigos').val('');
+            $('#imei_cel').val('');
             console.log(toTable);
 
             /* load data using filter controller */
@@ -157,7 +163,7 @@
                 width: "100%",
                 height: "600px",
 
-                confirmDeleting: true,
+                confirmDeleting: false,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
 
                 filtering: true,
@@ -190,49 +196,122 @@
 
         $('#limpiar').click( function(e) {
           console.log("limpiando");
+          $("#jsgrid_table").jsGrid("destroy");
           toTable = [];
-          $('#table_here').html("");
-          // $("#jsgrid_table").jsGrid("refresh");
           // $('#table_here').html(template({toTable}));
         });
 
-        
 
         $('#save_data').click( function(e) {
-          console.log(toTable);
           var testjson = JSON.stringify({series: toTable})
-          console.log(testjson);
+          e.preventDefault();
+          if($('#factura').val() === "") {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Agregue un numero de factura",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#factura').attr('required', 'required');
+            return;
+          } else if ($('#inventarioId').val() === "" || $('#inventarioId').val() === 0) {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Debe seleccionar un producto",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#inventarioId').attr('required', 'required');
+              return;
+          } else if ($('#proveedorId').val() === "" || $('#proveedorId').val() === 0) {
+              swal({
+                title: "Error",
+                type: "error",
+                text: "Debe seleccionar un proveedor",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+              $('#proveedorId').attr('required', 'required');
+              return;
+          } else if (toTable.length === 0) {
+            swal({
+                title: "Error",
+                type: "error",
+                text: "Debe agregar productos a la factura",
+                allowEscapeKey: true,
+                imageSize: "20x20"
+              });
+            console.log("table vacia");
+            return;
+          }
+
+
 
           $.ajax({
-                url:"${createLink(controller:'almacen', action:'saveData')}",
-                data: {'tuplas': JSON.stringify(toTable)},
-                type:"POST",
-                success:function (callback) {
-                  console.log(callback)
-                   var href = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
-                   location.href = href;
-                },
-                error:function (error) {
-                  console.log(error)
-                },
-                dataType:"json"
-            });
-        })
+              url:"${createLink(controller:'almacen', action:'saveData')}",
+              data: {'factura': $('#factura').val(), 'tuplas': JSON.stringify(toTable)},
+              type:"POST",
+              success:function (callback) {
+                console.log(callback)
+                if (callback.error === 303) {
+                  swal({
+                    title: "Error",
+                    type: "error",
+                    text: "Ya existe ese numero de factura",
+                    allowEscapeKey: true,
+                    imageSize: "20x20"
+                  });
+                  return;
+                } else {
+
+                  swal({
+                    title: "Nueva Factura",
+                    text: "Se generara una factura nueva",
+                    type: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true,
+                  },
+                  function(){
+                    setTimeout(function(){
+                      var href = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
+                      location.href = href;
+                    }, 2000);
+                  });
+                }
+              },
+              error:function (error) {
+                console.log(error)
+              },
+              dataType:"json"
+          });
+          //termina ajax
+          
+        });
+
       });
+
+        
 
     </script>
 </head>
 <body>
 <div class="container"> 
+  <div class="row">
+    <div class="header">SUMITEL S.A DE C.V</div>
+  </div>
+  
   <div class="col-md-12">
     <div class="row">
       <h1>AGREGAR PRODUCTOS</h1>
     </div>
     <div class="row">
-      <form id="formulario">
+      <form id="formulario" name="formulario">
         <div class="form-group">
           <label>FACTURA</label>
-          <input type="text" class="form-control col-md-6" id="factura" name="fact" required>
+          <input type="text" class="form-control col-md-6" id="factura" name="fact">
         </div>
         <div class="form-group">
           <label>Producto</label>
@@ -249,7 +328,7 @@
         </div>
         <div class="form-group">
           <label>Proveedor</label>
-          <g:select name="proveedorId" class="form-control col-md-4"
+          <g:select name="proveedorId" id="proveedorId" class="form-control col-md-4"
             from="${Proveedor.findAll()}"
             optionKey="id" optionValue="nombreProveedor"
             noSelection="${['':'Seleccione...']}"/>
@@ -260,17 +339,17 @@
         </div>
         <div class="form-group">
           <label>IMEI</label>
-          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel" maxlength="16"></textarea>
+          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel" maxlength="16"></input>
         </div>
         <div class="form-group">
           <label>Telefono</label>
           <input type="text" disabled class="form-control" id="tel_cel" name="tel_cel"></textarea>
         </div>
         <div class="form-group">
-          <button type="button" id="aplicar" class="btn">AGREGAR</button>
-          <button type="button" id="limpiar" class="btn">BORRAR</button>
+          <button type="button" id="aplicar" class="btn btn-xs blue">AGREGAR</button>&nbsp;&nbsp;&nbsp;
+          <button type="button" id="limpiar" class="btn btn-xs red">BORRAR</button>
         </div>
-      </form>
+      
     </div>
     <div class="row">
     <div class="col-sm-12">
@@ -280,10 +359,10 @@
     <div class="row">
       <div class="col-md-8"></div>
       <div class="col-md-4">
-        ${name}
-        <button type="button" id="save_data" class="btn pull-right">GENERAR ORDEN</button>
+        <button type="submit" name="submit" id="save_data" class="btn pull-right btn-sm green">GENERAR ORDEN</button>
       </div>
     </div>
+    </form>
   </div>
 </div>
   

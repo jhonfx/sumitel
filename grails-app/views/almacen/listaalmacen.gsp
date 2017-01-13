@@ -25,39 +25,21 @@
          top: 0 !important;
          width: 100% !important;
          height: 60px !important;   /* Height of the footer */
-         background: #e8ebec !important;
+         background: #9dc1e0 !important;
          float: right;
       }
+      .div_cargando {
+        width: 100%;
+        margin-right: 50%;
+        margin-left: 50%;
+        font-size: 38px;
+        text-align: center;
+      } 
 
     </style>
 
 
     <script type="text/javascript">
-      
-
-      var opts = {
-          lines: 13 // The number of lines to draw
-        , length: 28 // The length of each line
-        , width: 14 // The line thickness
-        , radius: 42 // The radius of the inner circle
-        , scale: 1 // Scales overall size of the spinner
-        , corners: 1 // Corner roundness (0..1)
-        , color: '#000' // #rgb or #rrggbb or array of colors
-        , opacity: 0.25 // Opacity of the lines
-        , rotate: 0 // The rotation offset
-        , direction: 1 // 1: clockwise, -1: counterclockwise
-        , speed: 1 // Rounds per second
-        , trail: 60 // Afterglow percentage
-        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-        , zIndex: 0 // The z-index (defaults to 2000000000)
-        , className: 'spinner' // The CSS class to assign to the spinner
-        , top: '300px'
-        , left: '50%' // Left position relative to parent
-        , shadow: false // Whether to render a shadow
-        , hwaccel: false // Whether to use hardware acceleration
-        , position: 'absolute' // Element positioning
-      }
-
 
       $(document).ready( function() {
         console.log("inciando");
@@ -68,15 +50,15 @@
           url: "${createLink(controller: 'almacen', action:'obtenerAlmacen')}",
           type: "GET",
           beforeSend: function() {
-            $('#spin').show()
+            $('.div_cargando').show();
             
           },
           error: function() {
             console.log("tuvimos un error al cargar los datos")
           },
           success: function(json) {
-            console.log(json.rows)
-            $('#spin').hide()
+            
+            $('.div_cargando').hide();
 
             $('#button_tupla').on('click', function(e, target) {
               // console.log("dando click")
@@ -110,7 +92,8 @@
                     return $.grep(this.tuplas, function(tupla) {
                       // console.log(tupla)
                         return (!filter.numeroFactura || tupla.numeroFactura === filter.numeroFactura)
-                        && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1);
+                        && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1)
+                        && (!filter.imeiCel || tupla.imeiCel.indexOf(filter.imeiCel) > -1);
                     });
                 },
 
@@ -143,7 +126,7 @@
                 width: "100%",
                 height: "600px",
 
-                confirmDeleting: true,
+                confirmDeleting: false,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
 
                 filtering: true,
@@ -161,7 +144,8 @@
                 fields: [
                     { name: "numeroFactura", title: '# Factura', type: "number", width: 50, editing: false},
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false},
-                    { name: "imeiSim", title: 'Imei / Sim', type: "text", width: 100, editing: false, filtering: true},
+                    { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
+                    { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
                     { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: false},
                     { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
                       return item.remision;
@@ -218,7 +202,7 @@
           },
           dataType: "json"
         });
-        console.log(response)
+        
 
 
       });
@@ -227,20 +211,18 @@
 </head>
 <body>
 <div class="container"> 
-  <!-- <div class="row">
-    <div class="header">SUMITEL S.A DE C.V</div>
-  </div> -->
-  <div class="col-sm-6 col-md-7">
-    <div class="row">
+  <div class="row">
+    <div class="header col-sm-12" >SUMITEL S.A DE C.V</div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-md-7">
       <h1>LISTA ALMACEN</h1>
-    </div>
-    <div id="spin" class='uil-ring-css' style='transform:scale(0.99);'><div></div></div>
-    <div class="row" id="datos_list">
-    </div>
-    <div class="row">
-      <div class="modal" id="contenedor">
+
+        <div class="div_cargando">Cargando....</div>
+        
+      <div class="row" id="datos_list">
       </div>
-    </div> 
+    </div>
   </div>
 </div>
   

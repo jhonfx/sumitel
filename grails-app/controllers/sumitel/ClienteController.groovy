@@ -4,7 +4,6 @@ import grails.transaction.Transactional
 
 import static org.springframework.http.HttpStatus.*
 
-@Transactional(readOnly = true)
 class ClienteController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -18,37 +17,42 @@ class ClienteController {
         respond cliente
     }
 
-    def create() {
-        respond new Cliente(params)
-    }
+    def create() {}
 
     @Transactional
     def save(Cliente cliente) {
-        if (cliente == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
+        log.debug("en save: "+ cliente)
+        log.debug("guardando un nuevo cliente")
+        try {
+            
+          def datos = params
+          Cliente c2 = new Cliente()
+          c2.nombre = datos.nombre.toUpperCase()
+          c2.ciudad = datos.ciudad.toUpperCase()
+          c2.estado = datos.estado.toUpperCase()
+          c2.fechaCreacion = new Date()
+          c2.usuarioCreacion = 'admin'
+          c2.save()
+
+
+        } catch(Exception exc) {
+            log.debug("no se pudo por: "+ exc)
         }
 
-        if (cliente.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond cliente.errors, view:'create'
-            return
-        }
+        
 
-        cliente.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'cliente.label', default: 'Cliente'), cliente.id])
-                redirect cliente
-            }
-            '*' { respond cliente, [status: CREATED] }
-        }
+        redirect(controller: 'cliente', action: 'create')
     }
+
 
     def edit(Cliente cliente) {
         respond cliente
+    }
+
+    def guardarCliente =  {
+        
+        
+
     }
 
     @Transactional
