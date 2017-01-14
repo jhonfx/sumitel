@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="${resource(dir: 'css', file: 'style.css')}"/>
   <link rel="stylesheet" href="${resource(dir: 'css', file: 'printer.css')}"/>
   <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.css')}"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-3.1.1.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment-with-locales.js')}"></script>

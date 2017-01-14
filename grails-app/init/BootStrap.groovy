@@ -1,4 +1,7 @@
 import sumitel.Menu
+import sumitel.Proveedor
+import sumitel.Usuario
+import sumitel.OrdenCompra
 
 class BootStrap {
 
@@ -12,12 +15,12 @@ class BootStrap {
       prov.save()
 
 
-      /*def menuList = ['Compras', 'Clientes', 'Usuarios', 'Almacen', 'Inventario', 'Orden Compra', 'Notas Devolucion']
+      def menuList = ['Compras', 'Clientes', 'Usuarios', 'Almacen', 'Inventario', 'Orden Compra', 'Notas Devolucion']
       menuList.each { obj -> 
         Menu menu = new Menu()
         menu.descripcionMenu = obj
         menu.save() 
-      }*/
+      }
 
       Usuario u = new Usuario()
       u.nombre = 'Juan'
@@ -28,17 +31,20 @@ class BootStrap {
       u.fechaCreacion = new Date()
       u.save()
 
-      /*OrdenCompra oc = new OrdenCompra()
-      oc.id = 900
+      OrdenCompra oc = new OrdenCompra()
+      
       oc.numeroOrden = 23460
       oc.numeroFactura = 00000000
       oc.fechaCreacion = new Date()
       oc.usuarioCreacion = 'admin'
+      oc.direccionCliente = "TOLUCA, EDO DE MEX"
+      oc.nombreCliente = "OFICINAS SUMITEL"
       oc.fechaModificacion = new Date()
       oc.usuarioModificacion = 'admin'
+      oc.version = 1
       oc.save()
 
-      Cliente c = new Cliente()
+      /*Cliente c = new Cliente()
       c.nombre = 'ANA MARIA FRANGI'
       c.ciudad = 'Toluca'
       c.estado = 'Estado de México'

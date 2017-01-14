@@ -137,7 +137,7 @@ class OrdenCompraController {
         oc.save()
 
         StringBuilder sql = new StringBuilder()
-        sql.append("UPDATE Almacen alm set alm.remision = ${remision} where alm.numeroFactura = ${params.fact}");
+        sql.append("UPDATE Almacen alm set alm.remision = ${remision}, alm.almacen = '${params.name}' where alm.numeroFactura = ${params.fact}");
         log.debug(sql.toString());
         def resultSQL = Almacen.executeUpdate(sql.toString())
         log.debug("resultQuery=>>>>" + resultSQL)

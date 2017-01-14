@@ -7,7 +7,6 @@
 
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
 
@@ -15,6 +14,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
 
     <title>INVENTARIO</title>
     <script type="text/javascript">
@@ -141,7 +141,7 @@
                 width: "100%",
                 height: customHeight,
 
-                confirmDeleting: true,
+                confirmDeleting: false,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
 
                 filtering:true,
@@ -216,12 +216,10 @@
         }
 
         hr {
-          height: 3px;
+          height: 10px;
           border: 0;
-          box-shadow: 0 8px 10px -10px #9dc1e0 inset;
-          font-family: 'specialFont';
-          background: #9dc1e0 !important;
-        }
+          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
 
     </style>
 </head>
@@ -229,7 +227,6 @@
 <div class="container">
   <div class="row">
     <div class="header">SUMITEL S.A DE C.V</div>
-
   </div>
   <div class="row">
      <h1>INVENTARIO</h1>

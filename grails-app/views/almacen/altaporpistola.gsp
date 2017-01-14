@@ -7,18 +7,24 @@
     <asset:stylesheet src="application.css"/>
     <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Articulo')}" />
     
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
+    
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts/utils', file: 'sumitel_utils.js')}"></script>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
 
 
     <title>CARGA DE ARTICULOS</title>
 
     <style type="text/css">
       
+      @font-face {
+        font-family: specialFont;
+        src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
+      }
+
       .header {
          top: 0 !important;
          width: 100% !important;
@@ -30,11 +36,19 @@
          color: white;
          text-align: center;
          padding: 15px;
-         font-family: 'Raleway',sans-serif;
+         font-family: 'specialFont';
       }
 
-       h1 { color: black; font-family: 'Raleway',sans-serif; font-size: 35px; font-weight: 800; line-height: 55px; margin: 0 0 4px; text-align: center; text-transform: uppercase; 
-       }
+       h1 { 
+          color: black; 
+          font-family: 'specialFont';
+          sans-serif; font-size: 35px; 
+          font-weight: 800; 
+          line-height: 55px; 
+          margin: 0 0 4px; 
+          text-align: center; 
+          text-transform: uppercase; 
+        }
 
        hr {
           height: 10px;
@@ -48,13 +62,20 @@
       $(document).ready( function() {
 
         var responseInvData;
+        var tipo_producto;
 
-        $('#inventarioId').on('change', function(e) {
-          console.log("lo cambie")
-          var id = $(this).find('option:selected').val();
+        $('.flexdatalist').flexdatalist({
+          minLength: 1,
+          valueProperty: '*',
+          selectionRequired: true,
+        });
+
+        $('.flexdatalist').on('select:flexdatalist', function(e, u, i) {
+          var d_list = $(this).val();
+          var parse =JSON.parse(d_list);
+          console.log(parse);
+          var id = parse.value
           var tipoProd = 0;
-          console.log(id)
-
           $.getJSON('${createLink(controller:"inventario", action:"infoProducto")}', {
               id: id,
               ajax: 'true'
@@ -68,16 +89,21 @@
               $('#idProducto').val(id)
               responseInvData = response[0];
               tipoProd = parseInt(responseInvData.tipoArticulo)
+              tipo_producto = tipoProd;
               console.log(tipoProd)
               if (tipoProd === 1 ) {
                 $('#imei_cel').removeAttr('disabled');
                 $('#imei_cel').attr('required');
-                $('input:radio[name=inlineRadioOptions]').removeAttr('checked');
+                //$('input:radio[name=inlineRadioOptions]').removeAttr('checked');
+                $('#imei').val('');
+                $('#imei').attr('disabled', 'disabled');
               } else {
                 $('#imei_cel').attr('disabled', 'disabled');
                 $('#imei_cel').val('');
                 $('#imei_cel').removeAttr('required');
-                $('input:radio[name=inlineRadioOptions]').removeAttr('checked');
+                $('#imei').val('');
+                $('#imei').removeAttr('disabled');
+                //$('input:radio[name=inlineRadioOptions]').removeAttr('checked');
               }
 
           });
@@ -86,7 +112,7 @@
         var serie = $('#codigos').val();
 
         
-        var ss = 0;
+       /*var ss = 0;
         $('input:radio[name=inlineRadioOptions]').on('change', function() {
           ss = $('input:radio[name=inlineRadioOptions]:checked').val();
           console.log(ss);
@@ -103,10 +129,10 @@
             });
             return;
           }
-        });
+        });*/
         
         //Funcion para agregar automaticamente
-        $('#imei').on('keypress', function(e, a){
+        /*$('#imei').on('keypress', function(e, a){
           var selected = $('input:radio[name=inlineRadioOptions]:checked').val();
 
           var serie = $('#imei').val()
@@ -122,9 +148,9 @@
          console.log(selected)
         //$('#aplicar').click();
           
-        });
+        });*/
         //termina funcion
-        $('#imei_cel').on('keypress', function(e, a){
+        /*$('#imei_cel').on('keypress', function(e, a){
           var imei_cel = $('#imei_cel').val();
 
           if(imei_cel.length == 15) {
@@ -134,8 +160,23 @@
               $('#imei').val('');
               $('#imei_cel').val('');
             }
-        })
+        })*/
+        $(document).on('keyup', function(e) {
+          var inp_val = $('#imei').val();
+          var inp_val_imei_cel = $('#imei_cel').val();
 
+          if (inp_val.length !== 0 || inp_val !== "") {
+            console.log("no esta vacio");
+            if (e.keyCode === 13) {
+              $('#aplicar').click();
+            }
+          } else if (inp_val_imei_cel !== 0 || inp_val_imei_cel !== "") {
+            console.log("no esta vacio");
+            if (e.keyCode === 13) {
+              $('#aplicar').click();
+            }
+          }
+        });
 
         console.log("cargando");
         var toTable = [];
@@ -146,32 +187,60 @@
           var producto = $('#producto').val();
           var data = JSON.stringify(frm.serializeObject());
           var format = JSON.parse(data);  //data parse
+          console.log(format);
 
-          var newobject = format.code.split(/\s+/);  //array of serie/IMEI
-          var newobject2 = !format.imei_cel ? [] : format.imei_cel.split(/\s+/);  //array of serie/IMEI
+          var newobject = !format.code ? 0 : format.code.split(/\s+/);  //array of serie/IMEI
+          var newobject2 = !format.imei_cel ? 0 : format.imei_cel.split(/\s+/);  //array of serie/IMEI
           console.log(newobject);
+          console.log(newobject2);
           console.log(responseInvData.articulo)
-          if (newobject == [""] || newobject == null || newobject.length == 0 || newobject == "") {
-            console.log("esta vacio")
-          } else {
-            _.each(newobject, function(obj) {
-              toTable.push({
-                'series': obj,
-                'imeiCel': !newobject2[0] ? 0 : newobject2[0],
-                'numeroCel': '0000000',
-                'factura': format.fact,
-                'articulo':  responseInvData.articulo,
-                'precioUnitario':  responseInvData.precioUnitario,
-                'precioPublico': responseInvData.precioPublico,
-                'precioSub': responseInvData.precioSub,
-                'totalArticulos': responseInvData.totalArticulos,
-                'idProducto': responseInvData.id
-              });
+          console.log(tipo_producto);
+          if (tipo_producto == 2 && newobject == 0 || tipo_producto == 1 && newobject2 == 0) {
+            console.log("newobject");
+            swal({
+              title: "Error",
+              type: "error",
+              text: "Falta SIM/SERIE ó IMEI",
+              allowEscapeKey: true,
+              imageSize: "20x20"
             });
-
-            $('#codigos').val('');
+          } else{
+            if (tipo_producto == 2) {
+              _.each(newobject, function(obj) {
+                toTable.push({
+                  'series': obj,
+                  'imeiCel': !newobject2[0] ? 0 : newobject2[0],
+                  'numeroCel': '0000000',
+                  'factura': format.fact,
+                  'articulo':  responseInvData.articulo,
+                  'precioUnitario':  responseInvData.precioUnitario,
+                  'precioPublico': responseInvData.precioPublico,
+                  'precioSub': responseInvData.precioSub,
+                  'totalArticulos': responseInvData.totalArticulos,
+                  'idProducto': responseInvData.id
+                });
+              });
+              $('#imei').focus();
+              $('#imei').val('');
+            } else {
+               _.each(newobject2, function(obj) {
+                toTable.push({
+                  'series': 0,
+                  'imeiCel': !newobject2[0] ? 0 : newobject2[0],
+                  'numeroCel': '0000000',
+                  'factura': format.fact,
+                  'articulo':  responseInvData.articulo,
+                  'precioUnitario':  responseInvData.precioUnitario,
+                  'precioPublico': responseInvData.precioPublico,
+                  'precioSub': responseInvData.precioSub,
+                  'totalArticulos': responseInvData.totalArticulos,
+                  'idProducto': responseInvData.id
+                });
+              });
+              $('#imei_cel').focus(); 
+              $('#imei_cel').val('');
+            }
             console.log(toTable);
-
             /* load data using filter controller */
             (function() {
               
@@ -208,7 +277,7 @@
                 width: "100%",
                 height: "600px",
 
-                confirmDeleting: true,
+                confirmDeleting: false,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
 
                 filtering: true,
@@ -332,16 +401,25 @@
         </div>
         <div class="form-group col-sm-4">
           <label>Producto</label>
-          <g:select name="inventarioId" class="form-control col-md-4" id="inventarioId"
-            from="${Inventario.findAll()}"
-            optionKey="id" optionValue="articulo"
-            noSelection="${['':'Seleccione...']}"/>
+          <input type='text'
+           placeholder='Elige un producto de inventario'
+           class='flexdatalist form-control col-md-4'
+           data-min-length='1'
+           data-value-property='id'
+           list='inventarioList'
+           name='inventarioId'>
+
+           <datalist id="inventarioList">
+              <g:each in="${Inventario.findAll()}" var="inventarioList">
+                  <option value="${inventarioList.id}">${inventarioList.articulo}</option>
+              </g:each>
+          </datalist>
             <input type="hidden" name="producto" id="producto">
             <input type="hidden" name="costosub" id="costosub">
             <input type="hidden" name="costoPublico" id="costoPublico">
             <input type="hidden" name="costoUnitario" id="costoUnitario">
             <input type="hidden" name="totalArticulos" id="totalArticulos">
-            <input type="hidden" name="idProducto" id="idProducto">
+            <input type="hidden" name="idProducto" id="idProducto">    
         </div>
         <div class="form-group col-sm-4">
           <label>Proveedor</label>
@@ -350,17 +428,7 @@
             optionKey="id" optionValue="nombreProveedor"
             noSelection="${['':'Seleccione...']}"/>
         </div>
-        <div class="form-group col-sm-4">
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="13"> EQUIPO
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="19"> CHIP
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="19"> TARJETA
-          </label>
-        </div>
+        
 
         <div class="form-group col-sm-8">
           <label>SIM / SERIE</label>
@@ -372,11 +440,11 @@
         </div>
         <div class="form-group col-sm-8">
           <label>IMEI</label>
-          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel" maxlength="15"></input>
+          <input type="text" disabled class="form-control" id="imei_cel" name="imei_cel"></input>
         </div>
         <div class="form-group col-sm-12">
-          <button type="button" id="aplicar" class="btn btn-xs blue">AGREGAR</button>&nbsp;&nbsp;&nbsp;
-          <button type="button" id="limpiar" class="btn btn-xs red">BORRAR</button>
+          <button type="button" id="aplicar" class="btn bttn-bordered bttn-primary bttn-sm">AGREGAR</button>&nbsp;&nbsp;&nbsp;
+          <button type="button" id="limpiar" class="btn bttn-bordered bttn-primary bttn-sm">BORRAR</button>
         </div>
     </div>
     <div class="row">
@@ -388,7 +456,7 @@
     <div class="row">
       <div class="col-md-8"></div>
       <div class="col-md-4">
-        <button type="button" id="save_data" class="btn btn-sm green pull-right">GENERAR ORDEN</button>
+        <button type="button" id="save_data" class="btn bttn-fill bttn-danger bttn-sm pull-right">GENERAR ORDEN</button>
       </div>
     </div>
     </form>

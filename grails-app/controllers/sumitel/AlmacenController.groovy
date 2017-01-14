@@ -45,8 +45,9 @@ class AlmacenController {
         log.debug(idProd)
         def cant = tuplas_articulos.cant
 
-
-        def searchFact = Almacen.findByNumeroFactura(params.factura);
+        log.debug(params)
+        log.debug(params.factura)
+        def searchFact = Almacen.findByNumeroFactura(params.factura)
         log.debug("factura----->" + searchFact);
         log.debug("buscando factura");
         try {

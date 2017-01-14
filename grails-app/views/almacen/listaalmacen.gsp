@@ -5,36 +5,54 @@
     <asset:stylesheet src="application.css"/>
     <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Almacen')}" />
     
-    
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'accounting.min.js')}"></script>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
 
-    <title>LISTAR ARTCULOS</title>
+    <title>ARTCULOS ALMACEN</title>
 
     <style type="text/css">
-      
-      .header {
-         
+        @font-face {
+          font-family: specialFont;
+          src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
+        }
+
+        .header {
          top: 0 !important;
          width: 100% !important;
          height: 60px !important;   /* Height of the footer */
          background: #9dc1e0 !important;
          float: right;
-      }
-      .div_cargando {
-        width: 100%;
-        margin-right: 50%;
-        margin-left: 50%;
-        font-size: 38px;
-        text-align: center;
-      } 
+         font-size: 40px;
+         font-weight: 400;
+         color: white;
+         text-align: center;
+         padding: 15px;
+         font-family: 'specialFont';
+        }
+
+        h1 { 
+          color: black; 
+          font-family: 'specialFont';
+          sans-serif; font-size: 35px; 
+          font-weight: 800; 
+          line-height: 55px; 
+          margin: 0 0 4px; 
+          text-align: center; 
+          text-transform: uppercase; 
+        }
+
+        hr {
+          height: 10px;
+          border: 0;
+          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
 
     </style>
 
@@ -80,7 +98,7 @@
 
             var result = json.rows;
             var tamanio = result.length
-            var customHeight = 36*30;
+            var customHeight = 36*50;
 
       
             /* load data using filter controller */
@@ -153,12 +171,14 @@
                     { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
                     return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn btn-primary btn-sm'>Ver Detalle</button>")
                       .on("click", function(e) {
-                          //alert(item.imeiSim)
+                          console.log(item)
 
                           console.log("click en boton de descxripcion")
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
-                          var results = $.each(db.tuplas, function(e, tupla) {
+                          console.log(target);
 
+                          var results = $.each(db.tuplas, function(e, tupla) {
+                            console.log(tupla)
                             if (tupla.id == target) {
                               $('#contenedor')
                               .append('<form>')
@@ -166,11 +186,11 @@
                               .append('<label for="articulo">Producto:</label>')
                               .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
                               .append('<label for="costosub">Costo Sub:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costosub" value="'+ tupla.costoSub +'"/> ')
+                              .append('<input readonly type="text" class="form-control" id="costosub" value="'+ accounting.formatMoney(tupla.costoSub) +'"/> ')
                               .append('<label for="costounitario">Costo Unitario:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ tupla.costoUnitario +'"/> ')
+                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ accounting.formatMoney(tupla.costoUnitario) +'"/> ')
                               .append('<label for="preciopublico">Precio publico:</label>')
-                              .append('<input readonly type="text" class="form-control" id="preciopublico" value="'+ tupla.precioPublico +'"/> ')
+                              .append('<input readonly type="text" class="form-control" id="preciopublico" value="'+ accounting.formatMoney(tupla.precioPublico) +'"/> ')
                               .append('<label for="preciopublico">Proveedor:</label>')
                               .append('<input readonly type="text" class="form-control" id="preciopublico" value="'+ tupla.proveedor +'"/> ')
                               .append('<label for="preciopublico">Almacén:</label>')
@@ -180,6 +200,10 @@
                               .append('</div>')
                               .append('</form>')
                               $('#contenedor').modal('show');
+                              var costouni = parseFloat($('#costounitario').val());
+                              console.log(costouni);
+                              var frm = accounting.formatMoney(costouni);
+                              console.log(frm);
                             }
                           });
 
@@ -212,17 +236,13 @@
 <body>
 <div class="container"> 
   <div class="row">
-    <div class="header col-sm-12" >SUMITEL S.A DE C.V</div>
+    <div class="header">SUMITEL S.A DE C.V</div>
   </div>
   <div class="row">
-    <div class="col-sm-6 col-md-7">
-      <h1>LISTA ALMACEN</h1>
-
-        <div class="div_cargando">Cargando....</div>
-        
-      <div class="row" id="datos_list">
-      </div>
-    </div>
+      <h1>ALMACÉN</h1>
+      <hr>
+      <div id="datos_list"></div>
+      <div id="contenedor"></div>
   </div>
 </div>
   

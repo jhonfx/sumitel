@@ -7,12 +7,53 @@
             
     <asset:stylesheet src="application.css"/>
     
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-1.8.3.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'print.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'print.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
+
+    <title>BUSCAR FACTURA</title>
+    <style type="text/css">
+      
+      @font-face {
+        font-family: specialFont;
+        src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
+      }
+
+      .header {
+         top: 0 !important;
+         width: 100% !important;
+         height: 60px !important;   /* Height of the footer */
+         background: #9dc1e0 !important;
+         float: right;
+         font-size: 40px;
+         font-weight: 400;
+         color: white;
+         text-align: center;
+         padding: 15px;
+         font-family: 'specialFont';
+      }
+
+       h1 { 
+          color: black; 
+          font-family: 'specialFont';
+          sans-serif; font-size: 35px; 
+          font-weight: 800; 
+          line-height: 55px; 
+          margin: 0 0 4px; 
+          text-align: center; 
+          text-transform: uppercase; 
+        }
+
+       hr {
+          height: 10px;
+          border: 0;
+          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
+
+    </style>
 
     <script type="text/javascript">
       $(document).ready( function() {
@@ -29,7 +70,14 @@
 
             var result = json.rows
             if (result.length == 0) {
-                console.log("no hay nada")
+                swal({
+                  title: "Error",
+                  type: "error",
+                  text: "Número de factura no existe",
+                  allowEscapeKey: true,
+                  imageSize: "20x20"
+                });
+                $('#fact').val('');
             } else {
                 console.log("si hay datos")
                 $('#grid_container').removeClass('hidden')
@@ -179,8 +227,8 @@
                 fields: [
                     { name: "fechaCompra", filtering: true, title:'Fecha Compra', type: "myDateField", width: 110,  editing: false},
                     { name: "articulo", filtering: true, title:'Producto', type: "text", width: 190,  editing: false},
-                    { name: "imeisim", filtering: true, title:'IMEI', type: "text", width: 130,  editing: false},
-                    { name: "imeicel", filtering: true, title:'SIM', type: "text", width: 130,  editing: false},
+                    { name: "imeisim", filtering: true, title:'SIM / SERIE', type: "text", width: 130,  editing: false},
+                    { name: "imeicel", filtering: true, title:'IMEI', type: "text", width: 130,  editing: false},
                     { name: "precioPublico", filtering: true, title:'Precio', type: "money", width: 70,  editing: false},
                     { name: "almacen", filtering: true, title:'Almacen', type: "text", width: 70,  editing: false},
                 ]
@@ -234,12 +282,20 @@
 
         <div class="container" id="principal_container">
             <div class="row">
+              <div class="header">SUMITEL S.A DE C.V</div>
+            </div>
+          
+            <div class="row">
+              <h1>ORDEN DE COMPRA</h1>
+              <hr>
+            </div>
+            <div class="row">
                 <div class="col-sm-12">
                     <label>Buscar Factura:</label>
                 </div>
                 <div class="col-sm-12">
                     <input type="text" class="col-sm-4" onkeypress="return numbersOnly(event)" name="fact" id="fact">
-                    <button class="searh_btn btn" style="margin-left: 10px" type="button" id="onSearch">Buscar</button>
+                    <button class="searh_btn btn bttn-fill bttn-royal bttn-sm" style="margin-left: 10px" type="button" id="onSearch">Buscar</button>
                 </div>
             </div>
             <div class="row">
@@ -266,7 +322,7 @@
                 </div>
               </div>
               <div class="col-sm-12">
-                <button class="btn pull-right" type="button" id="createOrder">Generar Orden</button>
+                <button class="btn pull-right bttn-fill bttn-danger bttn-sm pull-right" type="button" id="createOrder">Generar Orden</button>
               </div>
             </div>
         </div>

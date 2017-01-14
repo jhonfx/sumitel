@@ -34,5 +34,6 @@ class Almacen implements Serializable {
     static mapping = {
       table 'sumitel_almacen'
       id column: 'id_almacen'
+      numeroFactura column: 'numero_factura', index: 'alm_numero_factura'
     }
 }
