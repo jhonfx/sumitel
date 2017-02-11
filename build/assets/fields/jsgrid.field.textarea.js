@@ -1,2 +1,0 @@
-//# sourceMappingURL=jsgrid.field.textarea.js.map
-(function(a,e,f){function c(b){d.call(this,b)}var d=a.TextField;c.prototype=new d({insertTemplate:function(){return this.inserting?this.insertControl=this._createTextArea():""},editTemplate:function(b){if(!this.editing)return this.itemTemplate(b);var a=this.editControl=this._createTextArea();a.val(b);return a},_createTextArea:function(){return e("<textarea>").prop("readonly",!!this.readOnly)}});a.fields.textarea=a.TextAreaField=c})(jsGrid,jQuery);

@@ -39,7 +39,7 @@
        h1 { 
           color: black; 
           font-family: 'specialFont';
-          sans-serif; font-size: 35px; 
+          font-size: 35px; 
           font-weight: 800; 
           line-height: 55px; 
           margin: 0 0 4px; 
@@ -293,8 +293,28 @@
                 <div class="col-sm-12">
                     <label>Buscar Factura:</label>
                 </div>
+                <div class="col-sm-3">
+                  <label class="col-sm-8">Factura</label>
+                </div>
                 <div class="col-sm-12">
                     <input type="text" class="col-sm-4" onkeypress="return numbersOnly(event)" name="fact" id="fact">
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-sm-8">SIM / SERIE</label>
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" class="col-sm-4" onkeypress="return numbersOnly(event)" name="sim_serie_" id="sim_serie_">
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-sm-8">IMEI</label>
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" class="col-sm-4" onkeypress="return numbersOnly(event)" name="imei_" id="imei_">
+                </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      &nbsp;&nbsp;&nbsp;
+                    </div>
                     <button class="searh_btn btn bttn-fill bttn-royal bttn-sm" style="margin-left: 10px" type="button" id="onSearch">Buscar</button>
                 </div>
             </div>

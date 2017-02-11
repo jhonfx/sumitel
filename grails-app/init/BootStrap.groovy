@@ -2,6 +2,7 @@ import sumitel.Menu
 import sumitel.Proveedor
 import sumitel.Usuario
 import sumitel.OrdenCompra
+import sumitel.NotaCompleta
 
 class BootStrap {
 
@@ -43,6 +44,21 @@ class BootStrap {
       oc.usuarioModificacion = 'admin'
       oc.version = 1
       oc.save()
+
+      NotaCompleta nc = new NotaCompleta()
+      nc.setNombreCliente("Admin")
+      nc.setNumeroRemision(23530)
+      nc.setNombreEquipo("Vacio")
+      nc.setDireccionCliente("Mexico")
+      nc.setImei("0000")
+      nc.setSimSerie("0000")
+      nc.setPrecio(0)
+      nc.setPrecioPublico(0)
+      nc.setTelefono(0)
+      nc.setTotalTexto("CERO")
+      nc.setFechaCreacion(new Date())
+      nc.setUsuarioCreacion("admin")
+      nc.save(flush: true)
 
       /*Cliente c = new Cliente()
       c.nombre = 'ANA MARIA FRANGI'

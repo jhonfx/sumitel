@@ -107,18 +107,18 @@
               tipoProd = parseInt(responseInvData.tipoArticulo)
               tipo_producto = tipoProd;
               console.log(tipoProd)
-              if (tipoProd === 1 ) {
-                $('#imei_cel').removeAttr('disabled');
-                $('#imei_cel').attr('required');
-                $('#imei').val('');
-                $('#imei').attr('disabled', 'disabled');
-              } else {
-                $('#imei_cel').attr('disabled', 'disabled');
-                $('#imei_cel').val('');
-                $('#imei_cel').removeAttr('required');
-                $('#imei').val('');
-                $('#imei').removeAttr('disabled');
-              }
+              // if (tipoProd === 1 ) {
+              //   $('#imei_cel').removeAttr('disabled');
+              //   $('#imei_cel').attr('required');
+              //   $('#imei').val('');
+              //   $('#imei').attr('disabled', 'disabled');
+              // } else {
+              //   $('#imei_cel').attr('disabled', 'disabled');
+              //   $('#imei_cel').val('');
+              //   $('#imei_cel').removeAttr('required');
+              //   $('#imei').val('');
+              //   $('#imei').removeAttr('disabled');
+              // }
 
           });
         });
@@ -405,7 +405,7 @@
         </div>
         <div class="form-group">
           <label>IMEI</label>
-          <textarea type="textarea" disabled class="form-control" id="imei_cel" name="imei_cel"></textarea>
+          <textarea type="textarea" class="form-control" id="imei_cel" name="imei_cel"></textarea>
         </div>
         <div class="form-group">
           <button type="button" id="aplicar" class="btn bttn-bordered bttn-primary bttn-sm">AGREGAR</button>&nbsp;&nbsp;&nbsp;

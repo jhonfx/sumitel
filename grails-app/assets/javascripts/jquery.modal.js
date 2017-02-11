@@ -197,7 +197,7 @@
 
   $.modal.defaults = {
     closeExisting: true,
-    escapeClose: true,
+    escapeClose: false,
     clickClose: true,
     closeText: 'Close',
     closeClass: '',

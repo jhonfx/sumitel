@@ -129,7 +129,40 @@ class AlmacenController {
       render jsonData as JSON
     }
 
+    def obtenerAlmacen2 = {
+      def almacenList = Almacen.findAll(" from Almacen as alm where alm.remision = 0")
+      log.debug(almacenList)
+      def jsonData = [rows: almacenList]
+      render jsonData as JSON
+    }
+
     def listaAlmacen() {}
+
+    def listaparaorden() {}
+
+    def obtenerArticulosDos = {
+        StringBuilder sql = new StringBuilder()
+        sql.append(" SELECT alm from Almacen alm where alm.imeiCel = 0 and alm.remision = 0 and alm.articulo like '%CHIP%'");
+        log.debug(sql)
+        def resultSQL = Almacen.executeQuery(sql.toString())
+        log.debug(resultSQL.toString())
+
+        def tuplasJson = resultSQL.collect {
+          tuplas: [
+            id: it.id, 
+            almacen: it.almacen,
+            articulo: it.articulo,
+            imeiSim: it.imeiSim,
+            precioPublico: it.precioPublico,
+            precioUnitario: it.precioUnitario,
+            proveedor: it.proveedor,
+            factura: it.numeroFactura
+          ]
+        }
+        log.debug(tuplasJson)
+        def jsonData = [rows: tuplasJson]
+        render jsonData as JSON
+    }
 
     def obtenerArticulos = {
         StringBuilder sql = new StringBuilder()

@@ -85,7 +85,7 @@
           
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-7">
-              <button type="submit" id="on_save" class="btn  bttn-fill bttn-danger bttn-sm pull-right">Guardar</button>
+              <button type="submit" id="on_save" class="btn">Guardar</button>
             </div>
           </div>
         </g:form>

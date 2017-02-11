@@ -63,6 +63,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
       <a href="${createLink(controller: 'ordenCompra', action: 'buscarfact')}">Orden de Compra</a>
       <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
       <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
+      <a href="${createLink(controller: 'ordenCompra', action: 'listaparaorden')}">Nueva Orden</a>
     </div>
 
     <div id="main">
