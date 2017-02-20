@@ -23,41 +23,43 @@
 
       console.log(fact);
       $.ajax({
-          url: "${createLink(controller: 'ordenCompra', action:'datosPrintOrden')}?fact=" + fact,
+          url: "${createLink(controller: 'ordenCompra', action:'datosPrintOrdenCompleta')}?remision=" + fact,
           type: "GET",
           success: function(json) {
             console.log(json);
+            console.log(json.length)
             moment.locale("es");
             $('.date').append(moment(new Date()).format("LL"));
-            $('.cliente').append(json.info[0].nombre);
-            $('.numOrden').append(json.info[0].numOrden);
+            $('.cliente').append(json[0].nombreCliente);
+            $('.numOrden').append(fact);
+            var position = json.length-1;
+            var totalTexto = json[position].totalTexto;
+            console.log(totalTexto)
 
 
 
             var content = "<table id='table_articles' class='table table-bordered table-striped'>";
                 content += '<thead>'
-                  content += '<th>Ficha</th>';
+                  content += '<th>Equipo</th>';
                   content += '<th>IMEI</th>';
                   content += '<th>SIM</th>';
-                  content += '<th>Cantidad</th>';
                   content += '<th>Precio</th>';
                   content += '<th>P/P</th>';
                 content += '</thead>';
-              for(i=0; i<json.rows.length; i++){
-                  totalCoste = json.rows[i].coste + totalCoste;
+              for(i=0; i<json.length; i++){
+                  totalCoste = json.precio + totalCoste;
                   content += '<tr>';
-                    content += '<td>' +  json.rows[i].articulo + '</td>';
-                    content += '<td>' +   json.rows[i].imeicel + '</td>';
-                    content += '<td>' +  json.rows[i].imeisim + '</td>';
-                    content += '<td style="text-align: right;">' +  json.rows[i].total +'</td>';
-                    content += '<td style="text-align: right;">' +  accounting.formatMoney(json.rows[i].precioUnitario) +'</td>';
-                    content += '<td style="text-align: right;">' +  accounting.formatMoney(json.rows[i].precioPublico) +'</td>';
+                    content += '<td>' +  json[i].nombreEquipo + '</td>';
+                    content += '<td>' +   json[i].imei + '</td>';
+                    content += '<td>' +  json[i].simSerie + '</td>';
+                    content += '<td style="text-align: right;">' +  accounting.formatMoney(json[i].precio) +'</td>';
+                    content += '<td style="text-align: right;">' +  accounting.formatMoney(json[i].precioPublico) +'</td>';
                   content += '</tr>';
               }
               content += "</table>"
 
               console.log(totalCoste);
-            $('#coste').append(accounting.formatMoney(totalCoste));
+            $('#coste').append(totalTexto);
             $('#tableContainer').append(content);
           }
       });

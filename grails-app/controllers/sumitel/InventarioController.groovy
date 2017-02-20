@@ -19,6 +19,7 @@ class InventarioController {
 
       def tuplasJSON = resultSQL.collect {
         tuplas: [
+          id: it.id,
           articulo: it.articulo,
           precioSub: it.precioSub,
           precioPublico: it.precioPublico,
@@ -38,6 +39,43 @@ class InventarioController {
     }
 
     def create = {}
+
+    
+
+    def editArticle() {
+      def params = params
+      def pp = Double.parseDouble(params.pp)
+      def pu = Double.parseDouble(params.pu)
+      def ps = Double.parseDouble(params.ps)
+      def id = params.id
+
+
+      def article_ = Inventario.get(id);
+      def total = article_.totalArticulos;
+
+      article_.setPrecioPublico(pp)
+      article_.setPrecioUnitario(pu)
+      article_.setPrecioSub(ps)
+      article_.setCostoPublico(total * pp)
+      article_.setCostoUnitario(total * pu)
+      article_.setCostoSub(total * ps)
+      article_.save(flush: true);
+
+      /*StringBuilder sql = new StringBuilder()
+      sql.append("UPDATE Inventario inv set inv.precioPublico = ${pp}, inv.precioSub = '${ps}', inv.precioUnitario = '${pu}' where inv.id = ${params.fact}");
+      log.debug(sql.toString());
+      def resultSQL = Almacen.executeUpdate(sql.toString())
+      log.debug("resultQuery=>>>>" + resultSQL)*/
+      render article_ as JSON
+    }
+
+    def searchByArticle() {
+      def id = params.id
+      log.debug(id)
+      def article_ = Inventario.findAllById(id)
+      render article_ as JSON
+    }
+
 
     def saveArticle() {
 

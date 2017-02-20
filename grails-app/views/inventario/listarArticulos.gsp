@@ -9,6 +9,7 @@
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'accounting.min.js')}"></script>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
@@ -20,6 +21,7 @@
     <script type="text/javascript">
       $(document).ready( function() {
         console.log("inciando");
+        $('#contenedor').hide();
         
         var response = [];
         $.ajax({
@@ -157,17 +159,82 @@
                 controller: db,
          
                 fields: [
-                    { name: "articulo", filtering: true, title:'Producto', type: "text", width: 110,  editing: false},
-                    // { name: "precioSub", type: "number", width: 30,  editing: false},
+                    { name: "articulo", filtering: true, title:'Producto', type: "text", width: 90,  editing: false},
                     { name: "precioPublico", filtering: true, title:'Precio Publico', type: "money", width: 30,  editing: false },
                     { name: "precioUnitario", filtering: false,title: 'Precio Unitario', type: "money", width: 30,  editing: false},
+                    { name: "precioSub", filtering: false,title: 'Precio Sub', type: "money", width: 30,  editing: false},
                     { name: "totalArticulos", filtering: true, title: 'Total', type: "number", width: 30,  editing: false},
-                    // { name: "costoSub", type: "number", width: 30,  editing: false},
                     { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "money", width: 30,  editing: false},
                     { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
-                    // { name: "usuarioCreacion", type: "text", width: 50,  editing: false},
-                    // { name: "fechaCreacion", type: "date", width: 50,  editing: false},
-                    
+                    { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
+                    { title: 'Info', width: 25, editing: false,  itemTemplate: function(_, item) {
+                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Editar</button>")
+                            .on("click", function(e) {
+                                var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+
+                                $.ajax({
+                                  url: "${createLink(controller: 'inventario', action:'searchByArticle')}",
+                                  data: {id: target},
+                                  type: "POST",
+                                  success: function(json) { 
+                                    
+                                    //console.log(json)
+                                    var results = $.each(db.tuplas, function(e, tupla) {
+                                      console.log(tupla.id);
+                                      console.log(target)
+                                      if (tupla.id == target) {
+                                          $('#contenedor')
+                                            .append('<form>')
+                                            .append('<div class="form-group">')
+                                            .append('<label for="articulo">Producto:</label>')
+                                            .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
+                                            .append('<label for="costosub">Precio Publico:</label>')
+                                            .append('<input  type="text" class="form-control" id="pp" value="'+ tupla.precioPublico +'"/> ')
+                                            .append('<label for="costounitario">Precio Unitario:</label>')
+                                            .append('<input  type="text" class="form-control" id="pu" value="'+ tupla.precioUnitario +'"/> ')
+                                            .append('<label for="preciopublico">Precio Sub:</label>')
+                                            .append('<input  type="text" class="form-control" id="ps" value="'+ tupla.precioSub +'"/> ')
+                                            .append('<br>')
+                                            .append('<button type="button" class="btn pull-right btn-primary btn-sm" id="update_article">Actualizar</button>')
+                                            .append('</div>')
+                                            .append('</form>')
+                                            $('#contenedor').modal('show');
+
+                                            //Funcion para actualizar valores del articulo
+                                            $('#update_article').click( function()  {
+                                              console.log("click update")
+                                              $.ajax({
+                                                url: "${createLink(controller: 'inventario', action:'editArticle')}",
+                                                data: {id: target, pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
+                                                type: "POST",
+                                                success: function(json) {
+                                                  console.log(json);
+                                                  //$('#contenedor').modal('hide')
+                                                  var href2 = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
+                                                  location.href = href2;
+                                                }
+                                              });
+                                            });
+
+
+                                            var costouni = parseFloat($('#costounitario').val());
+                                            console.log(costouni);
+                                            var frm = accounting.formatMoney(costouni);
+                                            console.log(frm);
+                                      }
+                                    })
+                                  }
+                                });
+                                
+                                $('#contenedor').on($.modal.BEFORE_CLOSE, function(event, modal) {
+                                  $('#contenedor').html("");
+                                  $('#datos_list').jsGrid("refresh");
+                                  console.log("cerrando");
+                                }); 
+                                //searchByArticle
+
+                            });
+                          }}
                 ]
 
                 
@@ -232,6 +299,7 @@
      <h1>INVENTARIO</h1>
      <hr>
      <div id="datos_list"></div>
+     <div id="contenedor"></div>
   </div>
 </div>
 <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.core.js')}"></script>

@@ -296,7 +296,9 @@
                     { name: "factura", title: "Factura", type: "text", width: 50, filtering: false, editing: false},
                     { name: "series", title: "SIM/SERIE", type: "text", width: 50, editing: false},
                     { name: "imeiCel", title: "IMEI", type: "text", width: 50, editing: false},
-                    { name:  "precioUnitario", title: "Precio", type: 'text', width: 30, filtering: false, editing: false},
+                    { name:  "precioUnitario", title: "Precio unitario", type: 'text', width: 30, filtering: false, editing: false},
+                    { name:  "precioSub", title: "Precio Sub", type: 'text', width: 30, filtering: false, editing: false},
+                    { name:  "precioPublico", title: "Precio publico", type: 'text', width: 30, filtering: false, editing: false},
                     { type: "control", editButton: false, filtering: false}
                 ]
 
@@ -369,7 +371,7 @@
                 type:"POST",
                 success:function (callback) {
                   console.log(callback)
-                   var href = "${createLink(controller: 'almacen', action: 'listaAlmacen')}"
+                   var href = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
                    location.href = href;
                 },
                 error:function (json) {

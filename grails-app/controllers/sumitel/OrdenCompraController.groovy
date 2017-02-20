@@ -200,7 +200,7 @@ class OrdenCompraController {
             tuplas_art.each{tupla->
                 
 
-                totalCompra = tupla.preciopublico + totalCompra
+                totalCompra = tupla.preciounitario + totalCompra
                 NotaCompleta nc = new NotaCompleta()
                 nc.setNombreCliente(params.name)
                 nc.setNumeroRemision(nextRemision)

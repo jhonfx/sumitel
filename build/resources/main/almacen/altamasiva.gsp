@@ -9,6 +9,7 @@
     
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts/utils', file: 'sumitel_utils.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
@@ -107,19 +108,6 @@
               tipoProd = parseInt(responseInvData.tipoArticulo)
               tipo_producto = tipoProd;
               console.log(tipoProd)
-              // if (tipoProd === 1 ) {
-              //   $('#imei_cel').removeAttr('disabled');
-              //   $('#imei_cel').attr('required');
-              //   $('#imei').val('');
-              //   $('#imei').attr('disabled', 'disabled');
-              // } else {
-              //   $('#imei_cel').attr('disabled', 'disabled');
-              //   $('#imei_cel').val('');
-              //   $('#imei_cel').removeAttr('required');
-              //   $('#imei').val('');
-              //   $('#imei').removeAttr('disabled');
-              // }
-
           });
         });
 
@@ -221,21 +209,46 @@
 
             $( function() {
 
+              function MoneyField(config) {
+                jsGrid.NumberField.call(this, config);
+              }
+
+              MoneyField.prototype = new jsGrid.NumberField({
+
+                  itemTemplate: function(value) {
+                    var string = numeral(value).format('$0,0');
+                      return string;
+                  },
+
+                  filterValue: function() {
+                      return parseFloat(this.filterControl.val() || 0);
+                  },
+
+                  insertValue: function() {
+                      return parseFloat(this.insertControl.val() || 0);
+                  },
+
+                  editValue: function() {
+                      return parseFloat(this.editControl.val() || 0);
+                  }
+
+              });
+
+              jsGrid.fields.money = MoneyField;
+
               /* generate data table */
               $("#jsgrid_table").jsGrid({
                 width: "100%",
                 height: "600px",
 
                 confirmDeleting: false,
-                deleteConfirm: "¿ Deseas borrar este artículo ?",
-
                 filtering: true,
                 editing: true,
                 inserting: true,
                 sorting: true,
                 paging: true,
                 autoload: true,
-                pageSize: 15,
+                pageSize: 25,
                 pageButtonCount: 5,
                 
                 // data: toTable,
@@ -246,7 +259,9 @@
                     { name: "series", title: "SIM/SERIE", type: "text", width: 50, editing: false},
                     { name: "imeiCel", title: "IMEI", type: "text", width: 50, editing: false},
                     { name: "articulo", title: "Producto", type: "text", width: 150, editing: false},
-                    { name:  "precioUnitario", title: "Precio", type: 'text', width: 40, filtering: false, editing: false},
+                    { name:  "precioSub", title: "Precio/Sub", type: 'money', width: 40, filtering: false, editing: false},
+                    { name:  "precioPublico", title: "Precio/P", type: 'money', width: 40, filtering: false, editing: false},
+                    { name:  "precioUnitario", title: "Precio/Uni", type: 'money', width: 40, filtering: false, editing: false},
                     { type: "control", editButton: false, filtering: false}
                 ]
 

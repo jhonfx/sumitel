@@ -5,7 +5,6 @@ import grails.converters.JSON
 class AlmacenController {
     
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
     def index() { }
 
     def altamasiva() { }
@@ -79,7 +78,7 @@ class AlmacenController {
             obj.numeroCel = tupla.numeroCel
             obj.costoSub = tupla.precioSub * totalArticulo
             obj.precioPublico = tupla.precioPublico
-            obj.precioUnitario = tupla.precioUnitario
+            obj.precioUnitario = tupla.precioSub
             obj.costoUnitario = tupla.precioUnitario * totalArticulo
             obj.almacen = 'OF'
             obj.remision = '0'
@@ -142,7 +141,7 @@ class AlmacenController {
 
     def obtenerArticulosDos = {
         StringBuilder sql = new StringBuilder()
-        sql.append(" SELECT alm from Almacen alm where alm.imeiCel = 0 and alm.remision = 0 and alm.articulo like '%CHIP%'");
+        sql.append(" SELECT alm from Almacen alm where alm.imeiCel = 0 and alm.remision = 0 and alm.articulo like '%CHIP%' OR alm.articulo like '%SIM CARD%'");
         log.debug(sql)
         def resultSQL = Almacen.executeQuery(sql.toString())
         log.debug(resultSQL.toString())
