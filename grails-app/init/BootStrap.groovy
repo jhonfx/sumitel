@@ -8,7 +8,7 @@ class BootStrap {
 
     def init = { servletContext ->
 
-      Proveedor prov = new Proveedor()
+      /*Proveedor prov = new Proveedor()
       prov.nombreProveedor = 'TELCEL'
       prov.estatus = 1
       prov.usuarioCreacion = 'admin'
@@ -58,7 +58,7 @@ class BootStrap {
       nc.setTotalTexto("CERO")
       nc.setFechaCreacion(new Date())
       nc.setUsuarioCreacion("admin")
-      nc.save(flush: true)
+      nc.save(flush: true)*/
 
       /*Cliente c = new Cliente()
       c.nombre = 'ANA MARIA FRANGI'
