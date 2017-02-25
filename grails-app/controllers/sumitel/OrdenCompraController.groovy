@@ -9,14 +9,19 @@ class OrdenCompraController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def buscarfact() { }
+    def buscarfact() {}
 
     def printOrden() { 
         log.debug(params)
     }
 
-    def printOrdenCompleta() {
+    def printOrdenCompleta() {}
 
+    def reimprimirOrden() {}
+
+    def datosOrdenCompleta = {
+        def ordenes = OrdenCompra.findAll()
+        render ordenes as JSON
     }
 
     def datosPrintOrdenCompleta() {

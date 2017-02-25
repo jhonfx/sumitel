@@ -8,7 +8,7 @@ class BootStrap {
 
     def init = { servletContext ->
 
-      Proveedor prov = new Proveedor()
+      /*Proveedor prov = new Proveedor()
       prov.nombreProveedor = 'TELCEL'
       prov.estatus = 1
       prov.usuarioCreacion = 'admin'

@@ -2,11 +2,13 @@ package sumitel
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import grails.converters.JSON
 
 @Transactional(readOnly = true)
 class NotaCompletaController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
