@@ -56,14 +56,14 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
 
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-      <a href="${createLink(controller: 'almacen', action: 'obtenerAlmacen')}">Almacen</a>
+      <a href="${createLink(controller: 'almacen', action: 'listaalmacen')}">Almacen/Existencias</a>
       <a href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
-      <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Alta masiva</a>
-      <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Alta dispositivo</a>
+      <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Carga por factura</a>
+      <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Carga con Scaner</a>
       <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
       <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
-      <a href="${createLink(controller: 'almacen', action: 'listaparaorden')}">Orden Compra</a>
-      <a href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimprimir Orden</a>
+      <a href="${createLink(controller: 'almacen', action: 'listaparaorden')}">Generar Orden Compra</a>
+      <a href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimprimir Orden Compra</a>
     </div>
 
     <div id="main">

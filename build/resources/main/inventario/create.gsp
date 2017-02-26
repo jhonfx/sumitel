@@ -122,19 +122,19 @@
           <div class="form-group">
             <label for="costoSub" class="col-sm-2 control-label">Costo Sub</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control text-right" id="costoSub" name="costoSub" value="0.00">
+              <input type="text" class="form-control text-right" id="costoSub" name="costoSub" placeholder="$0.00">
             </div>
           </div>
           <div class="form-group">
             <label for="costoPublico" class="col-sm-2 control-label">Costo Publico</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control text-right" id="costoPublico" name="costoPublico" value="0.00">
+              <input type="text" class="form-control text-right" id="costoPublico" name="costoPublico" placeholder="$0.00">
             </div>
           </div>
           <div class="form-group">
             <label for="costoUnitario" class="col-sm-2 control-label">Costo Unitario</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control text-right" id="costoUnitario" name="costoUnitario" value="0.00">
+              <input type="text" class="form-control text-right" placeholder="$0.00" id="costoUnitario" name="costoUnitario">
             </div>
           </div>
           <div class="form-group">

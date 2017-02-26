@@ -17,8 +17,9 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-    <title>ARTCULOS ALMACEN</title>
+    <title>REIMPRIMIR NOTA</title>
 
     <style type="text/css">
         @font-face {
@@ -81,8 +82,7 @@
             console.log(tuplas);
 
             $(function(){
-               (function() {
-              
+               
                 var db2 = {
 
                   loadData: function(filter) {
@@ -103,9 +103,60 @@
                 db2.tuplas = tuplas.rows;
               }());
 
+              var DateField = function(config) {
+                jsGrid.Field.call(this, config);
+            };
+
+            var DateField = function(config) {
+                jsGrid.Field.call(this, config);
+            };
+
+            DateField.prototype = new jsGrid.Field({
+                sorter: function(date1, date2) {
+                    return new Date(date1) - new Date(date2);
+                },    
+                
+                itemTemplate: function(value) {
+                    return new Date(value).toDateString();
+                },
+                
+                filterTemplate: function() {
+                    var now = new Date();
+                    this._fromPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() - 1) });
+                    this._toPicker = $("<input>").datepicker({ defaultDate: now.setFullYear(now.getFullYear() + 1) });
+                    return $("<div>").append(this._fromPicker).append(this._toPicker);
+                },
+                
+                insertTemplate: function(value) {
+                    return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
+                },
+                
+                editTemplate: function(value) {
+                    return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+                },
+                
+                insertValue: function() {
+                    return this._insertPicker.datepicker("getDate").toISOString();
+                },
+                
+                editValue: function() {
+                    return this._editPicker.datepicker("getDate").toISOString();
+                },
+                
+                filterValue: function() {
+                    return {
+                        from: this._fromPicker.datepicker("getDate"),
+                        to: this._toPicker.datepicker("getDate")
+                    };
+                }
+            });
+
+            jsGrid.fields.date = DateField;
+
+
                $("#datos_simseries").jsGrid({
-                  width: "750px",
-                  height: "600px",
+                  width: "100%",
+                  height: "800px",
                   filtering: true,
                   editing: false,
                   inserting: false,
@@ -115,20 +166,33 @@
                   pageSize: 80,
                   pageButtonCount: 5,
                   
-                  //data: imeiSimCel.rows,
-                  controller: db2,
+                  data: tuplas,
+                  //controller: db2,
            
                   fields: [
-                      { name: "factura", title: 'Factura', type: "number", width: 30, editing: false},
-                      { name: "articulo", title: 'Articulo', type: "text", width: 30, editing: false},
-                      { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
-                      { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
+                      { name: "numeroOrden", title: 'Orden', type: "number", width: 30, editing: false},
+                      { name: "nombreCliente", title: 'Cliente', type: "text", width: 30, editing: false},
+                      { name: "usuarioCreacion", title: 'Usuario', type: "text", width: 40, editing: false, filtering: true},
+                      { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, editing: false, filtering: false},
+                      { title: 'Reimprimir', width: 20, editing: false,  itemTemplate: function(_, tupla) {
 
-                      
-                      }}
-                  ]
+                        return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {
+
+                          var target = $('#buttonTupla-'+tupla.id+'').data('idtupla');
+                          console.log(target);
+
+                          var href = "${createLink(controller: 'ordenCompra', action: 'printOrdenCompleta')}" +"?remision=" + target;
+                var specialurl = window.location.origin + href;
+                console.log(specialurl);
+                window.open(specialurl, '_blank');
+
+                          
+
+                          });
+                        }
+                      },
+                    ]
                 });
-            });
           }
       });
     </script>
@@ -140,18 +204,19 @@
     <div class="header">SUMITEL S.A DE C.V</div>
   </div>
   <div class="row">
-      <h1>NOTA COMPLETA</h1>
+      <h1>REIMPRIMIR ORDEN</h1>
       <hr>
   </div>
   <div class="row">
     &nbsp;
   </div>
   <div class="row">
-      <div id="datos_list"></div>
-      <div id="datos_list_final"></div>
-      <div id="datos_simseries"></div>
-      <div id="contenedor_sims" class="col-sm-"></div>
-      <button type="button" id="aplicar_orden" class="btn bttn-fill bttn-danger bttn-sm pull-right">Aplicar</button>
+      <div class="col-sm-12">
+        <div id="datos_list"></div>
+        <div id="datos_list_final"></div>
+        <div id="datos_simseries" class="col-sm-12"></div>
+        <div id="contenedor_sims" class="col-sm-"></div>
+      </div>
   </div>
 </div>
   

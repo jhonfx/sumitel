@@ -3,7 +3,7 @@
 <head>
     <meta name="layout" content="main" />
     <asset:stylesheet src="application.css"/>
-    <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Almacen')}" />
+    <g:set var="entityName" value="${message(code: 'articulo.label', default: 'ListaAlmacen')}" />
     
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
@@ -110,6 +110,8 @@
                     return $.grep(this.tuplas, function(tupla) {
                       // console.log(tupla)
                         return (!filter.numeroFactura || tupla.numeroFactura === filter.numeroFactura)
+                        && (!filter.articulo || (tupla.articulo === filter.articulo))
+                        && (!filter.remision || tupla.remision.indexOf(filter.remision) > -1)
                         && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1)
                         && (!filter.imeiCel || tupla.imeiCel.indexOf(filter.imeiCel) > -1);
                     });
@@ -155,6 +157,11 @@
                 autoload: true,
                 pageSize: 80,
                 pageButtonCount: 5,
+                onDataLoaded: function(args) {
+                  var rows = args.grid.data.length;
+                  console.log(rows.length)
+                  $('#totals_simseries').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                },
                 
                 //data: json.rows,
                 controller: db,
@@ -164,7 +171,7 @@
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false},
                     { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
-                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: false},
+                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
                     { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
                       return item.remision;
                     }},
@@ -242,6 +249,8 @@
       <h1>ALMACÉN</h1>
       <hr>
       <div id="datos_list"></div>
+      <div id="totals_simseries"></div>
+      <div>&nbsp</div>
       <div id="contenedor"></div>
   </div>
 </div>

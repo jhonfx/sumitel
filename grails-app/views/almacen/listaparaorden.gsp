@@ -263,6 +263,7 @@
                     return $.grep(this.tuplas, function(tupla) {
                       
                         return (!filter.numeroFactura || tupla.numeroFactura === filter.numeroFactura)
+                        && (!filter.articulo || (tupla.articulo === filter.articulo))
                         && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1)
                         && (!filter.imeiCel || tupla.imeiCel.indexOf(filter.imeiCel) > -1);
                     });
@@ -339,7 +340,11 @@
                 autoload: true,
                 pageSize: 80,
                 pageButtonCount: 5,
-                
+                onDataLoaded: function(args) {
+                  var rows = args.grid.data.length;
+                  console.log(rows.length)
+                  $('#totals_simseries').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                },
                 //data: json.rows,
                 controller: db,
          
@@ -348,7 +353,7 @@
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false},
                     { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
-                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: false},
+                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
                     { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
                       return item.remision;
                     }},
@@ -475,8 +480,13 @@
   </div>
   <div class="row">
       <div id="datos_list"></div>
+      <div id="totals_simseries"></div>
+      <div>&nbsp</div>
+      <hr>
       <div id="datos_list_final"></div>
-      <div id="datos_simseries"></div>
+      <div id="datos_simseries">
+      </div>
+
       <div id="contenedor_sims" class="col-sm-"></div>
       <button type="button" id="aplicar_orden" class="btn bttn-fill bttn-danger bttn-sm pull-right">Aplicar</button>
   </div>

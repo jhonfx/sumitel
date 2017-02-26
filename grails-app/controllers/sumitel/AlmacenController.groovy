@@ -135,7 +135,7 @@ class AlmacenController {
       render jsonData as JSON
     }
 
-    def listaAlmacen() {}
+    def listaalmacen() {}
 
     def listaparaorden() {}
 
