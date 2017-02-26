@@ -10,6 +10,24 @@
         $(document).ready( function() {
             
             console.log("jquery on");
+
+            // $.ajax({
+            //   url: "${createLink(controller: 'cliente', action: 'clientList')}",
+            //   type: 'GET',
+            //   error: function(e) {
+            //     console.log(e)
+            //   },
+            //   success: function(json) {
+            //     console.log(json)
+            //   }
+            // });
+
+            $.get("${createLink(controller: 'cliente', action: 'clientList')}", {
+              function(callback) {
+                console.log(callback)
+              }
+            }, "json"
+          );
             
         })
     </script>

@@ -1,6 +1,7 @@
 package sumitel
 
 import grails.transaction.Transactional
+import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
 
@@ -18,6 +19,11 @@ class ClienteController {
     }
 
     def create() {}
+
+    def clientList() {
+        def client = Cliente.findAll()
+        render client as JSON
+    }
 
     @Transactional
     def save(Cliente cliente) {
