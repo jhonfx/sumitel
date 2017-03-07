@@ -58,6 +58,10 @@
           box-shadow: 0 10px 10px -10px #8c8b8b inset;
        }
 
+       .btn-white {
+        color: white;
+       }
+
        
 
        #contenedor_sims {
@@ -165,6 +169,14 @@
                   autoload: true,
                   pageSize: 80,
                   pageButtonCount: 5,
+                  onDataLoaded: function(args) {
+                    var rows = args.grid.data.length;
+                    console.log(rows)
+                    if (rows.cancelada == 0) {
+
+                    }
+                    $('.btn-cancel').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                  },
                   
                   data: tuplas,
                   //controller: db2,
@@ -174,7 +186,7 @@
                       { name: "nombreCliente", title: 'Cliente', type: "text", width: 30, editing: false},
                       { name: "usuarioCreacion", title: 'Usuario', type: "text", width: 40, editing: false, filtering: true},
                       { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, editing: false, filtering: false},
-                      { title: 'Reimprimir', width: 20, editing: false,  itemTemplate: function(_, tupla) {
+                      { title: 'Reimprimir', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
                         return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {
 
@@ -189,6 +201,25 @@
                           
 
                           });
+                        }
+                      },
+                      { title: 'Cancelar', width: 10, editing: false,  itemTemplate: function(_, tupla) {
+
+                        if (tupla.cancelada === 0) {
+                          return $("<button type='button' id='buttonTupla' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red' disabled><i class='glyphicon glyphicon-remove btn-white'></button>")
+                        } else {
+                          return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'><i class='glyphicon glyphicon-remove'></i></button>").on("click", function(e) {
+                              $.getJSON('${createLink(controller: "almacen", action:"cancelarOrdenCompra")}', {
+                                  id: tupla.numeroOrden,
+                                  ajax: 'true'
+                              }, function(response) {
+                                  
+                                  console.log(response);
+
+
+                              });
+                            });
+                          }
                         }
                       },
                     ]

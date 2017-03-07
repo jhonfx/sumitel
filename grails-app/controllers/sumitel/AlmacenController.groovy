@@ -141,7 +141,7 @@ class AlmacenController {
 
     def obtenerArticulosDos = {
         StringBuilder sql = new StringBuilder()
-        sql.append(" SELECT alm from Almacen alm where alm.imeiCel = 0 and alm.remision = 0 and alm.articulo like '%CHIP%' OR alm.articulo like '%SIM CARD%'");
+        sql.append(" SELECT alm from Almacen alm where alm.remision = 0 and alm.articulo like '%SIM%'");
         log.debug(sql)
         def resultSQL = Almacen.executeQuery(sql.toString())
         log.debug(resultSQL.toString())
@@ -178,6 +178,42 @@ class AlmacenController {
           ]
         }
         log.debug(tuplasJson)
+        def jsonData = [rows: tuplasJson]
+        render jsonData as JSON
+    }
+
+    def cancelarOrdenCompra = {
+       
+        def grupoAlmacen = Almacen.findAllByRemision(params.id)
+        log.debug("grupoAlmacen=> ${grupoAlmacen.size()}")
+        grupoAlmacen.each {tuplas->
+            log.debug(tuplas.idArticuloInventario)
+            log.debug(tuplas.id)
+
+            def art_inventario = Inventario.get(tuplas.idArticuloInventario)
+            log.debug("articulo=> ${art_inventario}")
+            def total = art_inventario.getTotalArticulos()
+            log.debug("total=> ${total}")
+            art_inventario.setTotalArticulos(total + 1)
+            art_inventario.setCostoPublico(art_inventario.getPrecioPublico() * art_inventario.getTotalArticulos())
+            art_inventario.setCostoUnitario(art_inventario.getPrecioUnitario() * art_inventario.getTotalArticulos())
+            art_inventario.setCostoSub(art_inventario.getPrecioSub() * art_inventario.getTotalArticulos())
+
+            tuplas.remision = 0
+            
+
+            
+
+        }
+
+
+        def tuplasJson = grupoAlmacen.collect {
+          tuplas: [
+            factura: 0,
+            serie: 0,
+            descripcion: 0
+          ]
+        }
         def jsonData = [rows: tuplasJson]
         render jsonData as JSON
     }

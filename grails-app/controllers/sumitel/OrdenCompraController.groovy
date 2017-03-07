@@ -183,7 +183,10 @@ class OrdenCompraController {
         def resultSQL_oc = OrdenCompra.executeQuery(sql_select.toString(), [max: 1])
         log.debug("resultSQL=>>>>"+ resultSQL_oc[0])
         def remision = resultSQL_oc[0]
+        //def remision = 25055
 
+        def nextRemision = remision + 1
+        def totalCompra = 0
 
         OrdenCompra oc = new OrdenCompra()
         oc.numeroFactura = Long.parseLong("0")
@@ -192,14 +195,14 @@ class OrdenCompraController {
         oc.direccionCliente = params.ciudad +', '+ params.estado
         oc.fechaCreacion = new Date()
         oc.usuarioCreacion = 'admin'
+        oc.idCliente = params.idCliente
+        oc.idProveedor = 1
+        oc.totalCompra = totalCompra
         oc.fechaModificacion = new Date()
         oc.usuarioModificacion = 'admin'
         oc.save()
 
         
-
-        def nextRemision = remision + 1
-        def totalCompra = 0
 
         try {
             tuplas_art.each{tupla->
@@ -219,9 +222,19 @@ class OrdenCompraController {
                 nc.setTotalTexto(CantidadesEnLetraUtils.convertNumberToLetter(totalCompra, 'PESOS', true))
                 nc.setFechaCreacion(new Date())
                 nc.setUsuarioCreacion("admin")
-                nc.save(flush: true)
+                nc.save()
                 log.debug(nc)
+
+                def cliente = Cliente.get(params.idCliente)
+                def saldoCorriente = cliente.getSaldoTotal()
+                log.debug(saldoCorriente)
+                cliente.setSaldoTotal(saldoCorriente + totalCompra)
+                cliente.save();
             }
+
+            
+
+            
 
         } catch(Exception exec) {
             log.debug(exec)
@@ -253,10 +266,13 @@ class OrdenCompraController {
             log.debug(totalActual);
             log.debug("le vamos a quitar: " + tupla[0]);
             def resta = totalActual - tupla[0]
+            def mod_costoSub = (resta*prodInv.getPrecioSub())
+            def mod_costoUni = (resta*prodInv.getPrecioUnitario())
+            def mod_costoPub = (resta*prodInv.getPrecioPublico())
             log.debug(resta);
 
             StringBuilder update_cant_art = new StringBuilder()
-            update_cant_art.append("UPDATE Inventario inv set inv.totalArticulos = ${resta} where inv.id = ${idart}");
+            update_cant_art.append("UPDATE Inventario inv set inv.totalArticulos = ${resta}, inv.costoSub = ${mod_costoSub}, inv.costoUnitario = ${mod_costoUni}, inv.costoPublico = ${mod_costoPub} where inv.id = ${idart}");
             log.debug(update_cant_art.toString());
             def resultSQL_update = Almacen.executeUpdate(update_cant_art.toString())
             log.debug("resultQuery=>>>>" + resultSQL_update)

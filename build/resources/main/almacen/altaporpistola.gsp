@@ -111,56 +111,6 @@
 
         var serie = $('#codigos').val();
 
-        
-       /*var ss = 0;
-        $('input:radio[name=inlineRadioOptions]').on('change', function() {
-          ss = $('input:radio[name=inlineRadioOptions]:checked').val();
-          console.log(ss);
-        });
-        
-        $('#imei').on('focus', function() {
-          if (ss == 0) {
-            swal({
-              title: "Error",
-              type: "error",
-              text: "Debe seleccionar el tipo de producto",
-              allowEscapeKey: true,
-              imageSize: "20x20"
-            });
-            return;
-          }
-        });*/
-        
-        //Funcion para agregar automaticamente
-        /*$('#imei').on('keypress', function(e, a){
-          var selected = $('input:radio[name=inlineRadioOptions]:checked').val();
-
-          var serie = $('#imei').val()
-          
-          if (serie.length == 13) {
-            console.log("aqui");
-            $('#imei_cel').focus();
-          } else if (serie.length == selected) {
-            $('#aplicar').click();
-            $('#imei').val('');
-          }
-
-         console.log(selected)
-        //$('#aplicar').click();
-          
-        });*/
-        //termina funcion
-        /*$('#imei_cel').on('keypress', function(e, a){
-          var imei_cel = $('#imei_cel').val();
-
-          if(imei_cel.length == 15) {
-              console.log(imei_cel.length);
-              $('#aplicar').click();
-              $('#imei').focus();
-              $('#imei').val('');
-              $('#imei_cel').val('');
-            }
-        })*/
         $(document).on('keyup', function(e) {
           var inp_val = $('#imei').val();
           var inp_val_imei_cel = $('#imei_cel').val();

@@ -20,9 +20,45 @@ class ClienteController {
 
     def create() {}
 
+    def listaClientes = {}
+
     def clientList() {
         def client = Cliente.findAll()
         render client as JSON
+    }
+
+    def datosCliente() {
+        StringBuilder compra = new StringBuilder()
+        compra.append("select SUM(oc.totalCompra) from OrdenCompra oc where oc.idCliente = 2");
+        log.debug(compra.toString());
+        def resultSQL_compra = OrdenCompra.executeQuery(compra.toString())
+        log.debug("resultQuery=>>>>" + resultSQL_compra)
+        
+        render resultSQL_compra as JSON
+    }
+
+    def abonoCliente() {
+        def id = params.id
+        log.debug(id)
+        try {
+            def cliente = Cliente.get(id);
+            cliente.abonoSaldo = cliente.getAbonoSaldo() == 0 ? Double.parseDouble(params.pago) : cliente.getAbonoSaldo() + Double.parseDouble(params.pago)
+            cliente.saldoTotal = cliente.getSaldoTotal() - Double.parseDouble(params.pago)
+            cliente.fechaModificacion = new Date()
+            cliente.usuarioModificacion = "admin"
+            cliente.save();
+
+            AbonoCliente abc = new AbonoCliente()
+            abc.AbonoCliente = Double.parseDouble(params.pago)
+            abc.idCliente = cliente.id
+            abc.fechaCreacion = new Date()
+            abc.usuarioCreacion = "admin"
+            abc.fechaModificacion = new Date()
+            abc.usuarioModificacion = "admin"
+            abc.save()
+        } catch(Exception ex) {
+            log.debug("no se pudo por: "+ ex)   
+        }
     }
 
     @Transactional

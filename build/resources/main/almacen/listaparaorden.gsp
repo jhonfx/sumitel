@@ -83,6 +83,7 @@
         //Aplica la orden de compra
         $('#aplicar_orden').on('click', function() {
           var clent = $('#client_name').val();
+          console.log(clent)
           if (clent == "") {
             swal({
               title: "Error",
@@ -107,7 +108,7 @@
           $.ajax({
             url: "${createLink(controller: 'ordenCompra', action:'generarOrdenCompleta')}",
             // data: {imeis: imeis, seriesim: series, name: "Karen Medina", ciudad: "Toluca", estado: "Mexico"},
-            data: {obj: JSON.stringify(obj_seleccionados), name: $('#name').val(), ciudad: $('#ciudad').val(), estado: $('#estado').val(), ids: JSON.stringify(ids)},
+            data: {idCliente: clent, obj: JSON.stringify(obj_seleccionados), name: $('#name').val(), ciudad: $('#ciudad').val(), estado: $('#estado').val(), ids: JSON.stringify(ids)},
             type: "POST",
             success: function(json) { 
               
@@ -263,7 +264,7 @@
                     return $.grep(this.tuplas, function(tupla) {
                       
                         return (!filter.numeroFactura || tupla.numeroFactura === filter.numeroFactura)
-                        && (!filter.articulo || (tupla.articulo === filter.articulo))
+                        && (!filter.articulo || tupla.articulo.indexOf(filter.articulo) > -1)
                         && (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1)
                         && (!filter.imeiCel || tupla.imeiCel.indexOf(filter.imeiCel) > -1);
                     });
