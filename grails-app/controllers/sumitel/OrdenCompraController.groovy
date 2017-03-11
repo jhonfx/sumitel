@@ -181,9 +181,7 @@ class OrdenCompraController {
         
         StringBuilder sql_select = new StringBuilder()
         sql_select.append("Select nt.numeroRemision from NotaCompleta nt order by nt.numeroRemision DESC")
-        log.debug(sql_select.toString())
         def resultSQL_oc = OrdenCompra.executeQuery(sql_select.toString(), [max: 1])
-        log.debug("resultSQL=>>>>"+ resultSQL_oc[0])
         def remision = resultSQL_oc[0]
         //def remision = 25055
 
@@ -197,7 +195,7 @@ class OrdenCompraController {
         oc.direccionCliente = params.ciudad +', '+ params.estado
         oc.fechaCreacion = new Date()
         oc.usuarioCreacion = 'admin'
-        oc.idCliente = idcli
+        oc.idCliente = idcli.toInteger()
         oc.idProveedor = 1
         oc.cancelada = 0
         oc.totalCompra = totalCompra
@@ -205,13 +203,12 @@ class OrdenCompraController {
         oc.usuarioModificacion = 'admin'
         oc.save()
         log.debug("Genera ordendecompra---->")
-        log.debug("IDCLI---->####" + idcli)
+        log.debug("IDCLI para la orden de compra---->####" + idcli)
         
 
         try {
             tuplas_art.each{tupla->
                 
-                log.debug("vamos a generar la nota completa--->")
                 totalCompra = tupla.preciounitario + totalCompra
                 NotaCompleta nc = new NotaCompleta()
                 nc.setNombreCliente(params.name)
@@ -227,9 +224,7 @@ class OrdenCompraController {
                 nc.setFechaCreacion(new Date())
                 nc.setUsuarioCreacion("admin")
                 nc.save()
-                log.debug("notaCompleta ----> " + nc)
 
-                log.debug("idCliente---->"+ params.idCliente)
                 def cliente = Cliente.get(params.idCliente)
                 def saldoCorriente = cliente.getSaldoTotal()
                 log.debug(saldoCorriente)
@@ -247,37 +242,27 @@ class OrdenCompraController {
         lista_id.each{i->
             StringBuilder sql = new StringBuilder()
             sql.append("UPDATE Almacen alm set alm.remision = ${nextRemision}, alm.almacen = '${params.name}' where alm.id = ${i.id}");
-            log.debug(sql.toString())
             def resultSQL = Almacen.executeUpdate(sql.toString())
-            log.debug("resultQuery=>>>>" + resultSQL)    
         }
         
         
 
         StringBuilder idarticulos = new StringBuilder()
         idarticulos.append("SELECT count(*) as total, alm.idArticuloInventario from Almacen alm where alm.remision = ${nextRemision} group by alm.articulo");
-        log.debug(idarticulos.toString());
         def resultSQL_articulos = Almacen.executeQuery(idarticulos.toString())
-        log.debug("resultQuery=>>>>" + resultSQL_articulos)
 
         resultSQL_articulos.each{tupla->
             def prodInv = Inventario.get(tupla[1])
-            log.debug(prodInv)
             def idart = tupla[1];
             def totalActual = prodInv.getTotalArticulos()
-            log.debug(totalActual);
-            log.debug("le vamos a quitar: " + tupla[0]);
             def resta = totalActual - tupla[0]
             def mod_costoSub = (resta*prodInv.getPrecioSub())
             def mod_costoUni = (resta*prodInv.getPrecioUnitario())
             def mod_costoPub = (resta*prodInv.getPrecioPublico())
-            log.debug(resta);
 
             StringBuilder update_cant_art = new StringBuilder()
             update_cant_art.append("UPDATE Inventario inv set inv.totalArticulos = ${resta}, inv.costoSub = ${mod_costoSub}, inv.costoUnitario = ${mod_costoUni}, inv.costoPublico = ${mod_costoPub} where inv.id = ${idart}");
-            log.debug(update_cant_art.toString());
             def resultSQL_update = Almacen.executeUpdate(update_cant_art.toString())
-            log.debug("resultQuery=>>>>" + resultSQL_update)
         }
 
         def jsonResult = [success: true, remision: nextRemision, totalTexto: totalCompra]
