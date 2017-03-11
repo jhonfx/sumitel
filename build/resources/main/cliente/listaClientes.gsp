@@ -100,6 +100,8 @@
 
 
                                 var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+                                console.log(target);
+                                
 
                                 $.each(tuplas, function(e, tupla) {
                                   if(tupla.id === target) {
@@ -115,6 +117,8 @@
                                           allowEscapeKey: true,
                                           imageSize: "20x20"
                                         });
+                                        $('#modal').iziModal('close');
+                                        return;
                                       } else {
                                         $('#modal').iziModal('close');
                                         $.ajax({
@@ -123,10 +127,15 @@
                                           type: "POST",
                                           success: function(callback) {
                                             console.log(callback);
+                                            $('#listaClientes').jsGrid("refresh");
 
                                           },
                                           error: function(error) {
-
+                                            console.log(error)
+                                            $('#listaClientes').jsGrid("refresh");
+                                            var href = "${createLink(controller: 'cliente', action: 'listaClientes')}";
+                                            var specialurl = window.location.origin + href;
+                                            location.reload(specialurl)
                                           },
                                           dataType: "json"
                                         });

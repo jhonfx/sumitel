@@ -168,6 +168,8 @@ class OrdenCompraController {
      def generarOrdenCompleta = {
         log.debug("params: " + params)
         def datos = params
+
+        def idcli = params.idCliente
         def tuplas_art = JSON.parse(datos.obj)
         def list = new ArrayList()
         def lista_id = JSON.parse(params.ids)
@@ -195,19 +197,21 @@ class OrdenCompraController {
         oc.direccionCliente = params.ciudad +', '+ params.estado
         oc.fechaCreacion = new Date()
         oc.usuarioCreacion = 'admin'
-        oc.idCliente = params.idCliente
+        oc.idCliente = idcli
         oc.idProveedor = 1
+        oc.cancelada = 0
         oc.totalCompra = totalCompra
         oc.fechaModificacion = new Date()
         oc.usuarioModificacion = 'admin'
         oc.save()
-
+        log.debug("Genera ordendecompra---->")
+        log.debug("IDCLI---->####" + idcli)
         
 
         try {
             tuplas_art.each{tupla->
                 
-
+                log.debug("vamos a generar la nota completa--->")
                 totalCompra = tupla.preciounitario + totalCompra
                 NotaCompleta nc = new NotaCompleta()
                 nc.setNombreCliente(params.name)
@@ -222,18 +226,18 @@ class OrdenCompraController {
                 nc.setTotalTexto(CantidadesEnLetraUtils.convertNumberToLetter(totalCompra, 'PESOS', true))
                 nc.setFechaCreacion(new Date())
                 nc.setUsuarioCreacion("admin")
-                nc.save()
-                log.debug(nc)
+                nc.save(flush:true)
+                log.debug("notaCompleta ----> " + nc)
 
+                log.debug("idCliente---->"+ params.idCliente)
                 def cliente = Cliente.get(params.idCliente)
                 def saldoCorriente = cliente.getSaldoTotal()
                 log.debug(saldoCorriente)
                 cliente.setSaldoTotal(saldoCorriente + totalCompra)
                 cliente.save();
+
+                updatePurchaseOrder()
             }
-
-            
-
             
 
         } catch(Exception exec) {
@@ -280,6 +284,15 @@ class OrdenCompraController {
 
         def jsonResult = [success: true, remision: nextRemision, totalTexto: totalCompra]
         render(jsonResult as JSON)
+    }
+
+    def updatePurchaseOrder() {
+        log.debug("actualizando total venta---->>>>>>>")
+        OrdenCompra acc = OrdenCompra.get(nextRemision)
+        acc.setTotalCompra(totalCompra)
+        acc.fechaModificacion(new Date())
+        acc.usuarioModificacion("admin2")
+        occ.save()
     }
     
 

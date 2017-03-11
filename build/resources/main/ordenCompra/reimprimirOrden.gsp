@@ -185,7 +185,7 @@
                       { name: "numeroOrden", title: 'Orden', type: "number", width: 30, editing: false},
                       { name: "nombreCliente", title: 'Cliente', type: "text", width: 30, editing: false},
                       { name: "usuarioCreacion", title: 'Usuario', type: "text", width: 40, editing: false, filtering: true},
-                      { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, editing: false, filtering: false},
+                      { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, filtering: false},
                       { title: 'Reimprimir', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
                         return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {

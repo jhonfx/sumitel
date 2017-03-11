@@ -43,9 +43,9 @@ class BootStrap {
       oc.fechaModificacion = new Date()
       oc.usuarioModificacion = 'admin'
       oc.version = 1
-      oc.save()
+      oc.save()*/
 
-      NotaCompleta nc = new NotaCompleta()
+      /*NotaCompleta nc = new NotaCompleta()
       nc.setNombreCliente("Admin")
       nc.setNumeroRemision(23530)
       nc.setNombreEquipo("Vacio")

@@ -184,7 +184,18 @@ class AlmacenController {
 
     def cancelarOrdenCompra = {
        
+        log.debug("params--->" + params)
+        def totalPrice = 0
+
         def grupoAlmacen = Almacen.findAllByRemision(params.id)
+        
+        OrdenCompra occ = OrdenCompra.findByNumeroOrden(params.id);
+        occ.cancelada = 1
+        occ.save()
+
+
+        def clienteid = params.idcliente
+        log.debug(clienteid)
         log.debug("grupoAlmacen=> ${grupoAlmacen.size()}")
         grupoAlmacen.each {tuplas->
             log.debug(tuplas.idArticuloInventario)
@@ -194,17 +205,23 @@ class AlmacenController {
             log.debug("articulo=> ${art_inventario}")
             def total = art_inventario.getTotalArticulos()
             log.debug("total=> ${total}")
+            totalPrice = totalPrice + tuplas.precioUnitario
+            log.debug("totalPrice------->" + totalPrice)
             art_inventario.setTotalArticulos(total + 1)
             art_inventario.setCostoPublico(art_inventario.getPrecioPublico() * art_inventario.getTotalArticulos())
             art_inventario.setCostoUnitario(art_inventario.getPrecioUnitario() * art_inventario.getTotalArticulos())
             art_inventario.setCostoSub(art_inventario.getPrecioSub() * art_inventario.getTotalArticulos())
 
             tuplas.remision = 0
-            
-
-            
 
         }
+
+        Cliente cc = Cliente.get(clienteid)
+        log.debug("cliente?--->"+ cc)
+        def restSaldo = cc.getSaldoTotal() - totalPrice
+        cc.setSaldoTotal(restSaldo)
+        cc.save()
+        log.debug("saldo total cliente---->" + restSaldo)
 
 
         def tuplasJson = grupoAlmacen.collect {

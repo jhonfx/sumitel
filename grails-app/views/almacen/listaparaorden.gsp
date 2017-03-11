@@ -120,6 +120,10 @@
                 console.log(specialurl);
                 window.open(specialurl, '_blank');
 
+                var href = "${createLink(controller: 'almacen', action: 'listaparaorden')}";
+                var specialurl = window.location.origin + href;
+                location.reload()
+
                 // var href2 = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
                 // location.href = href2;
             }

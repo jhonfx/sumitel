@@ -4,12 +4,12 @@ class OrdenCompra implements Serializable{
 
 		Long numeroOrden
 		Long numeroFactura
-        Long idCliente
-        Long idProveedor
+    int idCliente
+    int idProveedor
 		String nombreCliente
 		String direccionCliente
-        int cancelada = 1
-        double totalCompra
+    int cancelada
+    double totalCompra
 		Date fechaCreacion
 		String usuarioCreacion
 		Date fechaModificacion
@@ -21,6 +21,15 @@ class OrdenCompra implements Serializable{
       idCliente nullable: true
       idProveedor nullable: true
       cancelada nullable: true
+      totalCompra nullable:true
+      direccionCliente nullable: true
+      numeroOrden nullable: true
+      numeroFactura nullable: true
+      idCliente nullable: true
+      idProveedor nullable: true
+      nombreCliente nullable: true
+      fechaCreacion nullable: true
+      fechaModificacion nullable: true
     }
 
     static mapping = {
