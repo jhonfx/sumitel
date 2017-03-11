@@ -188,7 +188,7 @@
                       { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, filtering: false},
                       { title: 'Reimprimir', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
-                        return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {
+                        return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+tupla.idCliente+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {
 
                           var target = $('#buttonTupla-'+tupla.id+'').data('idtupla');
                           console.log(target);
@@ -205,18 +205,23 @@
                       },
                       { title: 'Cancelar', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
-                        if (tupla.cancelada === 0) {
+                        if (tupla.cancelada === 1) {
                           return $("<button type='button' id='buttonTupla' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red' disabled><i class='glyphicon glyphicon-remove btn-white'></button>")
                         } else {
-                          return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'><i class='glyphicon glyphicon-remove'></i></button>").on("click", function(e) {
-                              $.getJSON('${createLink(controller: "almacen", action:"cancelarOrdenCompra")}', {
-                                  id: tupla.numeroOrden,
-                                  ajax: 'true'
-                              }, function(response) {
-                                  
-                                  console.log(response);
-
-
+                          return $("<button type='button' id='buttonTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+ tupla.idCliente +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'><i class='glyphicon glyphicon-remove'></i></button>").on("click", function(e) {
+                              $.ajax({
+                                url: '${createLink(controller: "almacen", action:"cancelarOrdenCompra")}',
+                                data: {id: tupla.numeroOrden, idcliente: tupla.idCliente},
+                                type: "POST",
+                                success: function(resp) {
+                                    console.log(resp);
+                                    location.reload()
+                                },
+                                error: function(err) {
+                                  console.log(err)
+                                  location.reload()
+                                },
+                                dataType: "json"
                               });
                             });
                           }

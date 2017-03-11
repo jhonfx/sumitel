@@ -34,6 +34,7 @@
             $('.numOrden').append(fact);
             var position = json.length-1;
             var totalTexto = json[position].totalTexto;
+            var totalCoste = 0;
             console.log(totalTexto)
 
 
@@ -47,7 +48,7 @@
                   content += '<th>P/P</th>';
                 content += '</thead>';
               for(i=0; i<json.length; i++){
-                  totalCoste = json.precio + totalCoste;
+                  totalCoste = parseFloat(json[i].precio) + totalCoste;
                   content += '<tr>';
                     content += '<td>' +  json[i].nombreEquipo + '</td>';
                     content += '<td>' +   json[i].imei + '</td>';
@@ -61,7 +62,7 @@
               console.log(totalCoste);
               console.log(json[0].precio)
             $('#coste').append(totalTexto);
-            $('#total_num').append(accounting.formatMoney(json[0].precio));
+            $('#total_num').append(accounting.formatMoney(totalCoste));
             $('#tableContainer').append(content);
           }
       });

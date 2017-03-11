@@ -134,7 +134,8 @@
                                             console.log(error)
                                             $('#listaClientes').jsGrid("refresh");
                                             var href = "${createLink(controller: 'cliente', action: 'listaClientes')}";
-                                            var specialurl = window.location.origin + href;
+                                            var specialurl = window.location.origin + window.location.pathname;
+                                            console.log(specialurl)
                                             location.reload(specialurl)
                                           },
                                           dataType: "json"

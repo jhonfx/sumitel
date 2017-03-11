@@ -59,7 +59,9 @@
               content += "</table>"
 
               console.log(totalCoste);
+              console.log(json[0].precio)
             $('#coste').append(totalTexto);
+            $('#total_num').append(accounting.formatMoney(json[0].precio));
             $('#tableContainer').append(content);
           }
       });
@@ -117,6 +119,9 @@
     
 
         
+          <div class="col-sm-12">
+            <span class="pull-right" id="total_num" style="font-size: 22px;"></span>
+          </div>
           <div class="col-sm-12" id="foot_ter">
             <div class="text-uppercase panel panel-default">
               <div class="panel-body">

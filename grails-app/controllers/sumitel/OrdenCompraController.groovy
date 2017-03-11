@@ -226,7 +226,7 @@ class OrdenCompraController {
                 nc.setTotalTexto(CantidadesEnLetraUtils.convertNumberToLetter(totalCompra, 'PESOS', true))
                 nc.setFechaCreacion(new Date())
                 nc.setUsuarioCreacion("admin")
-                nc.save(flush:true)
+                nc.save()
                 log.debug("notaCompleta ----> " + nc)
 
                 log.debug("idCliente---->"+ params.idCliente)
@@ -235,8 +235,6 @@ class OrdenCompraController {
                 log.debug(saldoCorriente)
                 cliente.setSaldoTotal(saldoCorriente + totalCompra)
                 cliente.save();
-
-                updatePurchaseOrder()
             }
             
 
