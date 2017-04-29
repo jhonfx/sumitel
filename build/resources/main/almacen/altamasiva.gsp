@@ -399,8 +399,8 @@
            name='inventarioId'>
 
            <datalist id="inventarioList">
-              <g:each in="${Inventario.findAll()}" var="inventarioList">
-                  <option value="${inventarioList.id}">${inventarioList.articulo}</option>
+              <g:each in="${Inventario.findAllByActivo(true)}" var="inventarioList">
+                <option value="${inventarioList.id}">${inventarioList.articulo}</option>
               </g:each>
           </datalist>
             <input type="hidden" name="producto" id="producto">
@@ -434,7 +434,7 @@
     <div class="row">
     <div class="col-sm-12">
       <div id="jsgrid_table"></div>
-      <div id="totals_articulos"></div>
+      <div id="totals_articulos"></div>x
     </div>
     </div>
     <div class="row">

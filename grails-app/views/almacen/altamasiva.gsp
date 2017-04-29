@@ -434,7 +434,7 @@
     <div class="row">
     <div class="col-sm-12">
       <div id="jsgrid_table"></div>
-      <div id="totals_articulos"></div>x
+      <div id="totals_articulos"></div>
     </div>
     </div>
     <div class="row">
