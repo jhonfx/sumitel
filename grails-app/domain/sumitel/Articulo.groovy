@@ -7,6 +7,7 @@ class Articulo implements Serializable{
     Double precioPublico
     Double precioUnitario
     String usuarioCreacion
+    boolean estatus = 0;
     Date fechaCreacion
     String usuarioModificacion
     Date fechaModificacion
@@ -17,6 +18,7 @@ class Articulo implements Serializable{
     }
 
     static constraints = {
+      estatus nullable: true, display: false
       fechaModificacion nullable: true, display: false
       usuarioModificacion nullable: true, display: false
     }

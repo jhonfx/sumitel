@@ -159,7 +159,6 @@
                 pageButtonCount: 5,
                 onDataLoaded: function(args) {
                   var rows = args.grid.data.length;
-                  console.log(rows.length)
                   $('#totals_simseries').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
                 },
                 
@@ -178,14 +177,11 @@
                     { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
                     return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn btn-primary btn-sm'>Ver Detalle</button>")
                       .on("click", function(e) {
-                          console.log(item)
 
                           console.log("click en boton de descxripcion")
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
-                          console.log(target);
 
                           var results = $.each(db.tuplas, function(e, tupla) {
-                            console.log(tupla)
                             if (tupla.id == target) {
                               $('#contenedor')
                               .append('<form>')
@@ -208,16 +204,13 @@
                               .append('</form>')
                               $('#contenedor').modal('show');
                               var costouni = parseFloat($('#costounitario').val());
-                              console.log(costouni);
                               var frm = accounting.formatMoney(costouni);
-                              console.log(frm);
                             }
                           });
 
 
                           $('#contenedor').on($.modal.BEFORE_CLOSE, function(event, modal) {
                             $('#contenedor').html("");
-                            console.log("cerrando");
                           });                          
 
                       });

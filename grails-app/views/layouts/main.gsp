@@ -64,7 +64,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
       <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
       <a href="${createLink(controller: 'cliente', action: 'listaClientes')}">Lista Clientes</a>
       <a href="${createLink(controller: 'almacen', action: 'listaparaorden')}">Generar Orden Compra</a>
-      <a href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimprimir Orden Compra</a>
+      <a href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimp/Cancelar Orden Compra</a>
     </div>
 
     <div id="main">

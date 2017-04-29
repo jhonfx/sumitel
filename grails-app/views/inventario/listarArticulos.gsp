@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <title>INVENTARIO</title>
     <script type="text/javascript">
@@ -167,6 +168,37 @@
                     { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "money", width: 30,  editing: false},
                     { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
                     { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
+                    { title: '', width: 25, editing: false,  itemTemplate: function(_, item) {
+                      console.log(item);
+                          if (item.activo == false) {
+                            return $("<button type='button' id='buttonTupla' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red' disabled><i class='glyphicon glyphicon-off btn-white'></button>")
+                          } else {
+                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'> <i class='glyphicon glyphicon-ok'></i></button>").on("click", function(e) {
+                              var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+                              
+                              console.log(item.totalArticulos)
+                              if (item.totalArticulos > 0) {
+                                swal({
+                                  title: "Error",
+                                  type: "info",
+                                  text: "Articulo aún cuenta con existencia",
+                                  allowEscapeKey: true,
+                                  imageSize: "20x20"
+                                });
+                              } else {
+                                $.ajax({
+                                  url: "${createLink(controller: 'inventario', action:'updateCancelArticle')}",
+                                  data: {id: target},
+                                  type: "POST",
+                                  success: function(json) {
+                                    console.log(json);
+                                    $('#datos_list').jsGrid("refresh");
+                                  }
+                                });
+                              }
+                            });
+                        }
+                    }},
                     { title: 'Info', width: 25, editing: false,  itemTemplate: function(_, item) {
                           return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Editar</button>")
                             .on("click", function(e) {
@@ -187,7 +219,7 @@
                                             .append('<form>')
                                             .append('<div class="form-group">')
                                             .append('<label for="articulo">Producto:</label>')
-                                            .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
+                                            .append('<input type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
                                             .append('<label for="costosub">Precio Publico:</label>')
                                             .append('<input  type="text" class="form-control" id="pp" value="'+ tupla.precioPublico +'"/> ')
                                             .append('<label for="costounitario">Precio Unitario:</label>')
@@ -205,7 +237,7 @@
                                               console.log("click update")
                                               $.ajax({
                                                 url: "${createLink(controller: 'inventario', action:'editArticle')}",
-                                                data: {id: target, pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
+                                                data: {id: target, art: $('#articulo').val(), pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
                                                 type: "POST",
                                                 success: function(json) {
                                                   console.log(json);
@@ -286,6 +318,10 @@
           height: 10px;
           border: 0;
           box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
+
+       .btn-white {
+        color: white;
        }
 
     </style>

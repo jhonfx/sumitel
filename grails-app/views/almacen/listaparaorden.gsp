@@ -118,7 +118,6 @@
               
                 var href = "${createLink(controller: 'ordenCompra', action: 'printOrdenCompleta')}" +"?remision=" + json.remision;
                 var specialurl = window.location.origin + href;
-                console.log(specialurl);
                 window.open(specialurl, '_blank');
 
                 var href = "${createLink(controller: 'almacen', action: 'listaparaorden')}";
@@ -157,10 +156,7 @@
             
           },
           success: function(json) {
-            console.log("almacen")
-            console.log(json);
             almacen = json;
-            console.log(almacen);
             $('.div_cargando').hide();
             $("#contenedor_sims").hide();
 
@@ -173,9 +169,6 @@
               success: function(json) {
                 
                 imeiSimCel = json;
-                
-                console.log(obj_seleccionados);
-                console.log(imeiSimCel)
 
                 $(function() {
 
@@ -372,11 +365,9 @@
 
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
-                          console.log(target);
 
                           $.each(db.tuplas, function(e, tupla) {
                             if (tupla.id == target) {
-                              console.log(tupla);
                               obj_seleccionados.push({ 
                                 id: tupla.id, 
                                 article: tupla.articulo, 
@@ -386,7 +377,6 @@
                                 imei: tupla.imeiCel,
                                 asignado: true
                               });
-                              console.log(obj_seleccionados)
                               btn.attr('disabled', 'disabled');
                               $("#datos_list_final").jsGrid("refresh");
                             } 

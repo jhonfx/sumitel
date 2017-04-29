@@ -10,6 +10,25 @@ class InventarioController {
 
     def listarArticulos = {  }
 
+    def updateCancelArticle() {
+      log.debug("params----->" + params)
+
+      def article_= Inventario.get(params.id);
+      log.debug(article_)
+      def estatus = article_.getActivo();
+      log.debug(estatus)
+
+      if (estatus == true) {
+        article_.setActivo(false)
+      } else {
+        article_.setActivo(true)
+      }
+      
+      article_.save(flush: true)
+
+      render article_ as JSON
+    }
+
     def obtenerListaArticulos = {
 
       StringBuilder sql = new StringBuilder()
@@ -21,6 +40,7 @@ class InventarioController {
         tuplas: [
           id: it.id,
           articulo: it.articulo,
+          activo: it.activo,
           precioSub: it.precioSub,
           precioPublico: it.precioPublico,
           precioUnitario: it.precioUnitario,
@@ -44,6 +64,7 @@ class InventarioController {
 
     def editArticle() {
       def params = params
+      def art = params.art.toUpperCase()
       def pp = Double.parseDouble(params.pp)
       def pu = Double.parseDouble(params.pu)
       def ps = Double.parseDouble(params.ps)
@@ -53,6 +74,7 @@ class InventarioController {
       def article_ = Inventario.get(id);
       def total = article_.totalArticulos;
 
+      article_.setArticulo(art)
       article_.setPrecioPublico(pp)
       article_.setPrecioUnitario(pu)
       article_.setPrecioSub(ps)
@@ -63,7 +85,7 @@ class InventarioController {
 
       log.debug("id_articulo>>>>>>>" + id)
       StringBuilder sql = new StringBuilder()
-      sql.append("UPDATE Almacen alm set alm.precioPublico = ${pp}, alm.precioUnitario = '${pu}' where alm.idArticuloInventario = ${id}");
+      sql.append("UPDATE Almacen alm set alm.articulo = '${art}', alm.precioPublico = ${pp}, alm.precioUnitario = '${pu}' where alm.idArticuloInventario = ${id}");
       log.debug(sql.toString());
       def resultSQL = Almacen.executeUpdate(sql.toString())
       log.debug("resultQuery=>>>>" + resultSQL)

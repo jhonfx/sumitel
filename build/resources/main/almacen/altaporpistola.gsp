@@ -73,14 +73,14 @@
         $('.flexdatalist').on('select:flexdatalist', function(e, u, i) {
           var d_list = $(this).val();
           var parse =JSON.parse(d_list);
-          console.log(parse);
+          
           var id = parse.value
           var tipoProd = 0;
           $.getJSON('${createLink(controller:"inventario", action:"infoProducto")}', {
               id: id,
               ajax: 'true'
           }, function(response) {
-              console.log(response)
+              
               $('#producto').val(response.articulo)
               $('#costosub').val(response.costosub)
               $('#costoPublico').val(response.costoPublico)
@@ -90,7 +90,7 @@
               responseInvData = response[0];
               tipoProd = parseInt(responseInvData.tipoArticulo)
               tipo_producto = tipoProd;
-              console.log(tipoProd)
+              
               if (tipoProd === 1 ) {
                 $('#imei_cel').removeAttr('disabled');
                 $('#imei_cel').attr('required');
@@ -116,37 +116,34 @@
           var inp_val_imei_cel = $('#imei_cel').val();
 
           if (inp_val.length !== 0 || inp_val !== "") {
-            console.log("no esta vacio");
+            
             if (e.keyCode === 13) {
               $('#aplicar').click();
             }
           } else if (inp_val_imei_cel !== 0 || inp_val_imei_cel !== "") {
-            console.log("no esta vacio");
+            
             if (e.keyCode === 13) {
               $('#aplicar').click();
             }
           }
         });
 
-        console.log("cargando");
+        
         var toTable = [];
         
         $('#aplicar').click( function(e) {
-        console.log(responseInvData);
+        
           var frm = $('#formulario');
           var producto = $('#producto').val();
           var data = JSON.stringify(frm.serializeObject());
           var format = JSON.parse(data);  //data parse
-          console.log(format);
+          
 
           var newobject = !format.code ? 0 : format.code.split(/\s+/);  //array of serie/IMEI
           var newobject2 = !format.imei_cel ? 0 : format.imei_cel.split(/\s+/);  //array of serie/IMEI
-          console.log(newobject);
-          console.log(newobject2);
-          console.log(responseInvData.articulo)
-          console.log(tipo_producto);
+
           if (tipo_producto == 2 && newobject == 0 || tipo_producto == 1 && newobject2 == 0) {
-            console.log("newobject");
+            
             swal({
               title: "Error",
               type: "error",
@@ -190,7 +187,7 @@
               $('#imei_cel').focus(); 
               $('#imei_cel').val('');
             }
-            console.log(toTable);
+            
             /* load data using filter controller */
             (function() {
               
@@ -238,6 +235,11 @@
                 autoload: true,
                 pageSize: 15,
                 pageButtonCount: 5,
+                onDataLoaded: function(args) {
+                  var rows = args.grid.data.length;
+                  console.log(rows.length)
+                  $('#totals_articulos').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                },
                 
                 // data: toTable,
                 controller: db,
@@ -260,7 +262,7 @@
         });
 
         $('#limpiar').click( function(e) {
-          console.log("limpiando");
+          
           $("#jsgrid_table").jsGrid("destroy");
           toTable = [];
         });
@@ -268,9 +270,9 @@
 
 
         $('#save_data').click( function(e) {
-          console.log(toTable);
+          
           var testjson = JSON.stringify({series: toTable})
-          console.log(testjson);
+          
           e.preventDefault();
 
           if($('#factura').val() === "") {
@@ -311,7 +313,7 @@
                 allowEscapeKey: true,
                 imageSize: "20x20"
               });
-            console.log("table vacia");
+            
             return;
           }
 
@@ -320,7 +322,7 @@
                 data: {'tuplas': JSON.stringify(toTable)},
                 type:"POST",
                 success:function (callback) {
-                  console.log(callback)
+                  
                    var href = "${createLink(controller: 'inventario', action: 'listarArticulos')}"
                    location.href = href;
                 },
@@ -401,8 +403,8 @@
     </div>
     <div class="row">
       <div class="col-sm-12 col-md-12">
-        <div id="jsgrid_table">
-        </div>
+        <div id="jsgrid_table"></div>
+        <div id="totals_articulos"></div>
       </div>
     </div>
     <div class="row">
