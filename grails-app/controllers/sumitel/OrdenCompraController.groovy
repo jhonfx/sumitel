@@ -227,8 +227,12 @@ class OrdenCompraController {
 
                 def cliente = Cliente.get(params.idCliente)
                 def saldoCorriente = cliente.getSaldoTotal()
-                log.debug(saldoCorriente)
-                cliente.setSaldoTotal(saldoCorriente + totalCompra)
+                log.debug("saldoCorriente------>>>>>>>>>>" + saldoCorriente)
+                log.debug("totalCompra--------->>>>>" + totalCompra)
+                def saldoAbonar = 0;
+                saldoAbonar = saldoCorriente + tupla.preciounitario
+                log.debug("nuevoMontoAbonado----------->"+ saldoAbonar)
+                cliente.setSaldoTotal(saldoAbonar)
                 cliente.save();
             }
             

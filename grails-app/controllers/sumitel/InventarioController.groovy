@@ -61,11 +61,20 @@ class InventarioController {
       article_.setCostoSub(total * ps)
       article_.save(flush: true);
 
+      log.debug("id_articulo>>>>>>>" + id)
+      StringBuilder sql = new StringBuilder()
+      sql.append("UPDATE Almacen alm set alm.precioPublico = ${pp}, alm.precioUnitario = '${pu}' where alm.idArticuloInventario = ${id}");
+      log.debug(sql.toString());
+      def resultSQL = Almacen.executeUpdate(sql.toString())
+      log.debug("resultQuery=>>>>" + resultSQL)
+      log.debug("termina proceso SQL____>>>>>>>>")
+      
       /*StringBuilder sql = new StringBuilder()
       sql.append("UPDATE Inventario inv set inv.precioPublico = ${pp}, inv.precioSub = '${ps}', inv.precioUnitario = '${pu}' where inv.id = ${params.fact}");
       log.debug(sql.toString());
       def resultSQL = Almacen.executeUpdate(sql.toString())
       log.debug("resultQuery=>>>>" + resultSQL)*/
+
       render article_ as JSON
     }
 

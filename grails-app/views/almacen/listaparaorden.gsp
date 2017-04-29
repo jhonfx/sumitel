@@ -80,6 +80,7 @@
         var imeis = [];
         var series = [];
         var ids = [];
+        var almacen = [];
         //Aplica la orden de compra
         $('#aplicar_orden').on('click', function() {
           var clent = $('#client_name').val();
@@ -158,7 +159,8 @@
           success: function(json) {
             console.log("almacen")
             console.log(json);
-
+            almacen = json;
+            console.log(almacen);
             $('.div_cargando').hide();
             $("#contenedor_sims").hide();
 
@@ -221,18 +223,20 @@
                           { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
                           { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
 
-                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>OK</button>")
+                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>AGREGAR</button>")
                             .on("click", function(e) {
 
                                 var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+
                                 $.each(imeiSimCel.rows, function(e, tupla) {
                                   if (target == tupla.id) {
-                                    
-                                    $.each(obj_seleccionados, function(e, row) {
+                                      tupla.isSelected = true;
                                       
+                                    $.each(obj_seleccionados, function(e, row) {
                                       if (id_tupla_odc == row.id) {
                                         row.seriesim = tupla.imeiSim;
                                         row.id_sim_serie = tupla.id;
+                                        row.haveSim = true;
                                         $("#datos_list_final").jsGrid("refresh");
                                       }
                                     })
@@ -363,7 +367,7 @@
                       return item.remision;
                     }},
                     { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
-                    return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm'>OK</button>")
+                    return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'>AGREGAR</button>")
                       .on("click", function(e) {
 
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
@@ -423,13 +427,13 @@
                     { name: "preciopublico", title: 'P/P', type: "money", width: 70, editing: false},
                     { title: 'Info', width: 120, editing: false,  itemTemplate: function(_, item) {
         
-                    return item.imei === "0" ? "" : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim'>Agregar SIM</button>")
+                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right' disabled>Agregar SIM</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right'>Agregar SIM</button>")
                       .on("click", function(e) {
                         
                             var target = $('#buttonTupla-'+item.id+'').data('idtupla');
-                            
+
                             $.each(obj_seleccionados, function(e, tupla) {
-                                console.log(obj_seleccionados);
+                                
                               if (target == tupla.id) {
 
                                   id_tupla_odc = target;
@@ -439,8 +443,7 @@
                                   $('#datos_simseries').jsGrid("refresh");
                                   //$("#datos_list_final").jsGrid("refresh");
                               }
-                            })
-
+                            });
                       });
                     }}
                 ]
