@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    
 
     <title>INVENTARIO</title>
     <script type="text/javascript">
@@ -143,10 +143,7 @@
               $("#datos_list").jsGrid({
                 width: "100%",
                 height: customHeight,
-
                 confirmDeleting: false,
-                deleteConfirm: "¿ Deseas borrar este artículo ?",
-
                 filtering:true,
                 editing: true,
                 sorting: true,
@@ -171,9 +168,23 @@
                     { title: '', width: 25, editing: false,  itemTemplate: function(_, item) {
                       console.log(item);
                           if (item.activo == false) {
-                            return $("<button type='button' id='buttonTupla' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red' disabled><i class='glyphicon glyphicon-off btn-white'></button>")
+                            return $("<button type='button' id='buttonTupla' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red; color: white;'>OFF</button>").on('click', function() {
+
+                                var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+
+                                $.ajax({
+                                  url: "${createLink(controller: 'inventario', action:'updateCancelArticle')}",
+                                  data: {id: target},
+                                  type: "POST",
+                                  success: function(json) {
+                                    console.log(json);
+                                    $('#datos_list').jsGrid("refresh");
+                                    location.reload();
+                                  }
+                                });
+                            });
                           } else {
-                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'> <i class='glyphicon glyphicon-ok'></i></button>").on("click", function(e) {
+                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'>ON</i></button>").on("click", function(e) {
                               var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                               
                               console.log(item.totalArticulos)
@@ -193,6 +204,7 @@
                                   success: function(json) {
                                     console.log(json);
                                     $('#datos_list').jsGrid("refresh");
+                                    location.reload();
                                   }
                                 });
                               }
@@ -322,6 +334,11 @@
 
        .btn-white {
         color: white;
+       }
+
+       #contenedor {
+        width: 750px;
+        height: 600px;
        }
 
     </style>

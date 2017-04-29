@@ -20,8 +20,6 @@
       var totalCoste = 0;
       var suma = 0;
 
-
-      console.log(fact);
       $.ajax({
           url: "${createLink(controller: 'ordenCompra', action:'datosPrintOrdenCompleta')}?remision=" + fact,
           type: "GET",
@@ -35,9 +33,6 @@
             var position = json.length-1;
             var totalTexto = json[position].totalTexto;
             var totalCoste = 0;
-            console.log(totalTexto)
-
-
 
             var content = "<table id='table_articles' class='table table-bordered table-striped'>";
                 content += '<thead>'
@@ -59,8 +54,6 @@
               }
               content += "</table>"
 
-              console.log(totalCoste);
-              console.log(json[0].precio)
             $('#coste').append(totalTexto);
             $('#total_num').append(accounting.formatMoney(totalCoste));
             $('#tableContainer').append(content);
