@@ -90,6 +90,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.control.js')}"></script>
 
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.flexdatalist.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
  
     <!-- <div class="footer">SUMITEL S.A de C.V</div> -->
 </body>

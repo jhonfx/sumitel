@@ -3,14 +3,17 @@
 <html lang="en" class="no-js">
 <head>
     <meta name="layout" content="main" />
+    
     <asset:stylesheet src="application.css"/>
     <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Almacen')}" />
-    
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-3.1.1.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'accounting.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+    
+    
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
@@ -70,7 +73,8 @@
 
       $(document).ready( function() {
         console.log("inciando");
-        
+        console.log("por que no se agrega la libreria")
+
 
         var response = [];
         var imeiSimCel = [];
@@ -103,6 +107,17 @@
             }
           });
           
+          _.find(obj_seleccionados, function(tt) {
+            console.log(tt.id == 1)
+          });
+
+          var ss = _.find(obj_seleccionados, function(tt) {
+            if (tt.id === 1) {
+              return tt
+            }
+          });
+
+          console.log(ss)
           
 
           //Generar orden e imprimir
@@ -198,7 +213,7 @@
                     };
 
                     window.db2 = db2;
-                    db2.tuplas = imeiSimCel.rows;
+                    db2.tuplas = imeiSimCel.rows
                   }());
 
 
@@ -222,7 +237,7 @@
                           { name: "articulo", title: 'Articulo', type: "text", width: 30, editing: false},
                           { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
                           { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
-
+                            console.log(item)
                           return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>AGREGAR</button>")
                             .on("click", function(e) {
 
@@ -372,7 +387,7 @@
 
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
-                          console.log(target);
+                            
 
                           $.each(db.tuplas, function(e, tupla) {
                             if (tupla.id == target) {
@@ -384,7 +399,8 @@
                                 preciopublico: tupla.precioPublico,
                                 seriesim: tupla.imeiSim,
                                 imei: tupla.imeiCel,
-                                asignado: true
+                                asignado: true,
+                                notToPhone: true
                               });
                               console.log(obj_seleccionados)
                               btn.attr('disabled', 'disabled');
@@ -438,7 +454,7 @@
 
                                   id_tupla_odc = target;
                                   id_sim_serie = tupla.id;
-
+                                  console.log(imeiSimCel.rows)
                                   $('#contenedor_sims').modal('show');
                                   $('#datos_simseries').jsGrid("refresh");
                                   //$("#datos_list_final").jsGrid("refresh");
@@ -500,7 +516,7 @@
   </div>
 </div>
   
-
+  
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.core.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-indicator.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-strategies.js')}"></script>

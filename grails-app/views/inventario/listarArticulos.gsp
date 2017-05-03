@@ -187,7 +187,7 @@
                                             .append('<form>')
                                             .append('<div class="form-group">')
                                             .append('<label for="articulo">Producto:</label>')
-                                            .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
+                                            .append('<input type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
                                             .append('<label for="costosub">Precio Publico:</label>')
                                             .append('<input  type="text" class="form-control" id="pp" value="'+ tupla.precioPublico +'"/> ')
                                             .append('<label for="costounitario">Precio Unitario:</label>')
@@ -205,7 +205,7 @@
                                               console.log("click update")
                                               $.ajax({
                                                 url: "${createLink(controller: 'inventario', action:'editArticle')}",
-                                                data: {id: target, pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
+                                                data: {id: target, art: $('#articulo'), pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
                                                 type: "POST",
                                                 success: function(json) {
                                                   console.log(json);

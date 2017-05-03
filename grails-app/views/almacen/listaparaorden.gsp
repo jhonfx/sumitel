@@ -3,14 +3,17 @@
 <html lang="en" class="no-js">
 <head>
     <meta name="layout" content="main" />
+    
     <asset:stylesheet src="application.css"/>
     <g:set var="entityName" value="${message(code: 'articulo.label', default: 'Almacen')}" />
-    
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery-3.1.1.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'spin.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.modal.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'accounting.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+    
+    
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
@@ -70,7 +73,8 @@
 
       $(document).ready( function() {
         console.log("inciando");
-        
+        console.log("por que no se agrega la libreria")
+
 
         var response = [];
         var imeiSimCel = [];
@@ -103,6 +107,17 @@
             }
           });
           
+          _.find(obj_seleccionados, function(tt) {
+            console.log(tt.id == 1)
+          });
+
+          var ss = _.find(obj_seleccionados, function(tt) {
+            if (tt.id === 1) {
+              return tt
+            }
+          });
+
+          console.log(ss)
           
 
           //Generar orden e imprimir
@@ -150,6 +165,7 @@
         //Termina info del cliente
 
         //Carga inicial de los datos del almacen
+        //Carga ventana Solo de SIMS
         $.ajax({
           url: "${createLink(controller: 'almacen', action:'obtenerAlmacen2')}",
           type: "GET",
@@ -157,10 +173,7 @@
             
           },
           success: function(json) {
-            console.log("almacen")
-            console.log(json);
             almacen = json;
-            console.log(almacen);
             $('.div_cargando').hide();
             $("#contenedor_sims").hide();
 
@@ -173,9 +186,6 @@
               success: function(json) {
                 
                 imeiSimCel = json;
-                
-                console.log(obj_seleccionados);
-                console.log(imeiSimCel)
 
                 $(function() {
 
@@ -186,10 +196,6 @@
                       loadData: function(filter) {
                         
                           return $.grep(imeiSimCel.rows, function(tupla) {
-                              
-                              if (filter.imeiSim === tupla.imeiSim) {
-                                console.log("es el mismo");
-                              }
                               // console.log(tupla)
                               return (!filter.imeiSim || tupla.imeiSim.indexOf(filter.imeiSim) > -1)
                           });
@@ -198,8 +204,10 @@
                     };
 
                     window.db2 = db2;
-                    db2.tuplas = imeiSimCel.rows;
+                    db2.tuplas = imeiSimCel.rows
                   }());
+
+                
 
 
                 $("#datos_simseries").jsGrid({
@@ -212,20 +220,21 @@
                       paging: true,
                       autoload: true,
                       pageSize: 80,
-                      pageButtonCount: 5,
-                      
+                      pageButtonCount: 5,                      
                       //data: imeiSimCel.rows,
-                      controller: db2,
-               
+                      controller: db2, 
                       fields: [
                           { name: "factura", title: 'Factura', type: "number", width: 30, editing: false},
                           { name: "articulo", title: 'Articulo', type: "text", width: 30, editing: false},
                           { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
                           { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
-
-                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>AGREGAR</button>")
+                          console.log(item)
+                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>")  : item.notToPhone == true ?  $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>NO DISPONIBLE</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>AGREGAR</button>")
                             .on("click", function(e) {
-
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log(e)
+                                $('.close-modal ').click();
                                 var target = $('#buttonTupla-'+item.id+'').data('idtupla');
 
                                 $.each(imeiSimCel.rows, function(e, tupla) {
@@ -238,6 +247,7 @@
                                         row.id_sim_serie = tupla.id;
                                         row.haveSim = true;
                                         $("#datos_list_final").jsGrid("refresh");
+                                        
                                       }
                                     })
                                   }
@@ -351,15 +361,16 @@
                 pageButtonCount: 5,
                 onDataLoaded: function(args) {
                   var rows = args.grid.data.length;
-                  console.log(rows.length)
+                  
                   $('#totals_simseries').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
                 },
+                
                 //data: json.rows,
                 controller: db,
          
                 fields: [
-                    { name: "numeroFactura", title: '# Factura', type: "number", width: 50, editing: false},
-                    { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false},
+                    { name: "numeroFactura", title: '# Factura', type: "number", width: 50, editing: false, editButtonTooltip: "Edit"},
+                    { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false, editButtonTooltip: "Edit"},
                     { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
                     { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
@@ -367,16 +378,22 @@
                       return item.remision;
                     }},
                     { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
-                    return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'>AGREGAR</button>")
+                    return item.isSelected == true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right hidden'>AGREGAR</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'>AGREGAR</button>")
                       .on("click", function(e) {
 
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
-                          console.log(target);
 
+                          $.each(imeiSimCel.rows, function(e, it) {
+                            console.log(it);
+                            if (it.id === target) {
+                              console.log(it)
+                              it.notToPhone = true;
+                            }
+                          });
+                          
                           $.each(db.tuplas, function(e, tupla) {
                             if (tupla.id == target) {
-                              console.log(tupla);
                               obj_seleccionados.push({ 
                                 id: tupla.id, 
                                 article: tupla.articulo, 
@@ -384,10 +401,11 @@
                                 preciopublico: tupla.precioPublico,
                                 seriesim: tupla.imeiSim,
                                 imei: tupla.imeiCel,
-                                asignado: true
+                                asignado: true,
                               });
-                              console.log(obj_seleccionados)
+                              
                               btn.attr('disabled', 'disabled');
+                              $('#datos_simseries').jsGrid("refresh");
                               $("#datos_list_final").jsGrid("refresh");
                             } 
                           });
@@ -427,7 +445,7 @@
                     { name: "preciopublico", title: 'P/P', type: "money", width: 70, editing: false},
                     { title: 'Info', width: 120, editing: false,  itemTemplate: function(_, item) {
         
-                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right' disabled>Agregar SIM</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right'>Agregar SIM</button>")
+                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right' disabled>Completo</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right'>Agregar SIM</button>")
                       .on("click", function(e) {
                         
                             var target = $('#buttonTupla-'+item.id+'').data('idtupla');
@@ -438,10 +456,9 @@
 
                                   id_tupla_odc = target;
                                   id_sim_serie = tupla.id;
-
+                                  
                                   $('#contenedor_sims').modal('show');
                                   $('#datos_simseries').jsGrid("refresh");
-                                  //$("#datos_list_final").jsGrid("refresh");
                               }
                             });
                       });
@@ -500,7 +517,7 @@
   </div>
 </div>
   
-
+  
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.core.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-indicator.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.load-strategies.js')}"></script>

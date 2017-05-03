@@ -5,8 +5,8 @@ class Cliente implements Serializable {
 		String nombre
 		String ciudad
 		String estado
-        Double saldoTotal
-        Double abonoSaldo
+        Double saldoTotal = 0
+        Double abonoSaldo = 0
         boolean estatus
 
 		Date fechaCreacion
