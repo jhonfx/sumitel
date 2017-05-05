@@ -205,7 +205,7 @@
                                               console.log("click update")
                                               $.ajax({
                                                 url: "${createLink(controller: 'inventario', action:'editArticle')}",
-                                                data: {id: target, art: $('#articulo'), pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
+                                                data: {id: target, art: $('#articulo').val(), pp: $('#pp').val(), pu: $('#pu').val(), ps: $('#ps').val()},
                                                 type: "POST",
                                                 success: function(json) {
                                                   console.log(json);

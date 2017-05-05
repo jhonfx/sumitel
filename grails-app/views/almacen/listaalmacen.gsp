@@ -169,7 +169,9 @@
                 fields: [
                     { name: "numeroFactura", title: '# Factura', type: "number", width: 50, editing: false},
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false},
-                    { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
+                    { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true, itemTemplate: function(_, item) {
+
+                    }},
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
                     { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
                     { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
