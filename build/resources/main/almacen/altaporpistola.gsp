@@ -220,7 +220,7 @@
             $( function() {
 
               /* generate data table */
-              $("#jsgrid_table").jsGrid({
+              $("#jsgrid_table_pistola").jsGrid({
                 width: "100%",
                 height: "600px",
 
@@ -238,7 +238,7 @@
                 onDataLoaded: function(args) {
                   var rows = args.grid.data.length;
                   console.log(rows.length)
-                  $('#totals_articulos').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                  $('#totals_articulos_pistola').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
                 },
                 
                 // data: toTable,
@@ -263,7 +263,7 @@
 
         $('#limpiar').click( function(e) {
           
-          $("#jsgrid_table").jsGrid("destroy");
+          $("#jsgrid_table_pistola").jsGrid("destroy");
           toTable = [];
         });
 
@@ -403,8 +403,8 @@
     </div>
     <div class="row">
       <div class="col-sm-12 col-md-12">
-        <div id="jsgrid_table"></div>
-        <div id="totals_articulos"></div>
+        <div id="jsgrid_table_pistola"></div>
+        <div id="totals_articulos_pistola"></div>
       </div>
     </div>
     <div class="row">
