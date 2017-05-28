@@ -17,9 +17,18 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
 
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
+
     <title>INVENTARIO</title>
     <script type="text/javascript">
       $(document).ready( function() {
+
+        // if (sessionStorage.activo == "true") {
+        //   $('#icon_menu').show();
+        //   $('#logout').show();
+        // } else {
+        //   window.location.href = "/";
+        // }
         console.log("inciando");
         $('#contenedor').hide();
         
@@ -159,14 +168,32 @@
                 controller: db,
          
                 fields: [
-                    { name: "articulo", filtering: true, title:'Producto', type: "text", width: 90,  editing: false},
+                    { name: "articulo", filtering: true, title:'Producto', type: "text", width: 80,  editing: false},
                     { name: "precioPublico", filtering: true, title:'Precio Publico', type: "money", width: 30,  editing: false },
                     { name: "precioUnitario", filtering: false,title: 'Precio Unitario', type: "money", width: 30,  editing: false},
                     { name: "precioSub", filtering: false,title: 'Precio Sub', type: "money", width: 30,  editing: false},
-                    { name: "totalArticulos", filtering: true, title: 'Total', type: "number", width: 30,  editing: false},
+                    { name: "totalArticulos", filtering: true, title: 'Total', type: "number", width: 20,  editing: false},
                     { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "money", width: 30,  editing: false},
                     { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
                     { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
+                    { title: 'Off', width: 10, editing: false, itemTemplate: function(_, item) {
+                      return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><img style='height: 20px;' src='${resource(dir: 'img', file: 'error.png')}'></img></button>").on('click', function(e) {
+                          var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
+                          var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
+                          console.log(target);
+                          console.log(estatus);
+
+                          $.ajax({
+                            url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
+                            data: {id: target, estatus: estatus},
+                            type: "POST",
+                            success: function(json) {
+                              console.log(json);
+                            }
+                          });
+
+                      });
+                    }},
                     { title: 'Info', width: 25, editing: false,  itemTemplate: function(_, item) {
                           return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Editar</button>")
                             .on("click", function(e) {
@@ -257,6 +284,10 @@
           src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
         }
 
+        .icon-t {
+          src: url(${resource(dir: 'png', file: 'error.png')});
+        }
+
         .header {
          top: 0 !important;
          width: 100% !important;
@@ -283,9 +314,10 @@
         }
 
         hr {
+          width: 100%;
           height: 10px;
-          border: 0;
-          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+          border: 1px;
+          /*box-shadow: 0 10px 10px -10px #8c8b8b inset;*/
        }
 
     </style>
@@ -298,8 +330,10 @@
   <div class="row">
      <h1>INVENTARIO</h1>
      <hr>
-     <div id="datos_list"></div>
-     <div id="contenedor"></div>
+     <div class="col-sm-12">
+       <div id="datos_list"></div>
+       <div id="contenedor"></div>
+     </div>
   </div>
 </div>
 <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jsgrid.core.js')}"></script>

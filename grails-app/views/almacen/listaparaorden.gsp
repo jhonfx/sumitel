@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <title>ARTCULOS ALMACEN</title>
 
     <style type="text/css">
@@ -57,7 +57,7 @@
         hr {
           height: 10px;
           border: 0;
-          box-shadow: 0 10px 10px -10px #8c8b8b inset;
+          /*box-shadow: 0 10px 10px -10px #8c8b8b inset;*/
        }
 
        

@@ -20,6 +20,7 @@ class InventarioController {
       def tuplasJSON = resultSQL.collect {
         tuplas: [
           id: it.id,
+          activo: it.activo,
           articulo: it.articulo,
           precioSub: it.precioSub,
           precioPublico: it.precioPublico,
@@ -126,6 +127,27 @@ class InventarioController {
       log.debug(producto)
       render producto as JSON
 
+    }
+
+    def cambiarEstatus = {
+      log.debug("PARAMS-------->" + params)
+      def id = params.id
+      def estatus = params.estatus
+      log.debug("id------->" +id)
+      log.debug("estatus-------->" +estatus)
+      def jsonResult = []
+      StringBuilder sql = new StringBuilder()
+
+      sql.append("UPDATE Inventario inv set inv.activo = ${estatus} where inv.id = ${id}")
+      def resultSQL = Inventario.executeUpdate(sql.toString())
+      log.debug("result-------"+resultSQL)
+      if(resultSQL > 0) {
+        jsonResult = [success: true, articleId: params.id]
+      } else {
+        jsonResult = [success: false, message: "No existe el articulo"]
+      }
+
+      render(jsonResult as JSON) 
     }
 
     

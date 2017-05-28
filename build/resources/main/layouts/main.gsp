@@ -1,4 +1,3 @@
-<!doctype html>
 <!DOCTYPE html>
 <%
 response.setHeader("Cache-Control","no-cache"); // Fuerza al cache a obtener una nueva copia de la pagina desde el servidor de origen
@@ -36,6 +35,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sweetalert.min.js')}"></script>
     
+    
 
     <script>
       function openNav() {
@@ -48,6 +48,24 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
           document.getElementById("main").style.marginLeft= "0";
       }
     </script>
+    <script type="text/javascript">
+      $(document).ready( function(e) {
+        
+        if (window.location.pathname == "/") {
+          $('#icon_menu').hide();
+        }
+
+        $('#logout').on('click', function() {
+          window.location.href = "/"
+          sessionStorage.activo = false;
+        })
+      });
+    </script>
+    <style type="text/css">
+      #logout {
+        float: right;
+      }
+    </style>
     <asset:stylesheet src="application.css"/>
     <g:layoutHead/>
 </head>
@@ -68,9 +86,9 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
     </div>
 
     <div id="main">
-      <span style="font-size:30px;cursor:pointer" onclick="openNav()">☰</span>
+      <span style="font-size:30px;cursor:pointer" id="icon_menu" onclick="openNav()">☰</span>
+      <button type="button" class="btn bttn-bordered bttn-danger bttn-sm" id="logout" tooltip="Cerrar sessión"><i class="glyphicon glyphicon-off"></i></button>
       <g:layoutBody/>
-      
     </div>
 
     <div id="spinner" class="spinner" style="display:none;">
