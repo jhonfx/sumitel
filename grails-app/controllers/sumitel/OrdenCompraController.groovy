@@ -19,6 +19,31 @@ class OrdenCompraController {
 
     def reimprimirOrden() {}
 
+    def updateImei = {
+        log.debug(params)
+        def id = params.id
+        def imei = params.imei
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE Almacen alm set alm.imeiCel = '${imei}' where alm.id = ${id}")
+        def resultSQL = Almacen.executeUpdate(sql.toString())
+        log.debug("UPDATE CEL------->"+ resultSQL)
+        def jsonResult = [success: true, message: "todo OK"]
+        render jsonResult as JSON
+    }
+
+    def updateSimSerie = {
+        log.debug(params)
+        def id = params.id
+        def sim = params.sim
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE Almacen alm set alm.imeiSim = '${sim}' where alm.id = ${id}")
+        def resultSQL = Almacen.executeUpdate(sql.toString())
+        log.debug("UPDATE SIM------->"+ resultSQL)
+        def jsonResult = [success: true, message: "todo OK"]
+        render jsonResult as JSON
+
+    }
+
     def datosOrdenCompleta = {
         def ordenes = OrdenCompra.findAll()
         render ordenes as JSON

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'iziModal.min.css')}"/>
     <title>ARTCULOS ALMACEN</title>
 
     <style type="text/css">
@@ -345,6 +346,14 @@
 
             jsGrid.fields.myDateField = MyDateField;
 
+            $("#modal").iziModal();
+
+
+            $(document).on('click', '.trigger', function (event) {
+                event.preventDefault();
+                $('#modal').iziModal('open');
+            });
+
               /* generate data table */
               $("#datos_list").jsGrid({
                 width: "100%",
@@ -373,10 +382,59 @@
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false, editButtonTooltip: "Edit"},
                     { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
-                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
-                    { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
-                      return item.remision;
+                    { title: "-", type: "text", width: 30, editing: false, itemTemplate: function(_, item) {
+                      return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'><img style='height: 10px;' src='${resource(dir:'img', file: 'edit.png')}'></img></button>").on('click', function(e) {
+                          var target = $('#buttonTupla-'+item.id+'').data('idtupla');
+                          var btn = $('#buttonTupla-'+item.id+'');
+
+                          console.log(target);
+                          console.log(btn)
+
+                          $('#modal').iziModal('open', {
+                            iframeHeight: 300,
+                            width: 200,
+                            transitionIn: 'bounceInDown'
+                          });
+
+                          $('#aplicar_pago').on('click',  function() {
+                            $.ajax({
+                              url: "${createLink(controller: 'cliente', action: 'asdadsadasd')}",
+                              data: {id: tupla.id , pago: pago},
+                              type: "POST",
+                              success: function(callback) {
+                                console.log(callback);
+                                $('#listaClientes').jsGrid("refresh");
+
+                              },
+                              error: function(error) {
+                                console.log(error)
+                                $('#listaClientes').jsGrid("refresh");
+                                var href = "${createLink(controller: 'cliente', action: 'listaClientes')}";
+                                var specialurl = window.location.origin + window.location.pathname;
+                                console.log(specialurl)
+                                location.reload(specialurl)
+                              },
+                              dataType: "json"
+                            });
+                          });
+
+                          // $.ajax({
+                          //   url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
+                          //   data: {id: target, estatus: 1},
+                          //   type: "GET",
+                          //   success: function(json) {
+                          //     console.log(json)
+                          //     if (json.success == true) { 
+                          //       console.log("esta ok");
+                          //       location.reload()
+                          //     }
+                          //   }
+                          // });
+
+                      }); 
                     }},
+                    { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
+                    { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, filtering: false},
                     { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
                     return item.isSelected == true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right hidden'>AGREGAR</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'>AGREGAR</button>")
                       .on("click", function(e) {
@@ -509,8 +567,22 @@
       <div>&nbsp</div>
       <hr>
       <div id="datos_list_final"></div>
-      <div id="datos_simseries">
+      <div id="datos_simseries"></div>
+      <div id="modals">
+          <div id="modal" class="iziModal" data-izimodal-title="Corregir IMEI">
+            <form class="form-inline">
+              <div class="form-group">
+                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                <div class="input-group">
+                  <div class="input-group-addon">$</div>
+                  <input type="text" class="form-control" id="pago" placeholder="$0">
+                </div>
+              </div>
+              <button type="submit" id="aplicar_pago" class="btn btn-primary">Aplicar</button>
+            </form>
+          </div>
       </div>
+
 
       <div id="contenedor_sims" class="col-sm-"></div>
       <button type="button" id="aplicar_orden" class="btn bttn-fill bttn-danger bttn-sm pull-right">Aplicar</button>
@@ -529,5 +601,6 @@
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.select.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.checkbox.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'javascripts', file: '/fields/jsgrid.field.control.js')}"></script>
+  <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'iziModal.js')}"></script>
 </body>
 </html>

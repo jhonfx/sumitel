@@ -364,7 +364,7 @@
            name='inventarioId'>
 
            <datalist id="inventarioList">
-              <g:each in="${Inventario.findAll()}" var="inventarioList">
+              <g:each in="${Inventario.findAllByActivo(true)}" var="inventarioList">
                   <option value="${inventarioList.id}">${inventarioList.articulo}</option>
               </g:each>
           </datalist>

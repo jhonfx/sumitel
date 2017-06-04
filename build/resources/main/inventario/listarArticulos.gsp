@@ -176,7 +176,40 @@
                     { name: "costoPublico", filtering: true, title: 'Costo Publico',type: "money", width: 30,  editing: false},
                     { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
                     { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
-                    { title: 'Off', width: 10, editing: false, itemTemplate: function(_, item) {
+                    { title: '-', width: 10, editing: false, itemTemplate: function(_, item) {
+                      if (item.activo == 1) {
+                        return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-success bttn-sm'><img style='height: 20px;' src='${resource(dir: 'img', file: 'success.png')}'></img></button>").on('click', function(e) {
+                          var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
+                          var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
+                          console.log(target);
+                          console.log(estatus);
+                          console.log(item.totalArticulos)
+                          if (item.totalArticulos !== 0) {
+                            swal({
+                              title: "Error",
+                              type: "warning",
+                              text: "El articulo aun cuenta con stock",
+                              allowEscapeKey: true,
+                            });
+                            return;
+                          } else {
+                            $.ajax({
+                              url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
+                              data: {id: target, estatus: 0},
+                              type: "GET",
+                              success: function(json) {
+                                console.log(json)
+                                if (json.success == true) { 
+                                  console.log("esta ok");
+                                  location.reload()
+
+                                }
+                              }
+                            });
+                          }
+
+                      });
+                      } else {
                       return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><img style='height: 20px;' src='${resource(dir: 'img', file: 'error.png')}'></img></button>").on('click', function(e) {
                           var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
                           var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
@@ -185,14 +218,20 @@
 
                           $.ajax({
                             url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
-                            data: {id: target, estatus: estatus},
-                            type: "POST",
+                            data: {id: target, estatus: 1},
+                            type: "GET",
                             success: function(json) {
-                              console.log(json);
+                              console.log(json)
+                              if (json.success == true) { 
+                                console.log("esta ok");
+                                location.reload()
+                              }
                             }
                           });
 
                       });
+                        
+                      }
                     }},
                     { title: 'Info', width: 25, editing: false,  itemTemplate: function(_, item) {
                           return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Editar</button>")
