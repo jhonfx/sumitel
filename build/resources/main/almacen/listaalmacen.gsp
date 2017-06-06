@@ -182,18 +182,22 @@
                       return item.remision;
                     }},
                     { title: 'Borrar', width: 40, editing: false,  itemTemplate: function(_, item) {
-                      return $("<button type='button' id='deleteTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-danger bttn-sm btn-delete pull-right'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function() {
+
+                      return item.remision != 0 ? "" : $("<button type='button' id='deleteTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-almacen='"+ item.idArticuloInventario +"' class='btn bttn-bordered bttn-danger bttn-sm btn-delete pull-right'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function() {
+                        console.log(item)
                           var target = $('#deleteTupla-'+item.id+'').data('idtupla');
+                          var artInventario = $('#deleteTupla-'+item.id+'').data('almacen');
                           console.log(target);
+                          console.log(artInventario)
 
                           
                           $.ajax({
-                            url: "${createLink(controller: 'almacen', action: 'deleteProducto2')}",
-                            data: {id: target},
+                            url: "${createLink(controller: 'almacen', action: 'deleteProducto')}",
+                            data: {id: target, idArticulo: artInventario},
                             type: "GET",
                             success: function(ask) {
                               console.log(ask)
-                              // location.reload();
+                              location.reload();
                             }
                           });
 
@@ -215,10 +219,8 @@
                               .append('<div class="form-group">')
                               .append('<label for="articulo">Producto:</label>')
                               .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
-                              .append('<label for="costosub">Costo Sub:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costosub" value="'+ accounting.formatMoney(tupla.costoSub) +'"/> ')
-                              .append('<label for="costounitario">Costo Unitario:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ accounting.formatMoney(tupla.costoUnitario) +'"/> ')
+                              .append('<label for="costounitario">Precio Sub:</label>')
+                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ accounting.formatMoney(tupla.precioUnitario) +'"/> ')
                               .append('<label for="preciopublico">Precio publico:</label>')
                               .append('<input readonly type="text" class="form-control" id="preciopublico" value="'+ accounting.formatMoney(tupla.precioPublico) +'"/> ')
                               .append('<label for="preciopublico">Proveedor:</label>')

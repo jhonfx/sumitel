@@ -183,7 +183,7 @@
                     }},
                     { title: 'Borrar', width: 40, editing: false,  itemTemplate: function(_, item) {
 
-                      return $("<button type='button' id='deleteTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-almacen='"+ item.idArticuloInventario +"' class='btn bttn-bordered bttn-danger bttn-sm btn-delete pull-right'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function() {
+                      return item.remision != 0 ? "" : $("<button type='button' id='deleteTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-almacen='"+ item.idArticuloInventario +"' class='btn bttn-bordered bttn-danger bttn-sm btn-delete pull-right'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function() {
                         console.log(item)
                           var target = $('#deleteTupla-'+item.id+'').data('idtupla');
                           var artInventario = $('#deleteTupla-'+item.id+'').data('almacen');
