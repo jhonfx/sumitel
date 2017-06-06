@@ -32,6 +32,7 @@ class AlmacenController {
         
     }
 
+
     def saveData = {
 
         log.debug("ya debuggea???")
@@ -133,6 +134,35 @@ class AlmacenController {
       log.debug(almacenList)
       def jsonData = [rows: almacenList]
       render jsonData as JSON
+    }
+
+    def deleteProducto = {
+      def params = params
+      def id = params.id
+      def idArt = params.idArticulo
+      log.debug("PARAMS_------>"+params)
+
+      StringBuilder sql = new StringBuilder()
+      sql.append("DELETE from Almacen alm where alm.id = ${id}")
+      def resultSQL = Almacen.executeUpdate(sql.toString())
+      log.debug(resultSQL.toString())
+
+      def invAlm = Inventario.get(idArt)
+      log.debug("InventarioAlmacen:>>>>>>"+invAlm)
+      def totalAlm = invAlm.getTotalArticulos()
+      def resta = totalAlm - 1
+      def mod_costoSub = (resta*invAlm.getPrecioSub())
+      def mod_costoUni = (resta*invAlm.getPrecioUnitario())
+      def mod_costoPub = (resta*invAlm.getPrecioPublico())
+      log.debug("TotalAlmacen:>>>>>>>"+totalAlm)
+      
+
+      StringBuilder update_cant_art = new StringBuilder()
+      update_cant_art.append("UPDATE Inventario inv set inv.totalArticulos = ${resta}, inv.costoSub = ${mod_costoSub}, inv.costoUnitario = ${mod_costoUni}, inv.costoPublico = ${mod_costoPub} where inv.id = ${idArt}");
+      def resultSQL_update = Almacen.executeUpdate(update_cant_art.toString())
+
+      def jsonResult = [success: true]
+      render(jsonResult as JSON)
     }
 
     def listaalmacen() {}

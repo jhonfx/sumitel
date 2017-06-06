@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'iziModal.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     <title>ARTCULOS ALMACEN</title>
 
@@ -178,27 +181,46 @@
                     { name: "remision", title: 'Remisión', type: "text", width: 100, editing: false, itemTemplate: function(_, item) {
                       return item.remision;
                     }},
-                    { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
-                    return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn btn-primary btn-sm'>Ver Detalle</button>")
+                    { title: 'Borrar', width: 40, editing: false,  itemTemplate: function(_, item) {
+
+                      return $("<button type='button' id='deleteTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-almacen='"+ item.idArticuloInventario +"' class='btn bttn-bordered bttn-danger bttn-sm btn-delete pull-right'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function() {
+                        console.log(item)
+                          var target = $('#deleteTupla-'+item.id+'').data('idtupla');
+                          var artInventario = $('#deleteTupla-'+item.id+'').data('almacen');
+                          console.log(target);
+                          console.log(artInventario)
+
+                          
+                          $.ajax({
+                            url: "${createLink(controller: 'almacen', action: 'deleteProducto')}",
+                            data: {id: target, idArticulo: artInventario},
+                            type: "GET",
+                            success: function(ask) {
+                              console.log(ask)
+                              location.reload();
+                            }
+                          });
+
+                      });
+                    }},
+                    { title: 'Info', width: 40, editing: false,  itemTemplate: function(_, item) {
+                    return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-primary bttn-sm btn-add-sim pull-right'><i class='fa fa-archive' aria-hidden='true'></i></button>")
                       .on("click", function(e) {
                           console.log(item)
 
-                          console.log("click en boton de descxripcion")
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           console.log(target);
 
                           var results = $.each(db.tuplas, function(e, tupla) {
-                            console.log(tupla)
+                            
                             if (tupla.id == target) {
                               $('#contenedor')
                               .append('<form>')
                               .append('<div class="form-group">')
                               .append('<label for="articulo">Producto:</label>')
                               .append('<input readonly type="text" class="form-control" id="articulo" value="'+ tupla.articulo +'"/>')
-                              .append('<label for="costosub">Costo Sub:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costosub" value="'+ accounting.formatMoney(tupla.costoSub) +'"/> ')
-                              .append('<label for="costounitario">Costo Unitario:</label>')
-                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ accounting.formatMoney(tupla.costoUnitario) +'"/> ')
+                              .append('<label for="costounitario">Precio Sub:</label>')
+                              .append('<input readonly type="text" class="form-control" id="costounitario" value="'+ accounting.formatMoney(tupla.precioUnitario) +'"/> ')
                               .append('<label for="preciopublico">Precio publico:</label>')
                               .append('<input readonly type="text" class="form-control" id="preciopublico" value="'+ accounting.formatMoney(tupla.precioPublico) +'"/> ')
                               .append('<label for="preciopublico">Proveedor:</label>')
@@ -211,9 +233,9 @@
                               .append('</form>')
                               $('#contenedor').modal('show');
                               var costouni = parseFloat($('#costounitario').val());
-                              console.log(costouni);
+                              
                               var frm = accounting.formatMoney(costouni);
-                              console.log(frm);
+                              
                             }
                           });
 

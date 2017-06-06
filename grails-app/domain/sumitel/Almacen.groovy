@@ -12,9 +12,9 @@ class Almacen implements Serializable {
     String imeiCel
     String numeroCel = "00000"
     double costoSub
+    double costoUnitario
     double precioPublico
     double precioUnitario
-    double costoUnitario
     String almacen
     String remision
     Date fechaEntrega

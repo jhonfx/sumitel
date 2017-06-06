@@ -87,7 +87,7 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
 
     <div id="main">
       <span style="font-size:30px;cursor:pointer" id="icon_menu" onclick="openNav()">☰</span>
-      <button type="button" class="btn bttn-bordered bttn-royal bttn-sm" id="logout" tooltip="Cerrar sessión"><img style="height: 20px;" src="${resource(dir: 'img', file: 'power.png')}"></button>
+      <button type="button" class="btn bttn-bordered bttn-royal bttn-sm" id="logout" tooltip="Cerrar sessión"><i class="fa fa-power-off" aria-hidden="true"></i></button>
       <g:layoutBody/>
     </div>
 

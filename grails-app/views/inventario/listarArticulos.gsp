@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'iziModal.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
 
@@ -178,7 +180,7 @@
                     { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
                     { title: '-', width: 10, editing: false, itemTemplate: function(_, item) {
                       if (item.activo == 1) {
-                        return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-success bttn-sm'><img style='height: 20px;' src='${resource(dir: 'img', file: 'success.png')}'></img></button>").on('click', function(e) {
+                        return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='fa fa-check' aria-hidden='true'></i></button>").on('click', function(e) {
                           var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
                           var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
                           console.log(target);
@@ -210,7 +212,7 @@
 
                       });
                       } else {
-                      return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><img style='height: 20px;' src='${resource(dir: 'img', file: 'error.png')}'></img></button>").on('click', function(e) {
+                      return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><i class='fa fa-close' aria-hidden='true'></i></button>").on('click', function(e) {
                           var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
                           var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
                           console.log(target);
@@ -233,8 +235,8 @@
                         
                       }
                     }},
-                    { title: 'Info', width: 25, editing: false,  itemTemplate: function(_, item) {
-                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Editar</button>")
+                    { title: 'Info', width: 15, editing: false,  itemTemplate: function(_, item) {
+                          return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'><i class='fa fa-edit' aria-hidden='true'></i></button>")
                             .on("click", function(e) {
                                 var target = $('#buttonTupla-'+item.id+'').data('idtupla');
 
@@ -261,7 +263,7 @@
                                             .append('<label for="preciopublico">Precio Sub:</label>')
                                             .append('<input  type="text" class="form-control" id="ps" value="'+ tupla.precioSub +'"/> ')
                                             .append('<br>')
-                                            .append('<button type="button" class="btn pull-right btn-primary btn-sm" id="update_article">Actualizar</button>')
+                                            .append('<button type="button" class="btn bttn-bordered bttn-primary bttn-sm pull-right" id="update_article">Actualizar</button>')
                                             .append('</div>')
                                             .append('</form>')
                                             $('#contenedor').modal('show');

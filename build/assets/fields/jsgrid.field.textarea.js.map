@@ -1,8 +1,0 @@
-{
-"version":3,
-"file":"jsgrid.field.textarea.js",
-"lineCount":2,
-"mappings":"A;AAAC,SAAQ,CAACA,CAAD,CAASC,CAAT,CAAYC,CAAZ,CAAuB,CAI5BC,QAASA,EAAa,CAACC,CAAD,CAAS,CAC3BC,CAAAC,KAAA,CAAe,IAAf,CAAqBF,CAArB,CAD2B,CAF/B,IAAIC,EAAYL,CAAAK,UAMhBF,EAAAI,UAAA,CAA0B,IAAIF,CAAJ,CAAc,CAEpCG,eAAgBA,QAAQ,EAAG,CACvB,MAAI,KAAAC,UAAJ,CAGO,IAAAC,cAHP,CAG4B,IAAAC,gBAAA,EAH5B,CACW,EAFY,CAFS,CASpCC,aAAcA,QAAQ,CAACC,CAAD,CAAQ,CAC1B,GAAIC,CAAA,IAAAA,QAAJ,CACI,MAAO,KAAAC,aAAA,CAAkBF,CAAlB,CAEX,KAAIG,EAAU,IAAAC,YAAVD,CAA6B,IAAAL,gBAAA,EACjCK,EAAAE,IAAA,CAAYL,CAAZ,CACA,OAAOG,EANmB,CATM,CAkBpCL,gBAAiBA,QAAQ,EAAG,CACxB,MAAOV,EAAA,CAAE,YAAF,CAAAkB,KAAA,CAAqB,UAArB,CAAiC,CAAEC,CAAA,IAAAA,SAAnC,CADiB,CAlBQ,CAAd,CAuB1BpB,EAAAqB,OAAAC,SAAA,CAAyBtB,CAAAG,cAAzB,CAAgDA,CA/BpB,CAA/B,CAAA,CAiCCH,MAjCD,CAiCSuB,MAjCT;",
-"sources":["jsgrid.field.textarea.unminified.js"],
-"names":["jsGrid","$","undefined","TextAreaField","config","TextField","call","prototype","insertTemplate","inserting","insertControl","_createTextArea","editTemplate","value","editing","itemTemplate","$result","editControl","val","prop","readOnly","fields","textarea","jQuery"]
-}

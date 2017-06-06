@@ -13,15 +13,13 @@
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'numeral.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
     
-    
-
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jsgrid-theme.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'iziModal.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <title>ARTCULOS ALMACEN</title>
 
     <style type="text/css">
@@ -73,9 +71,6 @@
     <script type="text/javascript">
 
       $(document).ready( function() {
-        console.log("inciando");
-        console.log("por que no se agrega la libreria")
-
 
         var response = [];
         var imeiSimCel = [];
@@ -89,7 +84,6 @@
         //Aplica la orden de compra
         $('#aplicar_orden').on('click', function() {
           var clent = $('#client_name').val();
-          console.log(clent)
           if (clent == "") {
             swal({
               title: "Error",
@@ -109,7 +103,7 @@
           });
           
           _.find(obj_seleccionados, function(tt) {
-            console.log(tt.id == 1)
+            
           });
 
           var ss = _.find(obj_seleccionados, function(tt) {
@@ -118,9 +112,7 @@
             }
           });
 
-          console.log(ss)
           
-
           //Generar orden e imprimir
           $.ajax({
             url: "${createLink(controller: 'ordenCompra', action:'generarOrdenCompleta')}",
@@ -134,7 +126,7 @@
               
                 var href = "${createLink(controller: 'ordenCompra', action: 'printOrdenCompleta')}" +"?remision=" + json.remision;
                 var specialurl = window.location.origin + href;
-                console.log(specialurl);
+                
                 window.open(specialurl, '_blank');
 
                 var href = "${createLink(controller: 'almacen', action: 'listaparaorden')}";
@@ -175,7 +167,7 @@
           },
           success: function(json) {
             almacen = json;
-            console.log(almacen)
+            
             $('.div_cargando').hide();
             $("#contenedor_sims").hide();
 
@@ -231,12 +223,12 @@
                           { name: "articulo", title: 'Articulo', type: "text", width: 30, editing: false},
                           { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
                           { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
-                          console.log(item)
-                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>")  : item.notToPhone == true ?  $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>NO DISPONIBLE</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>AGREGAR</button>")
+                          
+                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>")  : item.notToPhone == true ?  $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>NO DISPONIBLE</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>aa</button>")
                             .on("click", function(e) {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log(e)
+                                
                                 $('.close-modal ').click();
                                 var target = $('#buttonTupla-'+item.id+'').data('idtupla');
 
@@ -391,12 +383,9 @@
                     { name: "fechaCompra", title: 'Fecha Compra', type: "myDateField", width: 50, editing: false, editButtonTooltip: "Edit"},
                     { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 100, editing: false, filtering: true},
                     { title: "-", type: "text", width: 30, editing: false, itemTemplate: function(_, item) {
-                      return item.imeiSim === "0" ? "" : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'><img style='height: 10px;' src='${resource(dir:'img', file: 'edit.png')}'></img></button>").on('click', function(e) {
+                      return item.imeiSim === "0" ? "" : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm pull-right'><img style='height: 10px;' src='${resource(dir:'img', file: 'edit.png')}'></img></button>").on('click', function(e) {
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
-
-                          console.log(target);
-                          console.log(btn)
 
                           $('#modal').iziModal('open', {
                             iframeHeight: 300,
@@ -406,17 +395,15 @@
 
                           $('#aplicar_cambio').on('click',  function() {
                             var sim = $('#imei_sim').val();
-                            console.log(target);
                             $.ajax({
                               url: "${createLink(controller: 'ordenCompra', action: 'updateSimSerie')}",
                               data: {id: target, sim: sim},
                               type: "POST",
                               success: function(callback) {
-                                console.log(callback);
                                 location.reload();
                               },
                               error: function(error) {
-                                console.log(error);
+
                               },
                               dataType: "json"
                             });
@@ -459,12 +446,9 @@
                     { name: "imeiCel", title: 'IMEI', type: "text", width: 100, editing: false, filtering: true},
                     
                     { title: "-", type: "text", width: 30, editing: false, itemTemplate: function(_, item) {
-                      return item.imeiCel === "0" ? "" : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'><img style='height: 10px;' src='${resource(dir:'img', file: 'edit.png')}'></img></button>").on('click', function(e) {
+                      return item.imeiCel === "0" ? "" : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm pull-right'><img style='height: 10px;' src='${resource(dir:'img', file: 'edit.png')}'></img></button>").on('click', function(e) {
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
-
-                          console.log(target);
-                          console.log(btn)
 
                           $('#modal_').iziModal('open', {
                             iframeHeight: 300,
@@ -474,13 +458,11 @@
 
                           $('#aplicar_cambio_').on('click',  function() {
                             var imei = $('#imei_cel').val();
-                            console.log(target);
                             $.ajax({
                               url: "${createLink(controller: 'ordenCompra', action: 'updateImei')}",
                               data: {id: target, imei: imei},
                               type: "POST",
                               success: function(callback) {
-                                console.log(callback);
                                 location.reload();
                               },
                               error: function(error) {
@@ -526,23 +508,37 @@
                     }},
                     { name: "articulo", title: 'Producto', type: "text", width: 150, editing: false, filtering: true},
                     { name: "remision", title: 'Remisión', type: "text", width: 60, editing: false, filtering: false},
-                    { title: 'Info', width: 70, editing: false,  itemTemplate: function(_, item) {
-                    return item.isSelected == true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right hidden'>AGREGAR</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'>AGREGAR</button>")
+                    { title: 'Agregar', width: 35, editing: false,  itemTemplate: function(_, item) {
+                    return item.isSelected == true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right hidden'><i class='fa fa-plus' aria-hidden='true'></i></button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm pull-right' tooltip='agregar producto'><i class='fa fa-plus' aria-hidden='true'></i></button>")
                       .on("click", function(e) {
 
                           var target = $('#buttonTupla-'+item.id+'').data('idtupla');
                           var btn = $('#buttonTupla-'+item.id+'');
+                          console.log(target);
+                          console.log(obj_seleccionados);
+
+                          var found = obj_seleccionados.some(function (el) {
+                            return el.id === target;
+                          });
+
+                          console.log(found)
 
                           $.each(imeiSimCel.rows, function(e, it) {
-                            console.log(it);
                             if (it.id === target) {
-                              console.log(it)
                               it.notToPhone = true;
                             }
                           });
                           
                           $.each(db.tuplas, function(e, tupla) {
-                            if (tupla.id == target) {
+                            if (found) {
+                               swal({
+                                  title: "Error",
+                                  type: "warning",
+                                  text: "El articulo ya ha sido agregado",
+                                  allowEscapeKey: true,
+                                });
+                              return false; 
+                            } else if (tupla.id === target) {
                               obj_seleccionados.push({ 
                                 id: tupla.id, 
                                 article: tupla.articulo, 
@@ -553,11 +549,12 @@
                                 asignado: true,
                               });
                               
-                              btn.attr('disabled', 'disabled');
+                              // btn.attr('disabled', 'disabled');
                               $('#datos_simseries').jsGrid("refresh");
                               $("#datos_list_final").jsGrid("refresh");
-                            } 
+                            }
                           });
+                          
                       });
                     }}
                 ]
@@ -573,7 +570,7 @@
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
 
                 filtering: true,
-                editing: false,
+                editing: true,
                 inserting: false,
                 sorting: true,
                 paging: true,
@@ -592,15 +589,15 @@
                     { name: "telefono", title: 'Telefono', type: "number", width: 50, editing: false},
                     { name: "preciounitario", title: 'Precio', type: "money", width: 70, editing: false},
                     { name: "preciopublico", title: 'P/P', type: "money", width: 70, editing: false},
-                    { title: 'Info', width: 120, editing: false,  itemTemplate: function(_, item) {
+                    { title: 'Info', width: 35, editing: false,  itemTemplate: function(_, item) {
         
-                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right' disabled>Completo</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-success bttn-sm btn-add-sim pull-right'>Agregar SIM</button>")
+                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right' disabled>Completo</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right'><i class='fa fa-mobile' aria-hidden='true'></i></button>")
                       .on("click", function(e) {
                         
                             var target = $('#buttonTupla-'+item.id+'').data('idtupla');
 
                             $.each(obj_seleccionados, function(e, tupla) {
-                                
+                                console.log(obj_seleccionados)
                               if (target == tupla.id) {
 
                                   id_tupla_odc = target;
@@ -611,7 +608,8 @@
                               }
                             });
                       });
-                    }}
+                    }},
+                    { type: 'control', deleteButton: true, width: 50, editButton: false},
                 ]
               });
             });
