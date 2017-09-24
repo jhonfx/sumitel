@@ -1,0 +1,6 @@
+#Tue, 06 Jun 2017 05:17:04 -0500
+
+info.app.version=0.1
+info.app.name=sumitel
+grails.env=production
+info.app.grailsVersion=3.1.8

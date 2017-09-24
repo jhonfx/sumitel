@@ -26,7 +26,7 @@
           src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
         }
 
-        .header {
+        .header { 
          top: 0 !important;
          width: 100% !important;
          height: 60px !important;   /* Height of the footer */

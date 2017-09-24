@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.modal.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bttn.min.css')}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'iziModal.min.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     <title>REIMPRIMIR NOTA</title>
 
@@ -188,9 +190,9 @@
                       { name: "fechaCreacion", title: 'Fecha', type: "date", width: 40, filtering: false},
                       { title: 'Reimprimir', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
-                        return $("<button type='button' id='reimprimirOrden-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+tupla.idCliente+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='glyphicon glyphicon-print'></i></button>").on("click", function(e) {
+                        return $("<button type='button' id='reimprimirOrden-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+tupla.idCliente+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='fa fa-print' aria-hidden='true'></i></button>").on("click", function(e) {
 
-                          var target = $('#buttonTupla-'+tupla.id+'').data('idtupla');
+                          var target = $('#reimprimirOrden-'+tupla.id+'').data('idtupla');
                           console.log(target);
 
                           var href = "${createLink(controller: 'ordenCompra', action: 'printOrdenCompleta')}" +"?remision=" + target;
@@ -205,9 +207,9 @@
                       { title: 'Cancelar', width: 10, editing: false,  itemTemplate: function(_, tupla) {
 
                         if (tupla.cancelada === 1) {
-                          return $("<button type='button' id='tuplaCancelada' class='btn bttn-bordered bttn-success bttn-sm btn-cancel btn-white' style='background-color: red' disabled><i class='glyphicon glyphicon-remove btn-white'></button>")
+                          return $("<button type='button' id='tuplaCancelada' class='btn bttn-bordered bttn-danger bttn-sm btn-cancel btn-white' disabled><i class='fa fa-close' aria-hidden='true'></i></button>")
                         } else {
-                          return $("<button type='button' id='cancelarTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+ tupla.idCliente +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'><i class='glyphicon glyphicon-remove'></i></button>").on("click", function(e) {
+                          return $("<button type='button' id='cancelarTupla-"+tupla.id+"' data-idtupla='"+ tupla.numeroOrden +"' data-idcliente='"+ tupla.idCliente +"' class='btn bttn-bordered bttn-success bttn-sm btn-cancel'><i class='fa fa-check' aria-hidden='true'></i></button>").on("click", function(e) {
                               $.ajax({
                                 url: '${createLink(controller: "almacen", action:"cancelarOrdenCompra")}',
                                 data: {id: tupla.numeroOrden, idcliente: tupla.idCliente},
