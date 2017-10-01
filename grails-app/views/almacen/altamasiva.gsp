@@ -28,15 +28,16 @@
       .header {
          top: 0 !important;
          width: 100% !important;
-         height: 60px !important;   /* Height of the footer */
+         height: 100% !important;   /* Height of the footer */
          background: #9dc1e0 !important;
          float: right;
-         font-size: 40px;
+         font-size: 60px;
          font-weight: 400;
          color: white;
          text-align: center;
-         padding: 15px;
+         padding: 30px;
          font-family: 'specialFont';
+         margin-bottom: 20px;
       }
 
        h1 { 
@@ -54,6 +55,18 @@
           height: 10px;
           border: 0;
           box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
+
+       #logo_sumitel {
+          width: 20%;
+          height: 20%;
+          margin-bottom: 20px;
+       }
+       #logo_telcel {
+          width: 18%;
+          height: 18%;
+          float: right;  
+          margin-bottom: 20px;
        }
 
     </style>
@@ -372,70 +385,74 @@
     </script>
 </head>
 <body>
-<div class="container"> 
+<div class="container">
   <div class="row">
-    <div class="header">SUMITEL S.A DE C.V</div>
-  </div>
-
-  <div class="col-md-12">
-    <div class="row">
-      <h1>AGREGAR PRODUCTOS</h1>
-      <hr>
-    </div>
-    <div class="row">
-      <form id="formulario" name="formulario">
-        <div class="form-group">
-          <label>FACTURA</label>
-          <input type="text" class="form-control col-md-4" id="factura" name="fact">
-        </div>
-        <div class="form-group">
-          <label>Producto</label>
-          <input type='text'
-           placeholder='Elige un producto de inventario'
-           class='flexdatalist form-control col-md-4'
-           data-min-length='1'
-           data-value-property='id'
-           list='inventarioList'
-           name='inventarioId'>
-
-           <datalist id="inventarioList">
-              <g:each in="${Inventario.findAllByActivo(true)}" var="inventarioList">
-                  <option value="${inventarioList.id}">${inventarioList.articulo}</option>
-              </g:each>
-          </datalist>
-            <input type="hidden" name="producto" id="producto">
-            <input type="hidden" name="costosub" id="costosub">
-            <input type="hidden" name="costoPublico" id="costoPublico">
-            <input type="hidden" name="costoUnitario" id="costoUnitario">
-            <input type="hidden" name="totalArticulos" id="totalArticulos">
-            <input type="hidden" name="idProducto" id="idProducto">
-        </div>
-        <div class="form-group">
-          <label>Proveedor</label>
-          <g:select name="proveedorId" id="proveedorId" class="form-control col-md-4"
-            from="${Proveedor.findAll()}"
-            optionKey="id" optionValue="nombreProveedor"
-            noSelection="${['':'Seleccione...']}"/>
-        </div>
-        <div class="form-group">
-          <label>SERIE</label>
-          <textarea type="textarea" class="form-control" id="imei" name="code"></textarea>
-        </div>
-        <div class="form-group">
-          <label>IMEI</label>
-          <textarea type="textarea" class="form-control" id="imei_cel" name="imei_cel"></textarea>
-        </div>
-        <div class="form-group">
-          <button type="button" id="aplicar" class="btn bttn-bordered bttn-primary bttn-sm">AGREGAR</button>&nbsp;&nbsp;&nbsp;
-          <button type="button" id="limpiar" class="btn bttn-bordered bttn-primary bttn-sm">BORRAR</button>
-        </div>
-      
-    </div>
-    <div class="row">
     <div class="col-sm-12">
-      <div id="jsgrid_table"></div>
-      <div id="totals_articulos"></div>
+      <img id="logo_sumitel" src="${resource(dir: 'img', file:'sumitel.jpeg')}" />
+      <img id="logo_telcel" src="${resource(dir: 'img', file:'telcel.png')}" />
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="header">AGREGAR PRODUCTOS</div>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form id="formulario" name="formulario">
+          <div class="form-group">
+            <label>FACTURA</label>
+            <input type="text" class="form-control col-md-4" id="factura" name="fact">
+          </div>
+          <div class="form-group">
+            <label>Producto</label>
+            <input type='text'
+             placeholder='Elige un producto de inventario'
+             class='flexdatalist form-control col-md-4'
+             data-min-length='1'
+             data-value-property='id'
+             list='inventarioList'
+             name='inventarioId'>
+
+             <datalist id="inventarioList">
+                <g:each in="${Inventario.findAllByActivo(true)}" var="inventarioList">
+                    <option value="${inventarioList.id}">${inventarioList.articulo}</option>
+                </g:each>
+            </datalist>
+              <input type="hidden" name="producto" id="producto">
+              <input type="hidden" name="costosub" id="costosub">
+              <input type="hidden" name="costoPublico" id="costoPublico">
+              <input type="hidden" name="costoUnitario" id="costoUnitario">
+              <input type="hidden" name="totalArticulos" id="totalArticulos">
+              <input type="hidden" name="idProducto" id="idProducto">
+          </div>
+          <div class="form-group">
+            <label>Proveedor</label>
+            <g:select name="proveedorId" id="proveedorId" class="form-control col-md-4"
+              from="${Proveedor.findAll()}"
+              optionKey="id" optionValue="nombreProveedor"
+              noSelection="${['':'Seleccione...']}"/>
+          </div>
+          <div class="form-group">
+            <label>SERIE</label>
+            <textarea type="textarea" class="form-control" id="imei" name="code"></textarea>
+          </div>
+          <div class="form-group">
+            <label>IMEI</label>
+            <textarea type="textarea" class="form-control" id="imei_cel" name="imei_cel"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="button" id="aplicar" class="btn bttn-bordered bttn-primary bttn-sm">AGREGAR</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" id="limpiar" class="btn bttn-bordered bttn-primary bttn-sm">BORRAR</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="jsgrid_table"></div>
+        <div id="totals_articulos"></div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-8"></div>
@@ -444,7 +461,7 @@
       </div>
     </div>
     </form>
-  </div>
+  </div><!-- termina div row-->
 </div>
   
 

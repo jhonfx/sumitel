@@ -150,6 +150,18 @@ class InventarioController {
       render(jsonResult as JSON) 
     }
 
+    def borrarArticulo = {
+      log.debug("PARAMS-------->" + params)
+      def id = params.id
+      StringBuilder sql = new StringBuilder()
+      def jsonResult = []
+      sql.append("DELETE from Inventario inv where inv.id = ${id}")
+      def resultSQL = Inventario.executeUpdate(sql.toString())
+      log.debug("result---------"+resultSQL)
+      jsonResult = [success: true, message: "Eliminado con exito"]
+      render(jsonResult as JSON)
+    }
+
     
 
 }

@@ -79,7 +79,7 @@ class AlmacenController {
             obj.numeroCel = tupla.numeroCel
             obj.costoSub = tupla.precioSub * totalArticulo
             obj.precioPublico = tupla.precioPublico
-            obj.precioUnitario = tupla.precioSub
+            obj.precioUnitario = tupla.precioUnitario
             obj.costoUnitario = tupla.precioUnitario * totalArticulo
             obj.almacen = 'OF'
             obj.remision = '0'

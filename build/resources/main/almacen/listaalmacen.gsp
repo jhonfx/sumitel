@@ -26,18 +26,19 @@
           src: url(${resource(dir: 'fonts', file: 'DK_High_Tea.otf')});
         }
 
-        .header {
+        .header { 
          top: 0 !important;
          width: 100% !important;
-         height: 60px !important;   /* Height of the footer */
+         height: 100% !important;   /* Height of the footer */
          background: #9dc1e0 !important;
          float: right;
-         font-size: 40px;
+         font-size: 60px;
          font-weight: 400;
          color: white;
          text-align: center;
-         padding: 15px;
+         padding: 30px;
          font-family: 'specialFont';
+         margin-bottom: 20px;
         }
 
         h1 { 
@@ -55,6 +56,18 @@
           height: 10px;
           border: 0;
           box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
+
+       #logo_sumitel {
+          width: 20%;
+          height: 20%;
+          margin-bottom: 20px;
+       }
+       #logo_telcel {
+          width: 18%;
+          height: 18%;
+          float: right;  
+          margin-bottom: 20px;
        }
 
     </style>
@@ -147,7 +160,7 @@
               /* generate data table */
               $("#datos_list").jsGrid({
                 width: "100%",
-                height: "600px",
+                height: "900px",
 
                 confirmDeleting: false,
                 deleteConfirm: "¿ Deseas borrar este artículo ?",
@@ -268,15 +281,19 @@
 <body>
 <div class="container"> 
   <div class="row">
-    <div class="header">SUMITEL S.A DE C.V</div>
+    <div class="col-sm-12">
+      <img id="logo_sumitel" src="${resource(dir: 'img', file:'sumitel.jpeg')}" />
+      <img id="logo_telcel" src="${resource(dir: 'img', file:'telcel.png')}" />
+    </div>
   </div>
   <div class="row">
-      <h1>ALMACÉN</h1>
-      <hr>
-      <div id="datos_list"></div>
-      <div id="totals_simseries"></div>
-      <div>&nbsp</div>
-      <div id="contenedor"></div>
+      <div class="col-md-12">
+        <div class="header">ALMACÉN</div>
+        <div id="datos_list"></div>
+        <div id="totals_simseries"></div>
+        <div>&nbsp</div>
+        <div id="contenedor"></div>
+      </div>
   </div>
 </div>
   

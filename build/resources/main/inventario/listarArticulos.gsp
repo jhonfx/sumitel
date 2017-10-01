@@ -66,6 +66,7 @@
 
               window.db = db;
               db.tuplas = result;
+              console.log(result)
             }());
 
             var DateField = function(config) {
@@ -179,61 +180,64 @@
                     { name: "costoUnitario", filtering: false, title: 'Costo Unitario', type: "money", width: 30,  editing: false},
                     { name: "costoSub", filtering: false, title: 'Costo Sub', type: "money", width: 30,  editing: false},
                     { title: '-', width: 10, editing: false, itemTemplate: function(_, item) {
-                      if (item.activo == 1) {
-                        return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='fa fa-check' aria-hidden='true'></i></button>").on('click', function(e) {
-                          var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
-                          var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
-                          console.log(target);
-                          console.log(estatus);
-                          console.log(item.totalArticulos)
-                          if (item.totalArticulos !== 0) {
-                            swal({
-                              title: "Error",
-                              type: "warning",
-                              text: "El articulo aun cuenta con stock",
-                              allowEscapeKey: true,
-                            });
-                            return;
-                          } else {
+                      
+                        return item.totalArticulos == 0 ? $("<button type='button' id='buttonCancelar-"+item.id+"' data-articulo='"+item.articulo+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button>").on('click', function(e) {
+                            var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
+                            var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
+                            var articulo = $('#buttonCancelar-'+item.id+'').data('articulo');
+                            console.log(target);
+                            console.log(estatus);
+                            console.log(item.totalArticulos)
+
                             $.ajax({
-                              url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
-                              data: {id: target, estatus: 0},
-                              type: "GET",
+                              url: "${createLink(controller: 'inventario', action:'borrarArticulo')}",
+                              data: {id: target},
                               success: function(json) {
-                                console.log(json)
-                                if (json.success == true) { 
-                                  console.log("esta ok");
-                                  location.reload()
-
-                                }
+                                swal({
+                                  title: "Borrar articulo",
+                                  type: "warning",
+                                  text: "El  " + articulo+"  ha sido borrado",
+                                  allowEscapeKey: true,
+                                });
+                                setTimeout( function() {
+                                  location.reload();
+                                }, 3000);
                               }
                             });
-                          }
-
-                      });
-                      } else {
-                      return $("<button type='button' id='buttonCancelar-"+item.id+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-danger bttn-sm'><i class='fa fa-close' aria-hidden='true'></i></button>").on('click', function(e) {
-                          var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
-                          var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
-                          console.log(target);
-                          console.log(estatus);
-
-                          $.ajax({
-                            url: "${createLink(controller: 'inventario', action:'cambiarEstatus')}",
-                            data: {id: target, estatus: 1},
-                            type: "GET",
-                            success: function(json) {
-                              console.log(json)
-                              if (json.success == true) { 
-                                console.log("esta ok");
-                                location.reload()
-                              }
+                          }) : $("<button type='button' id='buttonCancelar-"+item.id+"' data-articulo='"+item.articulo+"' data-idtupla='"+item.id+"' data-estatus='"+item.activo+"' class='btn bttn-bordered bttn-success bttn-sm'><i class='fa fa-check' aria-hidden='true'></i></button>").on('click', function(e) {
+                            var target = $('#buttonCancelar-'+item.id+'').data('idtupla');
+                            var estatus = $('#buttonCancelar-'+item.id+'').data('estatus');
+                            var articulo = $('#buttonCancelar-'+item.id+'').data('articulo');
+                            console.log(target);
+                            console.log(estatus);
+                            console.log(item.totalArticulos)
+                            if (item.totalArticulos !== 0) {
+                              swal({
+                                title: "Error",
+                                type: "warning",
+                                text: "El articulo aun cuenta con stock",
+                                allowEscapeKey: true,
+                              });
+                              return;
+                            } else {
+                              $.ajax({
+                                url: "${createLink(controller: 'inventario', action:'borrarArticulo')}",
+                                data: {id: target},
+                                success: function(json) {
+                                  swal({
+                                    title: "Borrar articulo",
+                                    type: "warning",
+                                    text: "El  " + articulo+"  ha sido borrado",
+                                    allowEscapeKey: true,
+                                  });
+                                  setTimeout( function() {
+                                    location.reload();
+                                  }, 3000);
+                                }
+                              });
                             }
-                          });
 
                       });
-                        
-                      }
                     }},
                     { title: 'Info', width: 15, editing: false,  itemTemplate: function(_, item) {
                           return $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm pull-right'><i class='fa fa-edit' aria-hidden='true'></i></button>")
@@ -332,15 +336,16 @@
         .header {
          top: 0 !important;
          width: 100% !important;
-         height: 60px !important;   /* Height of the footer */
+         height: 100% !important;   /* Height of the footer */
          background: #9dc1e0 !important;
          float: right;
-         font-size: 40px;
+         font-size: 60px;
          font-weight: 400;
          color: white;
          text-align: center;
-         padding: 15px;
+         padding: 30px;
          font-family: 'specialFont';
+         margin-bottom: 20px;
         }
 
         h1 { 
@@ -361,17 +366,30 @@
           /*box-shadow: 0 10px 10px -10px #8c8b8b inset;*/
        }
 
+       #logo_sumitel {
+          width: 20%;
+          height: 20%;
+          margin-bottom: 20px;
+       }
+       #logo_telcel {
+          width: 18%;
+          height: 18%;
+          float: right;  
+          margin-bottom: 20px;
+       }
     </style>
 </head>
 <body>
 <div class="container">
   <div class="row">
-    <div class="header">SUMITEL S.A DE C.V</div>
+    <div class="col-sm-12">
+      <img id="logo_sumitel" src="${resource(dir: 'img', file:'sumitel.jpeg')}" />
+      <img id="logo_telcel" src="${resource(dir: 'img', file:'telcel.png')}" />
+    </div>
   </div>
   <div class="row">
-     <h1>INVENTARIO</h1>
-     <hr>
-     <div class="col-sm-12">
+     <div class="col-md-12">
+       <div class="header">INVENTARIO</div>
        <div id="datos_list"></div>
        <div id="contenedor"></div>
      </div>

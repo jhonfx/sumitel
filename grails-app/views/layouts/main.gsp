@@ -28,19 +28,22 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'push_nav.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'ring.css')}"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'sweetalert.css')}"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.flexdatalist.css')}"/>
 
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sumitel_utils.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.flexdatalist.css')}"/>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'moment.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sweetalert.min.js')}"></script>
+
     
+    <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'sweetalert.min.js')}"></script>
+
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'sweetalert.css')}"/>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css"/>
     
 
     <script>
       function openNav() {
-          document.getElementById("mySidenav").style.width = "250px";
-          document.getElementById("main").style.marginLeft = "250px";
+          document.getElementById("mySidenav").style.width = "300px";
+          document.getElementById("main").style.marginLeft = "300px";
       }
 
       function closeNav() {
@@ -73,16 +76,19 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
 
 
     <div id="mySidenav" class="sidenav">
+      <h1 style="color: white; font-color: white;">Menu</h1>
+      <h1 style="color: white; font-color: white;">Grupo Sumitel</h1>
+      <hr style="background-color: white; height: 2px !important; margin-bottom: 20px;">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-      <a href="${createLink(controller: 'almacen', action: 'listaalmacen')}">Almacen/Existencias</a>
-      <a href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
-      <a href="${createLink(controller: 'almacen', action: 'altamasiva')}">Carga por factura</a>
-      <a href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Carga con Scaner</a>
-      <a href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
-      <a href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
-      <a href="${createLink(controller: 'cliente', action: 'listaClientes')}">Lista Clientes</a>
-      <a href="${createLink(controller: 'almacen', action: 'listaparaorden')}">Generar Orden Compra</a>
-      <a href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimprimir/Cancelar Orden Compra</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'almacen', action: 'listaalmacen')}">Almacen/Existencias</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'inventario', action: 'listarArticulos')}">Inventario</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'almacen', action: 'altamasiva')}">Carga por factura</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'almacen', action: 'altaporpistola')}">Carga con Scaner</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'inventario', action: 'create')}">Nuevo Producto</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'cliente', action: 'create')}">Nuevo Cliente</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'cliente', action: 'listaClientes')}">Lista Clientes</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'almacen', action: 'listaparaorden')}">Generar Orden Compra</a>
+      <a style="font-size: 22px;" href="${createLink(controller: 'ordenCompra', action: 'reimprimirOrden')}">Reimprimir/Cancelar Orden Compra</a>
     </div>
 
     <div id="main">
@@ -109,6 +115,9 @@ response.setHeader("Pragma", "no-cache");       // HTTP 1.0 compatibilidad
 
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'jquery.flexdatalist.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'javascripts', file: 'underscore.js')}"></script>
+
+    
+    
  
     <!-- <div class="footer">SUMITEL S.A de C.V</div> -->
 </body>

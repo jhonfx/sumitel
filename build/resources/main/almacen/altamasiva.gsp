@@ -28,15 +28,16 @@
       .header {
          top: 0 !important;
          width: 100% !important;
-         height: 60px !important;   /* Height of the footer */
+         height: 100% !important;   /* Height of the footer */
          background: #9dc1e0 !important;
          float: right;
-         font-size: 40px;
+         font-size: 60px;
          font-weight: 400;
          color: white;
          text-align: center;
-         padding: 15px;
+         padding: 30px;
          font-family: 'specialFont';
+         margin-bottom: 20px;
       }
 
        h1 { 
@@ -54,6 +55,18 @@
           height: 10px;
           border: 0;
           box-shadow: 0 10px 10px -10px #8c8b8b inset;
+       }
+
+       #logo_sumitel {
+          width: 20%;
+          height: 20%;
+          margin-bottom: 20px;
+       }
+       #logo_telcel {
+          width: 18%;
+          height: 18%;
+          float: right;  
+          margin-bottom: 20px;
        }
 
     </style>
@@ -372,17 +385,19 @@
     </script>
 </head>
 <body>
-<div class="container"> 
+<div class="container">
   <div class="row">
-    <div class="header">SUMITEL S.A DE C.V</div>
+    <div class="col-sm-12">
+      <img id="logo_sumitel" src="${resource(dir: 'img', file:'sumitel.jpeg')}" />
+      <img id="logo_telcel" src="${resource(dir: 'img', file:'telcel.png')}" />
+    </div>
   </div>
-
-  <div class="col-md-12">
-    <div class="row">
-      <h1>AGREGAR PRODUCTOS</h1>
-      <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="header">AGREGAR PRODUCTOS</div>
     </div>
     <div class="row">
+      <div class="col-md-12">
       <form id="formulario" name="formulario">
         <div class="form-group">
           <label>FACTURA</label>
@@ -429,13 +444,14 @@
           <button type="button" id="aplicar" class="btn bttn-bordered bttn-primary bttn-sm">AGREGAR</button>&nbsp;&nbsp;&nbsp;
           <button type="button" id="limpiar" class="btn bttn-bordered bttn-primary bttn-sm">BORRAR</button>
         </div>
-      
+      </form>
+      </div>
     </div>
     <div class="row">
-    <div class="col-sm-12">
-      <div id="jsgrid_table"></div>
-      <div id="totals_articulos"></div>
-    </div>
+      <div class="col-sm-12">
+        <div id="jsgrid_table"></div>
+        <div id="totals_articulos"></div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-8"></div>
@@ -444,7 +460,7 @@
       </div>
     </div>
     </form>
-  </div>
+  </div><!-- termina div row-->
 </div>
   
 
