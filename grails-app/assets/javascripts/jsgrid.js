@@ -94,7 +94,7 @@
         editRowClass: "jsgrid-edit-row",
 
         confirmDeleting: true,
-        deleteConfirm: "Are you sure?",
+        deleteConfirm: "¿Estás seguro de eliminar el artículo?",
 
         selecting: true,
         selectedRowClass: "jsgrid-selected-row",
@@ -111,7 +111,7 @@
         pageIndex: 1,
         pageSize: 20,
         pageButtonCount: 15,
-        pagerFormat: "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}",
+        pagerFormat: "Páginas: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}",
         pagePrevText: "Prev",
         pageNextText: "Next",
         pageFirstText: "First",

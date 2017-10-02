@@ -98,6 +98,8 @@
         //Aplica la orden de compra
         $('#aplicar_orden').on('click', function() {
           var clent = $('#client_name').val();
+          
+          
           if (clent == "") {
             swal({
               title: "Error",
@@ -127,6 +129,12 @@
           });
 
           
+          var check = $('#group_chip:checked').val();
+          console.log(check)
+          console.log(obj_seleccionados.length)
+
+          
+
           //Generar orden e imprimir
           $.ajax({
             url: "${createLink(controller: 'ordenCompra', action:'generarOrdenCompleta')}",
@@ -238,7 +246,7 @@
                           { name: "imeiSim", title: 'SIM / SERIE', type: "text", width: 40, editing: false, filtering: true},
                           { title: 'Info', width: 20, editing: false,  itemTemplate: function(_, item) {
                           
-                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>")  : item.notToPhone == true ?  $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>NO DISPONIBLE</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>aa</button>")
+                          return item.isSelected == true ? $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>AGREGADO</button>")  : item.notToPhone == true ?  $("<button type='button' class='btn bttn-bordered bttn-danger bttn-sm' disabled>NO DISPONIBLE</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' data-idserie='"+ item.imeiSim +"' class='btn bttn-bordered bttn-success bttn-sm'>Agregar SIM</button>")
                             .on("click", function(e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -386,7 +394,9 @@
                 pageButtonCount: 5,
                 onDataLoaded: function(args) {
                   var rows = args.grid.data.length;
-                  $('#totals_simseries').html('<span style="font-size: 22px;">TOTAL: '+ rows +'</span>')
+                  var total = numeral(rows).format('0,0');
+
+                  $('#totals_simseries').html('<span>Total artículos: '+ total +'</span>')
                 },
                 
                 //data: json.rows,
@@ -596,7 +606,7 @@
                 //controller: db2,
          
                 fields: [
-                    { name: "id", title: 'Id Almacen', type: "text", width: 10, editing: false},
+                    { name: "id", title: 'ID', type: "text", width: 10, editing: false},
                     { name: "article", title: 'Equipo', type: "text", width: 100, editing: false},
                     { name: "imei", title: 'IMEI', type: "number", width: 100, editing: false},
                     { name: "seriesim", title: 'SIM/SERIE', type: "number", width: 100, editing: false},
@@ -605,7 +615,7 @@
                     { name: "preciopublico", title: 'P/P', type: "money", width: 70, editing: false},
                     { title: 'Info', width: 35, editing: false,  itemTemplate: function(_, item) {
         
-                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right' disabled>Completo</button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right'><i class='fa fa-mobile' aria-hidden='true'></i></button>")
+                    return item.imei === "0" ? "" : item.haveSim === true ?  $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right' style='display: none'> </button>") : $("<button type='button' id='buttonTupla-"+item.id+"' data-idtupla='"+ item.id +"' class='btn bttn-bordered bttn-warning bttn-sm btn-add-sim pull-right'><i class='fa fa-mobile' aria-hidden='true'></i></button>")
                       .on("click", function(e) {
                         
                             var target = $('#buttonTupla-'+item.id+'').data('idtupla');
@@ -638,7 +648,15 @@
 
       });
     </script>
-    
+    <style type="text/css">
+      #totals_simseries {
+        font-size: 24px;
+        margin-top: 10px;
+      }
+      .jsgrid-pager-container {
+        margin-top: 20px !important;
+      }
+    </style>
 </head>
 <body>
 <div class="container "> 
@@ -671,12 +689,26 @@
   <div class="row">
       <div class="col-sm-12">
         <div id="datos_list"></div>
+        <div id="totals_simseries"></div>
       </div>
-      <div id="totals_simseries"></div>
       <div>&nbsp</div>
       <hr>
-      <div id="datos_list_final"></div>
-      <div id="datos_simseries"></div>
+      <div class="col-sm-12">
+        <div id="datos_list_final"></div>
+        <div id="datos_simseries"></div>
+         <!-- <div class="checkbox" style="float: right; margin-top: -40px;">
+          <label>
+            <input type="checkbox" id="group_chip" value="1">
+            Agrupar SIM/CHIP
+          </label>
+        </div> -->
+      </div>
+      
+      <div class="col-sm-12">
+        <button type="button" id="aplicar_orden" class="btn bttn-fill bttn-danger bttn-sm pull-right">Aplicar</button>
+      </div>
+      
+
       <div id="modals">
           <div id="modal" class="iziModal" data-izimodal-title="Corregir SIM/SERIE">
             <form class="form-inline">
@@ -690,9 +722,9 @@
               <button type="submit" id="aplicar_cambio" class="btn btn-primary">Aplicar</button>
             </form>
           </div>
-      </div>
+        </div>
 
-      <div id="modals">
+        <div id="modals">
           <div id="modal_" class="iziModal" data-izimodal-title="Corregir IMEI">
             <form class="form-inline">
               <div class="form-group">
@@ -702,14 +734,13 @@
                   <input type="text" class="form-control" id="imei_cel" placeholder="IMEI">
                 </div>
               </div>
+
               <button type="submit" id="aplicar_cambio_" class="btn btn-primary">Aplicar</button>
             </form>
           </div>
-      </div>
+        </div>
 
-
-      <div id="contenedor_sims" class="col-sm-"></div>
-      <button type="button" id="aplicar_orden" class="btn bttn-fill bttn-danger bttn-sm pull-right">Aplicar</button>
+        <div id="contenedor_sims" class="col-sm-"></div>
   </div>
 </div>
   

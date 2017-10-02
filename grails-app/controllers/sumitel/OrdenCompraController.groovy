@@ -51,7 +51,8 @@ class OrdenCompraController {
 
     def datosPrintOrdenCompleta() {
         log.debug("datosPrintOrden" + params)
-
+        def check = params.agrupar;
+        log.debug("CHECKKKKK---->" + check)
         def notaCompleta = NotaCompleta.findAll("from NotaCompleta as nc where nc.numeroRemision = ${params.remision}")
         log.debug(notaCompleta)
         render notaCompleta as JSON

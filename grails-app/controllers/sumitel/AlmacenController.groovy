@@ -35,24 +35,14 @@ class AlmacenController {
 
     def saveData = {
 
-        log.debug("ya debuggea???")
-        log.debug(params);
 
         def tuplas_articulos = JSON.parse(params.tuplas)
-        log.debug "Total de tuplas a guardar: " + tuplas_articulos.size()
         def totalArticulo = tuplas_articulos.size();
         def idProd = tuplas_articulos.idProducto
-        log.debug(idProd)
         def cant = tuplas_articulos.cant
-
-        log.debug(params)
-        log.debug(params.factura)
         def searchFact = Almacen.findByNumeroFactura(params.factura)
-        log.debug("factura----->" + searchFact);
-        log.debug("buscando factura");
         try {
             if (searchFact) {
-                 log.debug("factura ya existe");
                  def jsonResult = [error: 303]
                  render jsonResult as JSON
                  return
@@ -92,8 +82,6 @@ class AlmacenController {
           }
 
           idProd.eachWithIndex{id, index->
-            log.debug("id: "+ id)
-
             def productoInventario = Inventario.get(id)
             def sumArticulos = productoInventario.getTotalArticulos() + 1
             def newCostoSub = productoInventario.getPrecioSub() * sumArticulos
@@ -124,14 +112,12 @@ class AlmacenController {
 
     def obtenerAlmacen = {
       def almacenList = Almacen.findAll()
-      log.debug(almacenList)
       def jsonData = [rows: almacenList]
       render jsonData as JSON
     }
 
     def obtenerAlmacen2 = {
       def almacenList = Almacen.findAll(" from Almacen as alm where alm.remision = 0")
-      log.debug(almacenList)
       def jsonData = [rows: almacenList]
       render jsonData as JSON
     }
@@ -140,21 +126,17 @@ class AlmacenController {
       def params = params
       def id = params.id
       def idArt = params.idArticulo
-      log.debug("PARAMS_------>"+params)
 
       StringBuilder sql = new StringBuilder()
       sql.append("DELETE from Almacen alm where alm.id = ${id}")
       def resultSQL = Almacen.executeUpdate(sql.toString())
-      log.debug(resultSQL.toString())
 
       def invAlm = Inventario.get(idArt)
-      log.debug("InventarioAlmacen:>>>>>>"+invAlm)
       def totalAlm = invAlm.getTotalArticulos()
       def resta = totalAlm - 1
       def mod_costoSub = (resta*invAlm.getPrecioSub())
       def mod_costoUni = (resta*invAlm.getPrecioUnitario())
       def mod_costoPub = (resta*invAlm.getPrecioPublico())
-      log.debug("TotalAlmacen:>>>>>>>"+totalAlm)
       
 
       StringBuilder update_cant_art = new StringBuilder()
@@ -172,10 +154,8 @@ class AlmacenController {
     def obtenerArticulosDos = {
         StringBuilder sql = new StringBuilder()
         sql.append(" SELECT alm from Almacen alm where alm.remision = 0 and alm.articulo like '%SIM%'");
-        log.debug(sql)
         def resultSQL = Almacen.executeQuery(sql.toString())
-        log.debug(resultSQL.toString())
-
+        
         def tuplasJson = resultSQL.collect {
           tuplas: [
             id: it.id, 
@@ -188,7 +168,7 @@ class AlmacenController {
             factura: it.numeroFactura
           ]
         }
-        log.debug(tuplasJson)
+        
         def jsonData = [rows: tuplasJson]
         render jsonData as JSON
     }
@@ -196,10 +176,8 @@ class AlmacenController {
     def obtenerArticulos = {
         StringBuilder sql = new StringBuilder()
         sql.append(" SELECT alm from Almacen alm");
-        log.debug(sql)
         def resultSQL = Almacen.executeQuery(sql.toString())
-        log.debug(resultSQL.toString())
-
+      
         def tuplasJson = resultSQL.collect {
           tuplas: [
             factura: it.factura,
@@ -207,14 +185,12 @@ class AlmacenController {
             descripcion: it.descripcion
           ]
         }
-        log.debug(tuplasJson)
         def jsonData = [rows: tuplasJson]
         render jsonData as JSON
     }
 
     def cancelarOrdenCompra = {
        
-        log.debug("params--->" + params)
         def totalPrice = 0
 
         def grupoAlmacen = Almacen.findAllByRemision(params.id)
@@ -225,18 +201,14 @@ class AlmacenController {
 
 
         def clienteid = params.idcliente
-        log.debug(clienteid)
-        log.debug("grupoAlmacen=> ${grupoAlmacen.size()}")
         grupoAlmacen.each {tuplas->
-            log.debug(tuplas.idArticuloInventario)
-            log.debug(tuplas.id)
 
             def art_inventario = Inventario.get(tuplas.idArticuloInventario)
-            log.debug("articulo=> ${art_inventario}")
+            
             def total = art_inventario.getTotalArticulos()
-            log.debug("total=> ${total}")
+            
             totalPrice = totalPrice + tuplas.precioUnitario
-            log.debug("totalPrice------->" + totalPrice)
+            
             art_inventario.setTotalArticulos(total + 1)
             art_inventario.setCostoPublico(art_inventario.getPrecioPublico() * art_inventario.getTotalArticulos())
             art_inventario.setCostoUnitario(art_inventario.getPrecioUnitario() * art_inventario.getTotalArticulos())
@@ -247,13 +219,11 @@ class AlmacenController {
         }
 
         Cliente cc = Cliente.get(clienteid)
-        log.debug("cliente?--->"+ cc)
+        
         def restSaldo = cc.getSaldoTotal() - totalPrice
         cc.setSaldoTotal(restSaldo)
         cc.save()
-        log.debug("saldo total cliente---->" + restSaldo)
-
-
+      
         def tuplasJson = grupoAlmacen.collect {
           tuplas: [
             factura: 0,
